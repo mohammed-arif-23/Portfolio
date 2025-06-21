@@ -54,6 +54,16 @@
     @apply bg-slate-900 text-foreground;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     background-attachment: fixed;
+    cursor: none;
+    user-select: none;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    transition: all 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+
   }
 }
 
