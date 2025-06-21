@@ -46,12 +46,11 @@ const projects = [
 
   {
     title: 'E-commerce Platform 🛒💳',
-    description: '🛍️ A comprehensive online store featuring React, Node.js, MongoDB, and Stripe integration. 🔄 Includes real-time inventory management, user authentication, shopping cart persistence, payment processing, order tracking, and an admin dashboard with analytics. 📦📊',
-    technologies: ['React', 'Redux' ],
-    liveUrl: 0,
-    githubUrl: 0,
-  },
-  
+    description: '🛍️ A comprehensive online store featuring Next.js, React, Firebase, and Tailwind CSS. 🔄 Includes Google OAuth integration for secure login, real-time cart synchronization across devices, user authentication, shopping cart persistence, order tracking, and a modern responsive design with smooth animations. 📦📊',
+    technologies: ['Next.js', 'React', 'Firebase', 'Tailwind CSS' , 'OAuth','Node.js'],
+    liveUrl: 'https://e-comm-store-arif.vercel.app/',
+    githubUrl: 'https://github.com/mohammed-arif-23/shopping'
+}
 ];
 
 export default function Projects() {
@@ -111,18 +110,18 @@ export default function Projects() {
                 </div>
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-auto">
-                  {project.liveUrl !== 0 && (
+                  {project.liveUrl && project.liveUrl !== '#' && (
                   <a
-                    href={String(project.liveUrl || '#')}
+                    href={project.liveUrl}
                     className="liquid-glass-btn flex items-center justify-center space-x-2 group"
                   >
                     <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
                     <span>View Live</span>
                   </a>
                   )}
-                    {project.githubUrl !== 0 && (
+                    {project.githubUrl && project.githubUrl !== 0 && project.githubUrl !== '#' && (
                   <a
-                    href={String(project.githubUrl || '#')}
+                    href={String(project.githubUrl)}
                     className="liquid-glass-btn flex items-center justify-center space-x-2 group"
                   >
                     <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
