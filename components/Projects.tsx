@@ -48,8 +48,8 @@ const projects = [
     title: 'E-commerce Platform 🛒💳',
     description: '🛍️ A comprehensive online store featuring React, Node.js, MongoDB, and Stripe integration. 🔄 Includes real-time inventory management, user authentication, shopping cart persistence, payment processing, order tracking, and an admin dashboard with analytics. 📦📊',
     technologies: ['React', 'Redux' ],
-    liveUrl: 'https://arif-1.vercel.app/',
-    githubUrl: 'https://github.com/mohammed-arif-23/e-commerce-clone',
+    liveUrl: 0,
+    githubUrl: 0,
   },
   
 ];
@@ -111,14 +111,16 @@ export default function Projects() {
                 </div>
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-auto">
+                  {project.liveUrl !== 0 && (
                   <a
-                    href={project.liveUrl}
+                    href={String(project.liveUrl || '#')}
                     className="liquid-glass-btn flex items-center justify-center space-x-2 group"
                   >
                     <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
                     <span>View Live</span>
                   </a>
-                  {project.githubUrl !== 0 && (
+                  )}
+                    {project.githubUrl !== 0 && (
                   <a
                     href={String(project.githubUrl || '#')}
                     className="liquid-glass-btn flex items-center justify-center space-x-2 group"
