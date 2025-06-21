@@ -8,6 +8,7 @@ import Experience from '@/components/Experience';
 import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
 import Background from '@/components/Background';
+import SEO from '@/components/SEO';
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -104,6 +105,7 @@ export default function Home() {
 
   return (
     <>
+      <SEO />
       {/* Shared animated background for all sections, fixed and non-scrolling */}
       <div className="fixed inset-0 z-0 w-full h-full pointer-events-none " style={{filter:"blur(3px)"}}>
         <Background />

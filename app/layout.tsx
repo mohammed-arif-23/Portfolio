@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: '8_WJN27z1Q0WVlN6N471Gf93AmxyqidjgRnRfNLwfWI',
   },
   category: 'technology',
   classification: 'Portfolio',
@@ -97,46 +97,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-        
-        {/* Structured Data for Person */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              "name": "T Mohammed Arif",
-              "jobTitle": "Full Stack Developer",
-              "description": "Award-winning Full Stack Web Developer specializing in Next.js, React, Node.js, and modern web technologies",
-              "url": "https://mohammedarif.dev",
-              "image": "https://mohammedarif.dev/images/profile.jpg",
-              "sameAs": [
-                "https://github.com/mohammed-arif-23",
-                "https://linkedin.com/in/mohammed-arif-23"
-              ],
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Salem",
-                "addressRegion": "Tamil Nadu",
-                "addressCountry": "IN"
-              },
-              "knowsAbout": [
-                "Next.js",
-                "React",
-                "Node.js",
-                "JavaScript",
-                "TypeScript",
-                "Full Stack Development",
-                "Web Development",
-                "UI/UX Design"
-              ],
-              "worksFor": {
-                "@type": "Organization",
-                "name": "Freelance"
-              }
-            })
-          }}
-        />
       </head>
       <body className={`${inter.className} bg-slate-900 text-white antialiased`}>
         {children}
