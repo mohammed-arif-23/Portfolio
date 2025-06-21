@@ -34,7 +34,7 @@ const projects = [
     description: '📸 Revolutionary image recognition platform that analyzes food images using advanced machine learning. 🧠 Built with Django and Keras, featuring real-time image processing, nutritional analysis, recipe suggestions, and personalized meal planning with dietary restrictions support. 🥗',
     technologies: ['Django', 'Keras', 'Python', 'TensorFlow', 'OpenCV', 'PostgreSQL', 'Flask' , 'DenseNet'],
     liveUrl: '#',
-    githubUrl: 0,
+    githubUrl: 'https://github.com/mohammed-arif-23/pixelstoplates',
   },
   {
     title: 'This Portfolio Website 🌐✨',
