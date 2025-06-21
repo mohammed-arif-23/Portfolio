@@ -11,21 +11,21 @@ const projects = [
     description: '🚀 Developed a full-stack college website with robust REST APIs for seamless frontend & backend integration. ⚡ Improved UI responsiveness and implemented new SEO-friendly designs to boost user experience and search engine visibility. 🔍📈',
     technologies: ['HTML5', 'CSS3', 'JavaScript', 'REST APIs', 'UI/UX Design', 'SEO' , 'PHP', 'MySQL', 'Bootstrap','AJAX'],
     liveUrl: 'https://www.avsenggcollege.ac.in/',
-    githubUrl: 0,
+    githubUrl: '#',
   },
   {
     title: 'AVS College of Arts and Science 🎨📚',
     description: '💡 Specialized in frontend web development, significantly reducing load times by optimizing HTML, CSS, and JavaScript code. 📱 Applied responsive design for seamless mobile experiences and enhanced interactivity using AJAX for dynamic content loading. ⚡',
     technologies: ['HTML5', 'CSS3', 'JavaScript', 'AJAX', 'Responsive Design', 'PHP', 'MySQL', 'Bootstrap'],
     liveUrl: 'https://www.avscollegeomalur.edu.in/',
-    githubUrl: 0,
+    githubUrl: '#',
   },
   {
     title: "Sakthi Kailash Women's College 👩‍🎓🌐",
     description: '🛠️ Developed and deployed full-stack web solutions using PHP, MySQL, and JavaScript. 🔗 Built robust RESTful APIs for frontend-backend integration and optimized database queries for better performance. 🤝 Collaborated with UI/UX teams to design responsive layouts for an improved user experience.',
     technologies: ['PHP', 'MySQL', 'JavaScript', 'RESTful APIs', 'HTML', 'CSS', 'Bootstrap'],
     liveUrl: 'https://www.sakthikailashcollege.org/',
-    githubUrl: 0,
+    githubUrl: '#',
   },
 
 
@@ -119,7 +119,7 @@ export default function Projects() {
                     <span>View Live</span>
                   </a>
                   )}
-                    {project.githubUrl && project.githubUrl !== 0 && project.githubUrl !== '#' && (
+                    {project.githubUrl  && project.githubUrl !== '#' && (
                   <a
                     href={String(project.githubUrl)}
                     className="liquid-glass-btn flex items-center justify-center space-x-2 group"
