@@ -97,7 +97,7 @@ export default function Hero() {
             <Github className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors" />
           </a>
           <a 
-            href="https://linkedin.com/in/mohammedarif" 
+            href="https://www.linkedin.com/in/mohammed-arif-0ab6402a1" 
             className="group relative p-4 glass-morphism rounded-full hover-lift-3d animate-pulse-glow"
             style={{ animationDelay: '1s' }}
           >

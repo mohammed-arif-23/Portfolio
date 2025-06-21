@@ -15,8 +15,8 @@ export default function SEO({
   title = 'T Mohammed Arif - Full Stack Developer',
   description = 'Award-winning Full Stack Web Developer specializing in Next.js, React, Node.js, and modern web technologies. Creating scalable solutions with exceptional user experiences.',
   keywords = 'Full Stack Developer, Web Developer, Next.js, React, Node.js, JavaScript, TypeScript, Salem, Tamil Nadu, Portfolio',
-  image = 'https://mohammedarif.dev/og-image.jpg',
-  url = 'https://mohammedarif.dev',
+  image = 'https://myportfolio-arif.vercel.app/images/profile.jpg',
+  url = 'https://myportfolio-arif.vercel.app/',
   type = 'website'
 }: SEOProps) {
   const structuredData = {
@@ -25,11 +25,11 @@ export default function SEO({
     "name": "T Mohammed Arif",
     "jobTitle": "Full Stack Developer",
     "description": "Award-winning Full Stack Web Developer specializing in Next.js, React, Node.js, and modern web technologies",
-    "url": "https://mohammedarif.dev",
-    "image": "https://mohammedarif.dev/images/profile.jpg",
+    "url": "https://myportfolio-arif.vercel.app/",
+    "image": "https://myportfolio-arif.vercel.app/images/profile.jpg",
     "sameAs": [
       "https://github.com/mohammed-arif-23",
-      "https://linkedin.com/in/mohammed-arif-23"
+      "https://www.linkedin.com/in/mohammed-arif-0ab6402a1"
     ],
     "address": {
       "@type": "PostalAddress",
