@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, Github, Zap, Eye, Code, Sparkles } from 'lucide-react';
-import { useSequentialScrollAnimation } from '../hooks/useSequentialScrollAnimation';
-
+import { ScrollReveal, TextSplit, Float } from '@/components/reactbits';
+import { forwardRef } from 'react';
+import FadeSlideIn from './reactbits/FadeSlideIn';
 
 const projects = [
   {
@@ -27,8 +27,6 @@ const projects = [
     liveUrl: 'https://www.sakthikailashcollege.org/',
     githubUrl: '#',
   },
-
-
   {
     title: 'Pixels to Plates 🍲🤖',
     description: '📸 Revolutionary image recognition platform that analyzes food images using advanced machine learning. 🧠 Built with Django and Keras, featuring real-time image processing, nutritional analysis, recipe suggestions, and personalized meal planning with dietary restrictions support. 🥗',
@@ -43,97 +41,108 @@ const projects = [
     liveUrl: '/',
     githubUrl: 'https://github.com/mohammed-arif-23/portfolio',
   },
-
   {
     title: 'E-commerce Platform 🛒💳',
     description: '🛍️ A comprehensive online store featuring Next.js, React, Firebase, and Tailwind CSS. 🔄 Includes Google OAuth integration for secure login, real-time cart synchronization across devices, user authentication, shopping cart persistence, order tracking, and a modern responsive design with smooth animations. 📦📊',
     technologies: ['Next.js', 'React', 'Firebase', 'Tailwind CSS' , 'OAuth','Node.js'],
     liveUrl: 'https://e-comm-store-arif.vercel.app/',
     githubUrl: 'https://github.com/mohammed-arif-23/shopping'
-}
+  }
 ];
 
-export default function Projects() {
-  const [particles, setParticles] = useState<
-    { left: string; top: string; animationDelay: string }[]
-  >([]);
-
-  useEffect(() => {
-    const generated = Array.from({ length: 30 }, () => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 20}s`,
-    }));
-    setParticles(generated);
-  }, []);
-
-  useSequentialScrollAnimation();
-
+const Projects = forwardRef<HTMLDivElement>((props, ref) => {
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section ref={ref} className="py-20 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            Featured Projects
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Innovative solutions that demonstrate expertise in cutting-edge development
-          </p>
+          <ScrollReveal duration={1.5} stagger={0.2} start="top 90%">
+            <TextSplit 
+              className="text-5xl md:text-6xl font-bold mb-4 text-white"
+              animation="words"
+              stagger={0.1}
+              duration={1}
+            >
+              Featured Projects
+            </TextSplit>
+          </ScrollReveal>
+          
+          <ScrollReveal duration={1.5} stagger={0.2} start="top 90%" delay={0.2}>
+            <TextSplit 
+              className="text-xl text-gray-400 max-w-3xl mx-auto"
+              animation="words"
+              stagger={0.05}
+              duration={0.8}
+            >
+              Innovative solutions that demonstrate expertise in cutting-edge development
+            </TextSplit>
+          </ScrollReveal>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-8">
           {projects.map((project, index) => (
-            <div
-              key={index}
-              className="project-card animate-on-scroll opacity-0 liquid-glass-card rounded-3xl hover-lift-3d flex flex-col justify-between"
-            >
-              <div className="p-2 sm:p-6 flex-1 flex flex-col">
-                <div className="flex items-center space-x-3 mb-4">
-                  <Code className="w-6 h-6 text-blue-400" />
-                  <h3 className="text-3xl font-bold text-white group-hover:text-blue-300 transition-colors">
-                    {project.title}
-                  </h3>
-                </div>
-                <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                  {project.description}
-                </p>
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-3 mb-8">
-                  {project.technologies.map((tech, techIndex) => (
-                    <span
-                      key={tech}
-                      className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:border-blue-400 transition-all duration-300 hover:scale-105 card-3d"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-auto">
-                  {project.liveUrl && project.liveUrl !== '#' && (
-                  <a
-                    href={project.liveUrl}
-                    className="liquid-glass-btn flex items-center justify-center space-x-2 group"
-                  >
-                    <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    <span>View Live</span>
-                  </a>
-                  )}
-                    {project.githubUrl  && project.githubUrl !== '#' && (
-                  <a
-                    href={String(project.githubUrl)}
-                    className="liquid-glass-btn flex items-center justify-center space-x-2 group"
-                  >
-                    <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    <span>Source Code</span>
-                  </a>
-                  )}
-                </div>
-              </div>
-            </div>
+            <FadeSlideIn key={index} x={index % 2 === 0 ? -48 : 48} duration={900} delay={index * 120}>
+              <ScrollReveal animation="scale" duration={1.5} delay={index * 0.1} stagger={0.2} start="top 90%" className="h-full">
+                <Float y={0} duration={4} delay={index * 0.2} className="h-full">
+                  <div className="glass-morphism-strong rounded-3xl hover-lift-3d h-full flex flex-col justify-between transition-all duration-300">
+                    <div className="p-4 sm:p-6 flex-1 flex flex-col">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <Code className="w-6 h-6 text-white" />
+                        <h3 className="text-3xl font-bold text-white group-hover:text-gray-300 transition-colors">
+                          {project.title}
+                        </h3>
+                      </div>
+                      <TextSplit 
+                        className="text-lg text-gray-300 mb-6 leading-relaxed"
+                        animation="words"
+                        stagger={0.02}
+                        duration={0.8}
+                      >
+                        {project.description}
+                      </TextSplit>
+                      
+                      {/* Technologies */}
+                      <div className="flex flex-wrap gap-3 mb-8">
+                        {project.technologies.map((tech, techIndex) => (
+                          <span
+                            key={tech}
+                            className="px-4 py-2 bg-white/10 text-white rounded-full text-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-auto">
+                        {project.liveUrl && project.liveUrl !== '#' && (
+                          <a
+                            href={project.liveUrl}
+                            className="glass-morphism flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/10"
+                          >
+                            <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                            <span>View Live</span>
+                          </a>
+                        )}
+                        {project.githubUrl && project.githubUrl !== '#' && (
+                          <a
+                            href={String(project.githubUrl)}
+                            className="glass-morphism flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/10"
+                          >
+                            <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                            <span>Source Code</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Float>
+              </ScrollReveal>
+            </FadeSlideIn>
           ))}
         </div>
       </div>
     </section>
   );
-}
+});
+Projects.displayName = 'Projects';
+export default Projects;

@@ -1,125 +1,107 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, Download} from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Github, Linkedin, Mail, Download } from 'lucide-react';
+import { gsap } from 'gsap';
+import { TextType, TextPressure } from '@/components/reactbits';
 
-export default function Hero() {
+const subtitles = [
+  'Full Stack Developer',
+  'Creative Coder',
+  'UI/UX Enthusiast',
+  'Problem Solver',
+  'Tech Innovator'
+];
+
+export default function Hero({ startAnimation }: { startAnimation: boolean }) {
   const heroRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState<
-    { left: string; top: string; animationDelay: string }[]
-  >([]);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-      
-      const floating = document.querySelectorAll('.floating-element');
-      floating.forEach((element, index) => {
-        const speed = (index + 1) * 0.02;
-        const x = (e.clientX * speed);
-        const y = (e.clientY * speed);
-        (element as HTMLElement).style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    // Set initial animation state
+    gsap.set('.hero-anim', { opacity: 0, filter: 'blur(10px)' });
+  }, []);
+
+  useEffect(() => {
+    if (startAnimation) {
+      // Main hero animation
+      gsap.to('.hero-anim', {
+        duration: 2,
+        opacity: 1,
+        filter: 'blur(0px)',
+        ease: 'power3.out',
+        stagger: 0.2,
       });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  useEffect(() => {
-    // Generate random positions and delays for particles on the client only
-    const generated = Array.from({ length: 20 }, () => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 8}s`,
-    }));
-    setParticles(generated);
-  }, []);
+    }
+  }, [startAnimation]);
 
   return (
     <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       <div ref={heroRef} className="relative z-10 text-center px-4 max-w-5xl">
-
-        <div className="mb-8 mt-12  flex justify-center opacity-0 animate-scale-in" style={{ animationDelay: '0.2s' }}>
-          <img src="/images/profile.jpg" alt="Profile" className="w-72 h-72 rounded-full border-4 shadow-lg border-blue-400" />
+        <div className="mb-8 mt-12 flex justify-center hero-anim">
+          <img
+            src="/images/profile.jpg"
+            alt="Profile"
+            className="w-72 h-72 rounded-full border-4 shadow-lg border-white/20 glass-morphism"
+          />
         </div>
 
-        <div className="relative transform-3d">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent opacity-0 animate-fade-in-up">
-            T Mohammed Arif
-          </h1>
-          <div className="text-2xl md:text-3xl text-gray-300 mb-4 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            Full Stack Web Developer
+        <div className="relative">
+          <TextPressure className="text-6xl md:text-8xl font-bold mb-6 text-white hero-anim">
+            I'm Mohammed Arif
+          </TextPressure>
+          <div className="text-2xl md:text-3xl text-gray-300 mb-4 hero-anim h-12">
+            <TextType 
+              strings={subtitles}
+              wrapperClassName="text-2xl md:text-3xl text-gray-300"
+              cursorClassName="text-2xl md:text-3xl text-gray-300"
+            />
           </div>
-       
-          <p className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed opacity-0 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-            Crafting immersive digital experiences with cutting-edge technologies. 
-            Specialized in creating scalable web applications that push the boundaries of modern web development.
+          <p className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed hero-anim">
+            Crafting immersive digital experiences with cutting-edge technologies. Specialized
+            in creating scalable web applications that push the boundaries of modern web
+            development.
           </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-12 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-          <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full text-white font-medium hover-lift-3d overflow-hidden">
+        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-12 hero-anim">
+          <button className="group relative px-8 py-4 bg-white text-black rounded-full font-medium hover-lift-3d overflow-hidden transition-all duration-300 hover:bg-gray-100">
             <span className="relative z-10 flex items-center space-x-2">
               <Mail className="w-5 h-5" />
-              <a href='https://wa.me/+917904645033'>
-              <span>Get In Touch</span>
+              <a href="https://wa.me/+917904645033">
+                <span>Get In Touch</span>
               </a>
-              
             </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
-          <button  className="group relative px-8 py-4 glass-morphism rounded-full text-white font-medium hover-lift-3d border border-white/20 hover:border-white/40">
-           <a href='My_Resume.pdf'>
-            <span className="flex items-center space-x-2">
-              <Download className="w-5 h-5" />
-              <span>Download CV</span>
-            </span>
-           </a>
+          <button className="group relative px-8 py-4 glass-morphism rounded-full text-white font-medium hover-lift-3d border border-white/20 hover:border-white/40 transition-all duration-300">
+            <a href="My_Resume.pdf">
+              <span className="flex items-center space-x-2">
+                <Download className="w-5 h-5" />
+                <span>Download CV</span>
+              </span>
+            </a>
           </button>
         </div>
 
-        {/* Social Links */}
-        <div className="flex justify-center space-x-6 mb-12 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
-          <a 
-            href="mailto:mohammedarif2303@gmail.com" 
-            className="group relative p-4 glass-morphism rounded-full hover-lift-3d animate-pulse-glow"
+        <div className="flex justify-center space-x-6 mb-12 hero-anim">
+          <a
+            href="mailto:mohammedarif2303@gmail.com"
+            className="group relative p-4 glass-morphism rounded-full hover-lift-3d transition-all duration-300 hover:bg-white/10"
           >
-            <Mail className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors" />
+            <Mail className="w-6 h-6 text-white group-hover:text-gray-300 transition-colors" />
           </a>
-          <a 
-            href="https://github.com/mohammed-arif-23/" 
-            className="group relative p-4 glass-morphism rounded-full hover-lift-3d animate-pulse-glow"
-            style={{ animationDelay: '0.5s' }}
+          <a
+            href="https://github.com/mohammed-arif-23/"
+            className="group relative p-4 glass-morphism rounded-full hover-lift-3d transition-all duration-300 hover:bg-white/10"
           >
-            <Github className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors" />
+            <Github className="w-6 h-6 text-white group-hover:text-gray-300 transition-colors" />
           </a>
-          <a 
-            href="https://www.linkedin.com/in/mohammed-arif-0ab6402a1" 
-            className="group relative p-4 glass-morphism rounded-full hover-lift-3d animate-pulse-glow"
-            style={{ animationDelay: '1s' }}
+          <a
+            href="https://www.linkedin.com/in/mohammed-arif-0ab6402a1"
+            className="group relative p-4 glass-morphism rounded-full hover-lift-3d transition-all duration-300 hover:bg-white/10"
           >
-            <Linkedin className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors" />
+            <Linkedin className="w-6 h-6 text-white group-hover:text-gray-300 transition-colors" />
           </a>
         </div>
-
-        
-      </div>
-
-      {/* Floating 3D Elements */}
-      <div className="absolute top-1/4 left-10 floating-element">
-        <div className="w-6 h-6 bg-blue-400/60 rounded-lg rotate-45 animate-spin-slow"></div>
-      </div>
-      <div className="absolute top-1/3 right-20 floating-element">
-        <div className="w-8 h-8 bg-purple-400/60 rounded-full animate-pulse"></div>
-      </div>
-      <div className="absolute bottom-1/4 left-1/4 floating-element">
-        <div className="w-5 h-5 bg-pink-400/60 rounded-full animate-bounce"></div>
-      </div>
-      <div className="absolute top-2/3 right-1/3 floating-element">
-        <div className="w-4 h-4 bg-cyan-400/60 rounded-lg animate-pulse"></div>
       </div>
     </section>
   );

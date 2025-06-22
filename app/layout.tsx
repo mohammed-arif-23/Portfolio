@@ -98,7 +98,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
       </head>
-      <body className={`${inter.className} bg-slate-900 text-white antialiased`}>
+      <body className={`${inter.className} text-white antialiased`}>
         {children}
       </body>
     </html>

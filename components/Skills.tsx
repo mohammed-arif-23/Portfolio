@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useSequentialScrollAnimation } from '../hooks/useSequentialScrollAnimation';
+import { ScrollReveal, TextSplit, Float } from '@/components/reactbits';
+import { forwardRef } from 'react';
 
 // Official logo URLs for popular technologies
 const techLogos = [
@@ -32,58 +32,64 @@ const techLogos = [
   { name: 'OpenCV', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg' },
   { name: 'Kubernetes', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg' },
   { name: 'Prisma', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg' },
-
 ];
 
-export default function Skills() {
-  const skillsRef = useRef<HTMLDivElement>(null);
-  const [particles, setParticles] = useState<
-    { left: string; top: string; animationDelay: string }[]
-  >([]);
-
-  useEffect(() => {
-    // Generate random positions and delays for particles on the client only
-    const generated = Array.from({ length: 25 }, () => ({
-      
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 12}s`,
-    }));
-    setParticles(generated);
-  }, []);
-
-  useSequentialScrollAnimation();
-
+const Skills = forwardRef<HTMLDivElement>((props, ref) => {
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section ref={ref} className="py-20 relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Technologies I've Known
-          </h2>
-          <p className="text-gray-400">Ordered by proficiency</p>
-        </div>
-
-        <div ref={skillsRef}>
-          {/* Technology Logos Grid */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-8 p-8 rounded-3xl liquid-glass-card">
-            {techLogos.map((tech) => (
-              <div
-                key={tech.name}
-                className="animate-on-scroll opacity-0 flex items-center justify-center p-4 rounded-2xl liquid-glass hover:scale-110 transition-transform duration-300 shadow-lg"
-                title={tech.name}
-              >
-                <img
-                  src={tech.url}
-                  alt={tech.name}
-                  className="w-14 h-14 object-contain drop-shadow-xl"
-                  loading="lazy"
-                />
-              </div>
-            ))}
+          <ScrollReveal duration={1.5} stagger={0.2} start="top 90%">
+            <TextSplit 
+              className="text-5xl md:text-6xl font-bold mb-4 text-white"
+              animation="words"
+              stagger={0.1}
+              duration={1}
+            >
+              Technologies I've Known
+            </TextSplit>
+          </ScrollReveal>
+          
+          <ScrollReveal duration={1.5} stagger={0.2} start="top 90%" delay={0.2}>
+            <TextSplit 
+              className="text-gray-400"
+              animation="words"
+              stagger={0.05}
+              duration={0.8}
+            >
+              Ordered by proficiency
+            </TextSplit>
+          </ScrollReveal>
           </div>
-        </div>
+
+        <ScrollReveal animation="scale" duration={1.5} stagger={0.2} start="top 90%">
+          <Float y={10} duration={4}>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-8 p-8 rounded-3xl glass-morphism-strong">
+              {techLogos.map((tech, index) => (
+                <ScrollReveal 
+                  key={tech.name}
+                  animation="scale" 
+                  duration={1.5} 
+                  delay={index * 0.05}
+                  stagger={0.2}
+                  start="top 90%"
+                  className="flex items-center justify-center p-4 rounded-2xl glass-morphism hover:scale-110 transition-all duration-300 shadow-lg hover:bg-white/10"
+                >
+                  <img
+                    src={tech.url}
+                    alt={tech.name}
+                    title={tech.name}
+                    className="w-14 h-14 object-contain drop-shadow-xl"
+                    loading="lazy"
+                  />
+                </ScrollReveal>
+              ))}
+            </div>
+          </Float>
+        </ScrollReveal>
       </div>
     </section>
   );
-}
+});
+Skills.displayName = 'Skills';
+export default Skills;
