@@ -35,7 +35,7 @@ export default function Hero({ startAnimation }: { startAnimation: boolean }) {
   }, [startAnimation]);
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div ref={heroRef} className="relative z-10 text-center px-4 max-w-5xl">
         <div className="mb-8 mt-12 flex justify-center hero-anim">
           <img

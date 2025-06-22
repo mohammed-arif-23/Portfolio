@@ -30,6 +30,7 @@ export default function Loader() {
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
+        pointerEvents: 'none',
       }}
     />
   );

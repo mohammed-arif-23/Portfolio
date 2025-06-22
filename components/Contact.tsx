@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useEffect, useRef } from 'react';
 import { Mail, Phone, MapPin, Send, MessageCircle, User, Sparkles } from 'lucide-react';
 import { ScrollReveal, TextSplit, Float } from '@/components/reactbits';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Contact = forwardRef<HTMLDivElement>((props, ref) => {
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,6 +14,8 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const refreshTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +37,15 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
       setStatus('error');
     }
     setIsSubmitting(false);
+    setTimeout(() => {
+      if (typeof window !== 'undefined' && ScrollTrigger) {
+        try {
+          ScrollTrigger.refresh();
+        } catch (e) {
+          // Ignore errors caused by removed nodes
+        }
+      }
+    }, 100);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -41,6 +54,37 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
       [e.target.name]: e.target.value
     });
   };
+
+  useEffect(() => {
+    const handleFocusIn = (e: FocusEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        if (typeof window !== 'undefined' && ScrollTrigger) {
+          ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        }
+      }
+    };
+
+    const handleFocusOut = (e: FocusEvent) => {
+      setTimeout(() => {
+        if (typeof window !== 'undefined' && ScrollTrigger) {
+          try {
+            ScrollTrigger.refresh();
+          } catch (e) {}
+        }
+      }, 300);
+    };
+
+    window.addEventListener('focusin', handleFocusIn);
+    window.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      window.removeEventListener('focusin', handleFocusIn);
+      window.removeEventListener('focusout', handleFocusOut);
+    };
+  }, []);
 
   return (
     <section ref={ref} className="py-20 relative overflow-hidden">
