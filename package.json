@@ -73,5 +73,8 @@
     "typewriter-effect": "^2.22.0",
     "vaul": "^0.9.9",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.17"
   }
 }
