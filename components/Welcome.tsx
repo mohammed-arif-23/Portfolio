@@ -5,17 +5,36 @@ import { TextSplit } from '@/components/reactbits';
 
 const MESSAGES = [
   'Hello!',
-  'Hola!',
-  'Welcome',
+  '¡Hola!',
   'Bonjour',
   'Ciao',
   'Willkommen',
-  'नमस्ते',
-  'こんにちは',
-  '你好',
-  '안녕하세요',
-  'مرحبا',
-  'Привет',
+  'नमस्ते', // Hindi
+  'こんにちは', // Japanese
+  '你好', // Chinese
+  'مرحبا', // Arabic
+  'Привет', // Russian
+  '안녕하세요', // Korean
+  'Olá', // Portuguese
+  'Hej', // Swedish/Danish
+  'سلام', // Persian/Azeri
+  'Γειά σου', // Greek
+  'Selam', // Turkish
+  'Halo', // Indonesian
+  'สวัสดี', // Thai
+  'שָׁלוֹם', // Hebrew
+  'Aloha', // Hawaiian
+  'Sveiki', // Latvian
+  'Cześć', // Polish
+  'Dzień dobry', // Polish (formal)
+  'Hallo', // Dutch
+  'Tere', // Estonian
+  'Merhaba', // Turkish (alt)
+  'Szia', // Hungarian
+  'Kamusta', // Filipino
+  'Xin chào', // Vietnamese
+  'Sawubona', // Zulu
+  'Habari', // Swahili
 ];
 
 export default function Welcome() {
@@ -24,7 +43,6 @@ export default function Welcome() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Entrance animation for the first message
     const entrance = setTimeout(() => {
       setTrigger(true);
       setShow(true);
@@ -34,7 +52,7 @@ export default function Welcome() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setShow(false); // start fade/blur out
+      setShow(false); 
       setTimeout(() => {
         setTrigger(false);
         setIndex((prev) => (prev + 1) % MESSAGES.length);
@@ -42,7 +60,7 @@ export default function Welcome() {
           setTrigger(true);
           setShow(true); // fade/blur in
         }, 50); // let TextSplit remount
-      }, 350); // match CSS transition duration
+      }, 350); 
     }, 2000);
     return () => clearInterval(interval);
   }, []);

@@ -37,7 +37,7 @@ const projects = [
   {
     title: 'This Portfolio Website 🌐✨',
     description: '🎨 A modern, interactive portfolio built with Next.js, React, and Tailwind CSS. 🌈 Features animated backgrounds, 3D effects, sequential scroll animations, and a responsive design. 🚀 Showcases projects, skills, and experience with a focus on performance and user experience.',
-    technologies: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'Lucide Icons', 'Shadcn UI','Radix UI'],
+    technologies: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'Lucide Icons', 'React.Bits','GSAP','Nodemailer'],
     liveUrl: '/',
     githubUrl: 'https://github.com/mohammed-arif-23/portfolio',
   },
