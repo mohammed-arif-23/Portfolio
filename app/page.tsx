@@ -29,7 +29,7 @@ export default function Home() {
     // Custom Cursor
     const cursor = cursorRef.current;
     const cursorFollower = cursorFollowerRef.current;
-
+  
     const handleMouseMove = (e: MouseEvent) => {
       const x = e.clientX;
       const y = e.clientY;
@@ -182,7 +182,7 @@ export default function Home() {
         colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
         blend={0.5}
         amplitude={1.0}
-        speed={0.5}
+        speed={0.5} 
       />
       
       {/* Top Page Progress Bar */}
@@ -197,7 +197,7 @@ export default function Home() {
         <div ref={horizontalTrackRef} className="flex overflow-hidden" style={{ width: '200vw', height: '100vh' }}>
           <Welcome />
           <div className="w-screen h-screen">
-            <Hero startAnimation={true} />
+        <Hero startAnimation={true} />
           </div>
         </div>
         <About />

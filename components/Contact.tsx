@@ -29,7 +29,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
       });
       if (res.ok) {
         setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
+    setFormData({ name: '', email: '', message: '' });
       } else {
         setStatus('error');
       }

@@ -48,14 +48,30 @@
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    scroll-padding-top: 80px;
+    scroll-behavior: smooth;
+    /* Make scroll slower and more fluid */
+    scroll-snap-type: y proximity;
   }
   
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    /* Make scroll slower and more fluid */
+    scroll-snap-type: y proximity;
+  }
+
+  /* For Webkit browsers (Chrome, Safari, Edge) - slow down scroll momentum */
+  html, body {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Optional: Smoother scroll for all elements */
+  * {
+    scroll-behavior: smooth;
   }
 }
-
 
 .custom-cursor {
   position: fixed;
@@ -70,8 +86,6 @@
   top: 0;
   left: 0;
 }
-
-
 
 .custom-cursor-follower {
   position: fixed;

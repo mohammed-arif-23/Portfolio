@@ -5,7 +5,7 @@ import { TextSplit } from '@/components/reactbits';
 
 const MESSAGES = [
   'Hello!',
-  '¡Hola!',
+  'Hola!',
   'Bonjour',
   'Ciao',
   'Willkommen',
