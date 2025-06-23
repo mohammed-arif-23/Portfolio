@@ -30,7 +30,7 @@ const projects = [
   {
     title: 'Pixels to Plates 🍲🤖',
     description: '📸 Revolutionary image recognition platform that analyzes food images using advanced machine learning. 🧠 Built with Django and Keras, featuring real-time image processing, nutritional analysis, recipe suggestions, and personalized meal planning with dietary restrictions support. 🥗',
-    technologies: ['Django', 'Keras', 'Python', 'TensorFlow', 'OpenCV', 'PostgreSQL', 'Flask' , 'DenseNet'],
+    technologies: ['Django', 'Keras', 'Python', 'TensorFlow', 'Flask' , 'DenseNet'],
     liveUrl: '#',
     githubUrl: 'https://github.com/mohammed-arif-23/pixelstoplates',
   },
