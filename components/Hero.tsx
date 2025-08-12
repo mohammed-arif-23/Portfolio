@@ -56,14 +56,13 @@ export default function Hero({ startAnimation }: { startAnimation: boolean }) {
               cursorClassName="text-2xl md:text-3xl text-gray-300"
             />
           </div>
-          <p className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed hero-anim">
-            Crafting immersive digital experiences with cutting-edge technologies. Specialized
-            in creating scalable web applications that push the boundaries of modern web
+          <p className="text-lg text-gray-400 mb-8 max-w-3xl mx-auto leading-relaxed hero-anim">
+            Specialized in creating scalable web applications that push the boundaries of modern web
             development.
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-12 hero-anim">
+        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-10 hero-anim">
           <button className="group relative px-8 py-4 bg-white text-black rounded-full font-medium hover-lift-3d overflow-hidden transition-all duration-300 hover:bg-gray-100">
             <span className="relative z-10 flex items-center space-x-2">
               <Mail className="w-5 h-5" />
@@ -82,7 +81,7 @@ export default function Hero({ startAnimation }: { startAnimation: boolean }) {
           </button>
         </div>
 
-        <div className="flex justify-center space-x-6 mb-12 hero-anim">
+        <div className="flex justify-center space-x-6 mb-1 hero-anim">
           <a
             href="mailto:mohammedarif2303@gmail.com"
             className="group relative p-4 glass-morphism rounded-full hover-lift-3d transition-all duration-300 hover:bg-white/10"

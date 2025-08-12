@@ -6,48 +6,49 @@ import { forwardRef } from 'react';
 import FadeSlideIn from './reactbits/FadeSlideIn';
 
 const projects = [
-  {
-    title: 'AVS Engineering College 🏫✨',
-    description: '🚀 Developed a full-stack college website with robust REST APIs for seamless frontend & backend integration. ⚡ Improved UI responsiveness and implemented new SEO-friendly designs to boost user experience and search engine visibility. 🔍📈',
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'REST APIs', 'UI/UX Design', 'SEO' , 'PHP', 'MySQL', 'Bootstrap','AJAX'],
-    liveUrl: 'https://www.avsenggcollege.ac.in/',
-    githubUrl: '#',
+   {
+    title: 'CinemaHub - Movie Booking Platform',
+    description: 'A full-stack, real-time movie ticket booking application. Features include a rich movie catalog, interactive seat selection, instant booking confirmations, and a responsive UI. Built with Next.js, React, and Firebase, it also integrates real email notifications.',
+    technologies: ['Next.js', 'React', 'Firebase', 'Tailwind CSS', 'Framer Motion', 'Nodemailer'],
+    liveUrl: 'http://cinemahub-arif.vercel.app/',
+    githubUrl: 'https://github.com/mohammed-arif-23/cinemahub',
   },
   {
-    title: 'AVS College of Arts and Science 🎨📚',
-    description: '💡 Specialized in frontend web development, significantly reducing load times by optimizing HTML, CSS, and JavaScript code. 📱 Applied responsive design for seamless mobile experiences and enhanced interactivity using AJAX for dynamic content loading. ⚡',
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'AJAX', 'Responsive Design', 'PHP', 'MySQL', 'Bootstrap'],
-    liveUrl: 'https://www.avscollegeomalur.edu.in/',
-    githubUrl: '#',
+    title: 'V8 Engine Digital Twin Simulator',
+    description: 'A full-stack, real-time digital twin simulator of a V8 engine-powered car. This project features physics-based engine dynamics, an interactive 3D visualization using Three.js, a live telemetry dashboard, and a RESTful backend with persistent state management.',
+    technologies: ['Next.js', 'Three.js', 'React Three Fiber', 'MongoDB', 'Node.js', 'Tailwind CSS'],
+    liveUrl: '#',
+    githubUrl: 'https://github.com/mohammed-arif-23/v8-digital-twin-simulator',
   },
   {
-    title: "Sakthi Kailash Women's College 👩‍🎓🌐",
-    description: '🛠️ Developed and deployed full-stack web solutions using PHP, MySQL, and JavaScript. 🔗 Built robust RESTful APIs for frontend-backend integration and optimized database queries for better performance. 🤝 Collaborated with UI/UX teams to design responsive layouts for an improved user experience.',
-    technologies: ['PHP', 'MySQL', 'JavaScript', 'RESTful APIs', 'HTML', 'CSS', 'Bootstrap'],
-    liveUrl: 'https://www.sakthikailashcollege.org/',
-    githubUrl: '#',
-  },
-  {
-    title: 'Pixels to Plates 🍲🤖',
-    description: '📸 Revolutionary image recognition platform that analyzes food images using advanced machine learning. 🧠 Built with Django and Keras, featuring real-time image processing, nutritional analysis, recipe suggestions, and personalized meal planning with dietary restrictions support. 🥗',
-    technologies: ['Django', 'Keras', 'Python', 'TensorFlow', 'Flask' , 'DenseNet'],
+    title: 'Pixels to Plates',
+    description: 'A revolutionary image recognition platform that analyzes food images using advanced machine learning. Built with Django and Keras, it features real-time image processing, nutritional analysis, recipe suggestions, and personalized meal planning with dietary restrictions support.',
+    technologies: ['Django', 'Keras', 'Python', 'TensorFlow', 'Flask', 'DenseNet'],
     liveUrl: '#',
     githubUrl: 'https://github.com/mohammed-arif-23/pixelstoplates',
   },
   {
-    title: 'This Portfolio Website 🌐✨',
-    description: '🎨 A modern, interactive portfolio built with Next.js, React, and Tailwind CSS. 🌈 Features animated backgrounds, 3D effects, sequential scroll animations, and a responsive design. 🚀 Showcases projects, skills, and experience with a focus on performance and user experience.',
-    technologies: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'Lucide Icons', 'React.Bits','GSAP','Nodemailer'],
+    title: 'This Portfolio Website',
+    description: 'A modern, interactive portfolio built with Next.js, React, and Tailwind CSS. It features animated backgrounds, 3D effects, sequential scroll animations, and a responsive design. It showcases projects, skills, and experience with a focus on performance and user experience.',
+    technologies: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'Lucide Icons', 'React.Bits', 'GSAP', 'Nodemailer'],
     liveUrl: '/',
     githubUrl: 'https://github.com/mohammed-arif-23/portfolio',
   },
+ 
   {
-    title: 'E-commerce Platform 🛒💳',
-    description: '🛍️ A comprehensive online store featuring Next.js, React, Firebase, and Tailwind CSS. 🔄 Includes Google OAuth integration for secure login, real-time cart synchronization across devices, user authentication, shopping cart persistence, order tracking, and a modern responsive design with smooth animations. 📦📊',
-    technologies: ['Next.js', 'React', 'Firebase', 'Tailwind CSS' , 'OAuth','Node.js'],
-    liveUrl: 'https://e-comm-store-arif.vercel.app/',
-    githubUrl: 'https://github.com/mohammed-arif-23/shopping'
-  }
+    title: 'AI Movie Recommender',
+    description: 'A Streamlit application that recommends movies based on genre similarity and release year. It uses cosine similarity on the MovieLens dataset to find relevant films, which are then displayed in an organized grid. The app is built with Streamlit, Pandas, and Scikit-learn.',
+    technologies: ['Streamlit', 'Pandas', 'NumPy', 'Scikit-learn', 'Python'],
+    liveUrl: 'https://arif-nm-movieapi.streamlit.app/',
+    githubUrl: 'https://github.com/mohammed-arif-23/nm-movieapi',
+  },
+  {
+    title: 'Multi-Digit Handwritten Number Predictor',
+    description: 'A deep learning-based web application for recognizing multi-digit handwritten numbers. It uses a CNN model trained on the MNIST dataset, with a Flask backend for inference and an interactive web canvas for user input. The project provides real-time predictions for drawn digits.',
+    technologies: ['PyTorch', 'Flask', 'Python', 'CNN', 'HTML', 'CSS', 'JavaScript'],
+    liveUrl: '#',
+    githubUrl: 'https://github.com/mohammed-arif-23/multi-digit-handwritten-number-predictor',
+  },
 ];
 
 const Projects = forwardRef<HTMLDivElement>((props, ref) => {
@@ -68,13 +69,13 @@ const Projects = forwardRef<HTMLDivElement>((props, ref) => {
           
           <ScrollReveal duration={1.5} stagger={0.2} start="top 90%" delay={0.2}>
             <TextSplit 
-              className="text-xl text-gray-400 max-w-3xl mx-auto"
+              className="text-xl text-gray-400 max-w-4xl mx-auto"
               animation="words"
               stagger={0.05}
               duration={0.8}
             >
-              Innovative solutions that demonstrate expertise in cutting-edge development
-            </TextSplit>
+              My recent projects showcase my skills in full-stack development, AI, and web technologies. Each project is a testament to my ability to create innovative solutions that solve real-world problems.
+                          </TextSplit>
           </ScrollReveal>
         </div>
 
@@ -87,7 +88,7 @@ const Projects = forwardRef<HTMLDivElement>((props, ref) => {
                     <div className="p-4 sm:p-6 flex-1 flex flex-col">
                       <div className="flex items-center space-x-3 mb-4">
                         <Code className="w-6 h-6 text-white" />
-                        <h3 className="text-3xl font-bold text-white group-hover:text-gray-300 transition-colors">
+                        <h3 className="text-2xl font-bold text-white group-hover:text-gray-300 transition-colors">
                           {project.title}
                         </h3>
                       </div>

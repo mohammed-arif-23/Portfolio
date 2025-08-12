@@ -58,7 +58,6 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
           </div>
           
           <div className="grid lg:grid-cols-2 gap-12 items-stretch min-h-full">
-            {/* Left Column - Main Content */}
             <div className="space-y-8 flex-1 min-h-full flex flex-col justify-between">
               <FadeSlideIn duration={900}>
                 <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%">
@@ -78,7 +77,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
                     >
                       I'm a passionate Full Stack Web Developer with extensive experience in creating 
                       scalable web applications using modern technologies. My expertise spans across 
-                      Next.js, Node.js, PHP, MySQL, and JavaScript, with a focus on delivering 
+                      Next.js, MERN Stack, Docker, PHP, MySQL, and JavaScript, with a focus on delivering 
                       exceptional user experiences. I also leverage AI and Machine Learning techniques to solve real-world problems and build innovative solutions.
                     </TextSplit>
                     <TextSplit 
