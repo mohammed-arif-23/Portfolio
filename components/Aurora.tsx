@@ -123,7 +123,7 @@ interface AuroraProps {
 
 export default function Aurora(props: AuroraProps) {
   const {
-    colorStops = ["#5227FF", "#7cff67", "#5227FF"],
+    colorStops = ["#ffffff", "#ffffff", "#ffffff"],
     amplitude = 1.0,
     blend = 0.5
   } = props;
@@ -190,7 +190,7 @@ export default function Aurora(props: AuroraProps) {
     let animateId = 0;
     const update = (t: any) => {
       animateId = requestAnimationFrame(update);
-      const { time = t * 0.01, speed = 1.0 } = propsRef.current;
+      const { time = t * 0.01, speed = 0.2 } = propsRef.current;
       program.uniforms.uTime.value = time * speed * 0.1;
       program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
       program.uniforms.uBlend.value = propsRef.current.blend ?? blend;

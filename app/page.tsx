@@ -11,8 +11,7 @@ import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
 import { Squares } from '@/components/reactbits';
 import SEO from '@/components/SEO';
-import Loader from '@/components/Loader';
-import Welcome from '@/components/Welcome';
+import IntroOverlay from '@/components/IntroOverlay';
 import Aurora from '@/components/Aurora';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,9 +20,8 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorFollowerRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
   const [floatingElements, setFloatingElements] = useState<any[]>([]);
-  const horizontalTrackRef = useRef<HTMLDivElement>(null);
+  const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
     // Custom Cursor
@@ -76,33 +74,6 @@ export default function Home() {
     }));
     setFloatingElements(elements);
 
-    // Horizontal scroll animation
-    const pinTrigger = containerRef.current;
-    const track = horizontalTrackRef.current;
-    if (pinTrigger && track) {
-      const swipeDistance = window.innerWidth;
-      const isMobile = window.innerWidth < 768;
-      const pauseDistance = isMobile ? 400 : 0;
-      const tl = gsap.timeline();
-      tl.to(track, { x: -swipeDistance, ease: 'none', duration: 1 });
-      if (isMobile && pauseDistance > 0) {
-        tl.to(track, { x: -swipeDistance, ease: 'none', duration: pauseDistance / swipeDistance });
-      }
-      const st = ScrollTrigger.create({
-        trigger: pinTrigger,
-        pin: true,
-        scrub: 1,
-        start: 'top top',
-        end: () => `+=${swipeDistance + pauseDistance}`,
-        animation: tl,
-        invalidateOnRefresh: true,
-        onLeave: () => {
-          ScrollTrigger.refresh();
-        },
-      });
-      return () => st.kill();
-    }
-
     // GSAP ScrollTrigger setup
     gsap.set('.scroll-reveal', { opacity: 0, y: 50 });
 
@@ -145,13 +116,8 @@ export default function Home() {
       end: 'bottom 20%'
     });
 
-    // Page progress bar
     const handleScroll = () => {
       const scrolled = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = docHeight > 0 ? (scrolled / docHeight) * 100 : 0;
-      setProgress(scrollPercent);
-
       // Parallax for floating elements
       const parallaxElements = document.querySelectorAll('.parallax-element');
       parallaxElements.forEach(el => {
@@ -172,34 +138,24 @@ export default function Home() {
 
   return (
     <>
-      <Loader />
+      {showIntro && (
+        <IntroOverlay
+          onFinish={() => {
+            setShowIntro(false);
+          }}
+        />
+      )}
       <SEO />
   
       {/* Floating Elements */}
       
 
       <Aurora
-        colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
-        blend={0.5}
-        amplitude={1.0}
-        speed={0.5} 
+       
       />
       
-      {/* Top Page Progress Bar */}
-      <div className="fixed top-0 left-0 w-full z-[9999] h-1.5">
-        <div
-          className="bg-white rounded-full shadow-lg transition-all duration-200"
-          style={{ width: `${progress}%`, height: '50%' }}
-        />
-      </div>
-      
       <div ref={containerRef} className="relative">
-        <div ref={horizontalTrackRef} className="flex overflow-hidden" style={{ width: '200vw', height: '100vh' }}>
-          <Welcome />
-          <div className="w-screen h-screen">
         <Hero startAnimation={true} />
-          </div>
-        </div>
         <About />
         <Skills />
         <Experience />

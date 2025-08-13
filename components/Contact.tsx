@@ -210,6 +210,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
           {/* Contact Form */}
           <ScrollReveal animation="fadeRight" duration={1.5} stagger={0.2} start="top 90%" className="h-full">
             <Float y={5} duration={3} delay={0.3} className="h-full">
+              <h2 className="text-2xl font-bold text-white mb-4">Contact Me</h2>
               <div className="p-8 glass-morphism-strong rounded-3xl hover-lift-3d transition-all duration-300 h-full flex flex-col">
                 <form onSubmit={handleSubmit} className="space-y-6 flex flex-col flex-grow">
                   <div>
