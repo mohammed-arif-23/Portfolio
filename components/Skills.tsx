@@ -5,36 +5,36 @@ import { forwardRef } from 'react';
 
 // Official logo URLs for popular technologies
 const techLogos = [
-  { name: 'Next.js', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg' },
-  { name: 'React', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
-  { name: 'JavaScript', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-  { name: 'Node.js', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
-  { name: 'MongoDB', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
-  { name: 'Express', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg' },
-  { name: 'PHP', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg' },
-  { name: 'MySQL', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
-  { name: 'Tailwind', url: 'https://www.svgrepo.com/show/374118/tailwind.svg' },
-  { name: 'HTML5', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
-  { name: 'CSS3', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
-  { name: 'TypeScript', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
-  { name: 'Firebase', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg' },
-  { name: 'Docker', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
-  { name: 'Python', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-  { name: 'Django', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg' },
-  { name: 'Flask', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg' },
-  { name: 'Keras', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/keras/keras-original.svg' },
-  { name: 'TensorFlow', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg' },
-  { name: 'PyTorch', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg' },
-  { name: 'Three.js', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg' },
-  { name: 'Git', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
-  { name: 'Prisma', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg' },
-  { name: 'Bootstrap', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-plain.svg' },
-  { name: 'Redux', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg' },
-  { name: 'Supabase', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg' },
-  { name: 'OpenCV', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg' },
-  { name: 'Java', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
-  { name: 'C++', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
-  { name: 'C#', url: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg' },
+  { name: 'Next.js', url: '/logos/Next.js' },
+  { name: 'React', url: '/logos/React' },
+  { name: 'JavaScript', url: '/logos/JavaScript' },
+  { name: 'Node.js', url: '/logos/Node.js' },
+  { name: 'MongoDB', url: '/logos/MongoDB' },
+  { name: 'Express', url: '/logos/Express' },
+  { name: 'PHP', url: '/logos/PHP' },
+  { name: 'MySQL', url: '/logos/MySQL' },
+  { name: 'Tailwind', url: '/logos/Tailwind' },
+  { name: 'HTML5', url: '/logos/HTML5' },
+  { name: 'CSS3', url: '/logos/CSS3' },
+  { name: 'TypeScript', url: '/logos/TypeScript' },
+  { name: 'Firebase', url: '/logos/Firebase' },
+  { name: 'Docker', url: '/logos/Docker' },
+  { name: 'Python', url: '/logos/Python' },
+  { name: 'Django', url: '/logos/Django' },
+  { name: 'Flask', url: '/logos/Flask' },
+  { name: 'Keras', url: '/logos/Keras' },
+  { name: 'TensorFlow', url: '/logos/TensorFlow' },
+  { name: 'PyTorch', url: '/logos/PyTorch' },
+  { name: 'Three.js', url: '/logos/Three.js' },
+  { name: 'Git', url: '/logos/Git' },
+  { name: 'Prisma', url: '/logos/Prisma' },
+  { name: 'Bootstrap', url: '/logos/Bootstrap' },
+  { name: 'Redux', url: '/logos/Redux' },
+  { name: 'Supabase', url: '/logos/Supabase' },
+  { name: 'OpenCV', url: '/logos/OpenCV' },
+  { name: 'Java', url: '/logos/Java' },
+  { name: 'C++', url: '/logos/C++' },
+  { name: 'C#', url: '/logos/cS' },
 ];
 const Skills = forwardRef<HTMLDivElement>((props, ref) => {
   return (
@@ -69,7 +69,7 @@ const Skills = forwardRef<HTMLDivElement>((props, ref) => {
                   className="flex items-center justify-center p-4 rounded-2xl glass-morphism hover:scale-110 transition-all duration-300 shadow-lg"
                 >
                   <img
-                    src={tech.url}
+                    src={'/images'+tech.url + '.svg'}
                     alt={tech.name}
                     title={tech.name}
                     className="w-14 h-14 object-contain drop-shadow-xl filter saturate-150"
