@@ -40,8 +40,8 @@
   body {
     @apply bg-black text-white;
     background: #000000;
-    cursor: none;
-    user-select: none;
+    cursor: auto;
+    user-select: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
@@ -73,59 +73,160 @@
   }
 }
 
-.custom-cursor {
-  position: fixed;
-  width: 25px;
-  height: 25px;
-  background: rgba(255, 255, 255, 0.75);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: exclusion;
-  transition: transform 0.1s ease-in;
-  top: 0;
-  left: 0;
-}
+/* Remove custom cursor styles */
 
-.custom-cursor-follower {
-  position: fixed;
-  width: 60px;
-  height: 60px;
-  border: 2px solid rgba(255, 255, 255);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transition: all 0.3s ease;
-}
-
-/* Glass Morphism */
+/* Glass Morphism - Apple-like liquid glass */
 .glass-morphism {
-  background: rgba(10, 10, 10, 0.25);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
+  --glass-blur: 22px;
+  --glass-sat: 170%;
+  --glass-bright: 1.04;
+  background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.10),
+      rgba(255, 255, 255, 0.04)
+    );
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 22px rgba(0, 0, 0, 0.30);
+  background-blend-mode: overlay;
+  background-clip: padding-box;
 }
 
+/* Subtle noise texture overlay */
+.glass-morphism::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.12) 0px,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.12) 0px,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+}
+
+/* Liquid shine sweep on hover */
 .glass-morphism::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.5s;
+  top: -150%;
+  left: -150%;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(
+      35% 20% at 50% 50%,
+      rgba(255, 255, 255, 0.28),
+      rgba(255, 255, 255, 0.06) 60%,
+      transparent 70%
+    );
+  transform: rotate(20deg);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .glass-morphism:hover::before {
-  left: 100%;
+  opacity: 1;
+  animation: glass-shine 1.6s ease forwards;
 }
 
+@keyframes glass-shine {
+  0% { transform: translate3d(-20%, -20%, 0) rotate(20deg); }
+  100% { transform: translate3d(20%, 20%, 0) rotate(20deg); }
+}
+
+/* Stronger variant if needed */
 .glass-morphism-strong {
-  background: rgba(20, 20, 20, 0.35);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  --glass-blur: 26px;
+  --glass-sat: 185%;
+  --glass-bright: 1.06;
+  background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.16),
+      rgba(255, 255, 255, 0.06)
+    );
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.10),
+    0 12px 26px rgba(0, 0, 0, 0.40);
+}
+
+/* Dim modifier for glass surfaces */
+.glass-dim {
+  --glass-bright: 0.92;
+}
+.glass-dim::after {
+  opacity: 0.06;
+}
+
+/* Glassy glossy button finish */
+.btn-glass {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 6px 18px rgba(0, 0, 0, 0.28);
+  transition: transform 0.15s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-glass::before {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(35% 20% at 50% 50%, rgba(255,255,255,0.35), rgba(255,255,255,0.08) 60%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.btn-glass:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.10),
+    0 20px 48px rgba(0, 0, 0, 0.34);
+}
+
+.btn-glass:hover::before {
+  opacity: 1;
+  animation: glass-shine 1.25s ease forwards;
+}
+
+.btn-glass:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .glass-morphism:hover::before {
+    animation: none;
+  }
 }
 
 /* Scrollbar */
@@ -169,11 +270,6 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .custom-cursor,
-  .custom-cursor-follower {
-    display: none;
-  }
-  
   body {
     cursor: auto;
     user-select: auto;
@@ -217,5 +313,3 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
-
-

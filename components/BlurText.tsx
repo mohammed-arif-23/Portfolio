@@ -49,7 +49,7 @@ const BlurText: React.FC<BlurTextProps> = ({
 }) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLParagraphElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -96,7 +96,11 @@ const BlurText: React.FC<BlurTextProps> = ({
   );
 
   return (
-    <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
+    <div
+      ref={ref}
+      className={`blur-text ${className} flex-nowrap whitespace-nowrap overflow-x-auto min-w-0`}
+      style={{ width: "100%", minWidth: "220px", minHeight: "2.5em" }}
+    >
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
@@ -119,14 +123,18 @@ const BlurText: React.FC<BlurTextProps> = ({
             style={{
               display: "inline-block",
               willChange: "transform, filter, opacity",
+              minWidth: "1em",
+              fontSize: "clamp(2.2rem, 7vw, 3.5rem)",
+              lineHeight: "1.1",
             }}
+            className="inline-block"
           >
             {segment === " " ? "\u00A0" : segment}
             {animateBy === "words" && index < elements.length - 1 && "\u00A0"}
           </motion.span>
         );
       })}
-    </p>
+    </div>
   );
 };
 

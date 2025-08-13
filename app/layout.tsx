@@ -6,26 +6,21 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'T Mohammed Arif - Full Stack Developer',
-    template: '%s | T Mohammed Arif'
+    default: 'Mohammed Arif T - Portfolio',
+    template: '%s | Mohammed Arif T'
   },
-  description: 'Award-winning Full Stack Web Developer specializing in Next.js, React, Node.js, and modern web technologies. Creating scalable solutions with exceptional user experiences.',
+  description: 'Full Stack Developer and AI & ML Architect specializing in Next.js, MERN, PyTorch and modern web technologies.',
   keywords: [
-    'Full Stack Developer',
-    'Web Developer', 
+    'Mohammed Arif T',
+    'Portfolio',
+    'Full Stack Developer Portfolio',
+    'AI & ML Architect', 
     'Next.js Developer',
-    'React Developer',
-    'Node.js Developer',
-    'JavaScript Developer',
+    'MERN Developer',
     'TypeScript Developer',
     'Salem Developer',
     'Tamil Nadu Developer',
-    'Portfolio',
-    'Freelance Developer',
-    'UI/UX Developer',
-    'Frontend Developer',
-    'Backend Developer'
-  ],
+    'Web Developer',],
   authors: [{ name: 'T Mohammed Arif' }],
   creator: 'T Mohammed Arif',
   publisher: 'T Mohammed Arif',
@@ -34,32 +29,32 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://mohammedarif.dev'),
+  metadataBase: new URL('https://myportfolio-arif.vercel.app/'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://mohammedarif.dev',
-    title: 'T Mohammed Arif - Full Stack Developer',
-    description: 'Award-winning Full Stack Web Developer creating modern, scalable web solutions with Next.js, React, and Node.js',
-    siteName: 'T Mohammed Arif Portfolio',
+    url: 'https://myportfolio-arif.vercel.app/',
+    title: 'Mohammed Arif T - Portfolio',
+    description: 'Full Stack Developer and AI & ML Architect specializing in Next.js, MERN, PyTorch and modern web technologies',
+    siteName: 'Mohammed Arif T - Portfolio',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/profile.jpg',
         width: 1200,
         height: 630,
-        alt: 'T Mohammed Arif - Full Stack Developer',
+        alt: 'Mohammed Arif T - Portfolio',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'T Mohammed Arif - Full Stack Developer',
-    description: 'Award-winning Full Stack Web Developer creating modern, scalable web solutions',
-    creator: '@mohammed_arif',
-    images: ['/og-image.jpg'],
+    title: 'Mohammed Arif T - Portfolio',
+    description: 'Full Stack Developer and AI & ML Architect specializing in Next.js, MERN, PyTorch and modern web technologies',
+    creator: '@mohdarif2303',
+    images: ['/profile.jpg'],
   },
   robots: {
     index: true,
@@ -88,8 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="canonical" href="https://mohammedarif.dev" />
+        <link rel="canonical" href="https://myportfolio-arif.vercel.app" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="msapplication-TileColor" content="#0f172a" />
         

@@ -129,7 +129,7 @@ const Experience = forwardRef<HTMLDivElement>((props, ref) => {
                   >
                     <Float y={5} duration={3} delay={i * 0.1}>
                       <div
-                        className={`p-8 glass-morphism-strong rounded-3xl hover-lift-3d group relative mb-12 transition-all duration-300 ${
+                        className={`p-8 glass-morphism-strong glass-dim rounded-3xl hover-lift-3d group relative mb-12 transition-all duration-300 ${
                           exp.type === "current"
                             ? "border-2 border-white/30"
                             : ""
@@ -193,21 +193,21 @@ const Experience = forwardRef<HTMLDivElement>((props, ref) => {
                         <div className="flex flex-wrap gap-2 mt-4">
                           <a
                             href="https://www.avsenggcollege.ac.in/"
-                            className="glass-morphism flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/10"
+                            className="glass-morphism btn-glass flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300"
                           >
                             <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             <span>AVS Engineering College</span>
                           </a>
                           <a
                             href="https://www.sakthikailashcollege.org/"
-                            className="glass-morphism flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/10"
+                            className="glass-morphism btn-glass flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300"
                           >
                             <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             <span>Shri Sakthikailassh Women's College</span>
                           </a>
                           <a
                             href="https://www.avscollegeomalur.edu.in/"
-                            className="glass-morphism flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/10"
+                            className="glass-morphism btn-glass flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300"
                           >
                             <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             <span>AVS Arts and Science Omalur</span>

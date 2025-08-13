@@ -16,8 +16,7 @@ export default function IntroOverlay({ onFinish }: IntroOverlayProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const messages = [
-    'Hello',
-    'Welcome to my Portfolio',
+    'Hey there 👀'
   ];
 
   useEffect(() => {
@@ -44,13 +43,13 @@ export default function IntroOverlay({ onFinish }: IntroOverlayProps) {
 
     const timeline = gsap.timeline();
 
-    // Initial card entrance
+    // Initial card entrance - optimized with transform3d and reduced blur
     timeline.fromTo(cardRef.current, 
       { 
         scale: 0.8, 
         opacity: 0, 
         y: 50,
-        filter: 'blur(20px)'
+        filter: 'blur(8px)'
       },
       { 
         scale: 1, 
@@ -66,15 +65,15 @@ export default function IntroOverlay({ onFinish }: IntroOverlayProps) {
     timeline.to({}, { duration: 0.5 })
       .call(() => setCurrentMessage(0));
 
-    // Message transitions
+    // Message transitions - optimized blur effects
     messages.forEach((_, index) => {
       if (index === 0) return; // Skip first message as it's already shown
       
       timeline.to({}, { duration: 1.5 }) // Show current message
         .to(cardRef.current, {
-          filter: 'blur(10px)',
+          filter: 'blur(6px)',
           opacity: 0.7,
-          duration: 0.4,
+          duration: 0.3,
           ease: 'power2.inOut'
         })
         .call(() => {
@@ -82,28 +81,28 @@ export default function IntroOverlay({ onFinish }: IntroOverlayProps) {
           setTimeout(() => {
             setCurrentMessage(index);
             setIsTransitioning(false);
-          }, 200);
+          }, 150);
         })
         .to(cardRef.current, {
           filter: 'blur(0px)',
           opacity: 1,
-          duration: 0.4,
+          duration: 0.3,
           ease: 'power2.out'
         });
     });
 
-    // Final exit
+    // Final exit - optimized with transform3d
     timeline.to({}, { duration: 2.5 }) // Show last message
       .to(cardRef.current, {
-        scale: 1.1,
+        scale: 1.05,
         opacity: 0,
-        filter: 'blur(20px)',
-        duration: 1,
+        filter: 'blur(8px)',
+        duration: 0.8,
         ease: 'power2.in'
       })
       .to(overlayRef.current, {
         opacity: 0,
-        duration: 0.8,
+        duration: 0.6,
         ease: 'power2.inOut'
       })
       .call(onFinish);
@@ -118,37 +117,35 @@ export default function IntroOverlay({ onFinish }: IntroOverlayProps) {
     <div
       ref={overlayRef}
       className="fixed inset-0 z-[10000] flex items-center justify-center bg-black pointer-events-none touch-none select-none"
+      style={{
+        willChange: 'opacity',
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden'
+      }}
     >
       {/* Show card only after page is loaded */}
       {isLoaded && (
         <div
           ref={cardRef}
-          className="bg-black backdrop-blur-xl rounded-3xl p-16 max-w-lg mx-4 text-center relative overflow-hidden"
+          className="bg-black backdrop-blur-xl rounded-3xl p-12 sm:p-12 md:p-16 max-w-lg mx-4 text-center relative overflow-hidden min-w-[260px] min-h-[200px] flex items-center justify-center"
+          style={{
+            willChange: 'transform, opacity, filter',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden'
+          }}
         >
           {/* Card content */}
-          <div className="relative z-10 min-h-[180px] flex items-center justify-center">
+          <div className="relative z-10 w-full min-h-[120px] flex items-center justify-center">
             {!isTransitioning && (
-              currentMessage == 0 ? (
-                <BlurText
+              <BlurText
                 key={currentMessage}
                 text={messages[currentMessage]}
-                delay={300}
-                animateBy="letters"
-                direction="top"
+                delay={150}
+                animateBy="words"
+                direction="bottom"
                 onAnimationComplete={handleAnimationComplete}
-                className="text-4xl md:text-4xl font-bold text-white leading-tight drop-shadow-lg"
+                className="text-3xl scale-[1.8] md:scale-[1] sm:text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg w-full min-w-[220px]"
               />
-              ) : (
-                <BlurText
-                 key={currentMessage}
-                 text={messages[currentMessage]}
-                 delay={150}
-                 animateBy="words"
-                 direction="bottom"
-                 onAnimationComplete={handleAnimationComplete}
-                 className="text-3xl md:text-3xl font-bold text-white leading-tight drop-shadow-lg"
-               />
-              )
             )}
           </div>
         </div>

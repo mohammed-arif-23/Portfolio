@@ -30,15 +30,15 @@ const projects = [
   {
     title: 'This Portfolio Website',
     description: 'A modern, interactive portfolio built with Next.js, React, and Tailwind CSS. It features animated backgrounds, 3D effects, sequential scroll animations, and a responsive design. It showcases projects, skills, and experience with a focus on performance and user experience.',
-    technologies: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'Lucide Icons', 'React.Bits', 'GSAP', 'Nodemailer'],
-    liveUrl: '/',
-    githubUrl: 'https://github.com/mohammed-arif-23/portfolio',
+    technologies: ['Next.js','Three.js', 'React', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'Lucide Icons', 'React.Bits', 'GSAP', 'Nodemailer'],
+    liveUrl: '#',
+    githubUrl: '#',
   },
  
   {
     title: 'AI Movie Recommender',
     description: 'A Streamlit application that recommends movies based on genre similarity and release year. It uses cosine similarity on the MovieLens dataset to find relevant films, which are then displayed in an organized grid. The app is built with Streamlit, Pandas, and Scikit-learn.',
-    technologies: ['Streamlit', 'Pandas', 'NumPy', 'Scikit-learn', 'Python'],
+    technologies: ['Streamlit', 'Pandas', 'NumPy', 'Scikit-learn', 'Python','Machine Learning'],
     liveUrl: 'https://arif-nm-movieapi.streamlit.app/',
     githubUrl: 'https://github.com/mohammed-arif-23/nm-movieapi',
   },
@@ -84,7 +84,7 @@ const Projects = forwardRef<HTMLDivElement>((props, ref) => {
             <FadeSlideIn key={index} x={index % 2 === 0 ? -48 : 48} duration={900} delay={index * 120}>
               <ScrollReveal animation="scale" duration={1.5} delay={index * 0.1} stagger={0.2} start="top 90%" className="h-full">
                 <Float y={0} duration={4} delay={index * 0.2} className="h-full">
-                  <div className="glass-morphism-strong rounded-3xl hover-lift-3d h-full flex flex-col justify-between transition-all duration-300">
+                  <div className="glass-morphism-strong glass-dim rounded-3xl hover-lift-3d h-full flex flex-col justify-between transition-all duration-300">
                     <div className="p-4 sm:p-6 flex-1 flex flex-col">
                       <div className="flex items-center space-x-3 mb-4">
                         <Code className="w-6 h-6 text-white" />
@@ -118,7 +118,7 @@ const Projects = forwardRef<HTMLDivElement>((props, ref) => {
                         {project.liveUrl && project.liveUrl !== '#' && (
                           <a
                             href={project.liveUrl}
-                            className="glass-morphism flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/10"
+                            className="glass-morphism glass-dim btn-glass flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300"
                           >
                             <Eye className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             <span>View Live</span>
@@ -127,7 +127,7 @@ const Projects = forwardRef<HTMLDivElement>((props, ref) => {
                         {project.githubUrl && project.githubUrl !== '#' && (
                           <a
                             href={String(project.githubUrl)}
-                            className="glass-morphism flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/10"
+                            className="glass-morphism glass-dim btn-glass flex items-center justify-center space-x-2 group px-6 py-3 rounded-full transition-all duration-300"
                           >
                             <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             <span>Source Code</span>

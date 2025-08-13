@@ -118,7 +118,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
           <div className="space-y-8">
             <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%">
               <Float y={5} duration={3}>
-                <div className="p-8 glass-morphism-strong rounded-3xl hover-lift-3d transition-all duration-300">
+                <div className="p-8 glass-morphism-strong glass-dim rounded-3xl hover-lift-3d transition-all duration-300">
                   <div className="flex items-center space-x-4 mb-6">
                     <div className="p-3 bg-white/10 rounded-2xl">
                       <User className="w-6 h-6 text-white" />
@@ -128,7 +128,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                   
                   <div className="space-y-6">
                     <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%" delay={0.1}>
-                      <div className="flex items-center space-x-4 p-4 glass-morphism rounded-xl hover:bg-white/10 transition-colors group">
+                      <div className="flex items-center space-x-4 p-4 glass-morphism glass-dim rounded-xl transition-colors group">
                         <div className="p-3 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">
                           <Mail className="w-6 h-6 text-white" />
                         </div>
@@ -142,7 +142,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                     </ScrollReveal>
 
                     <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%" delay={0.2}>
-                      <div className="flex items-center space-x-4 p-4 glass-morphism rounded-xl hover:bg-white/10 transition-colors group">
+                      <div className="flex items-center space-x-4 p-4 glass-morphism glass-dim rounded-xl transition-colors group">
                         <div className="p-3 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">
                           <Phone className="w-6 h-6 text-white" />
                         </div>
@@ -156,7 +156,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                     </ScrollReveal>
 
                     <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%" delay={0.3}>
-                      <div className="flex items-center space-x-4 p-4 glass-morphism rounded-xl hover:bg-white/10 transition-colors group">
+                      <div className="flex items-center space-x-4 p-4 glass-morphism glass-dim rounded-xl transition-colors group">
                         <div className="p-3 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">
                           <MapPin className="w-6 h-6 text-white" />
                         </div>
@@ -173,7 +173,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
 
             <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%" delay={0.2}>
               <Float y={5} duration={3} delay={0.5}>
-                <div className="p-8 glass-morphism-strong rounded-3xl hover-lift-3d transition-all duration-300">
+                <div className="p-8 glass-morphism-strong glass-dim rounded-3xl hover-lift-3d transition-all duration-300">
                   <div className="flex items-center space-x-4 mb-6">
                     <div className="p-3 bg-white/10 rounded-2xl">
                       <Sparkles className="w-6 h-6 text-white" />
@@ -183,15 +183,15 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                   <ul className="space-y-4 text-gray-300">
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                      <span>Award-winning developer with proven track record</span>
+                      <span>Skilled Full Stack Developer in Next.js, MERN, and AI/ML.</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                      <span>Full-stack expertise from concept to deployment</span>
+                      <span>Crafts responsive, user-focused web applications with performance optimization.</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                      <span>Modern technologies and best practices</span>
+                      <span>Creative thinker driving dynamic, efficient solutions for real-world challenges.</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
@@ -208,10 +208,15 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
           </div>
 
           {/* Contact Form */}
-          <ScrollReveal animation="fadeRight" duration={1.5} stagger={0.2} start="top 90%" className="h-full">
-            <Float y={5} duration={3} delay={0.3} className="h-full">
-              <h2 className="text-2xl font-bold text-white mb-4">Contact Me</h2>
-              <div className="p-8 glass-morphism-strong rounded-3xl hover-lift-3d transition-all duration-300 h-full flex flex-col">
+          <ScrollReveal animation="fadeRight" duration={1.5} stagger={0.2} start="top 90%" className="space-y-8">
+            <Float y={5} duration={3} delay={0.3}>
+              <div className="p-8 glass-morphism-strong glass-dim rounded-3xl hover-lift-3d transition-all duration-300 flex flex-col">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="p-3 bg-white/10 rounded-2xl">
+                    <MessageCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">Contact Me</h3>
+                </div>
                 <form onSubmit={handleSubmit} className="space-y-6 flex flex-col flex-grow">
                   <div>
                     <label htmlFor="name" className="block text-white font-medium mb-3 text-lg">
@@ -224,7 +229,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-6 py-4 glass-morphism border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 hover:border-white/30"
+                      className="w-full px-6 py-4 glass-morphism glass-dim border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 hover:border-white/30"
                       placeholder="Enter your full name"
                     />
                   </div>
@@ -240,7 +245,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-6 py-4 glass-morphism border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 hover:border-white/30"
+                      className="w-full px-6 py-4 glass-morphism glass-dim border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 hover:border-white/30"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -255,8 +260,8 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      rows={12}
-                      className="w-full px-6 py-4 glass-morphism border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 resize-none hover:border-white/30"
+                      rows={11}
+                      className="w-full px-6 py-4 glass-morphism glass-dim border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 resize-none hover:border-white/30"
                       placeholder="Tell me about your project, goals, timeline, and any specific requirements..."
                     />
                   </div>
@@ -266,7 +271,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center space-x-3 px-8 py-4 glass-morphism rounded-2xl font-medium transition-all duration-300 hover-lift-3d focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed group hover:bg-white/10"
+                    className="w-full flex items-center justify-center space-x-3 px-8 py-4 glass-morphism btn-glass rounded-2xl font-medium transition-all duration-300 hover-lift-3d focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed group"
                   >
                     {isSubmitting ? (
                       <>

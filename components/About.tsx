@@ -29,7 +29,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 relative overflow-hidden"
+      className="py-10 md:py-20 relative overflow-hidden"
       style={{ marginTop: '60px' }}
     >
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -45,14 +45,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
               >
                 About Me
               </TextSplit>
-              <TextSplit 
-                className="text-xl text-gray-400 max-w-3xl mx-auto"
-                animation="words"
-                stagger={0.05}
-                duration={0.8}
-              >
-                Passionate developer crafting the future of web experiences
-              </TextSplit>
+             
             </ScrollReveal>
             </FadeSlideIn>
           </div>
@@ -62,7 +55,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
               <FadeSlideIn duration={900}>
                 <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%">
                 <Float y={5} duration={3}>
-                  <div className="p-8 glass-morphism-strong rounded-3xl hover-lift-3d transition-all duration-300">
+                  <div className="p-8 glass-morphism-strong glass-dim rounded-3xl hover-lift-3d transition-all duration-300">
                     <div className="flex items-center space-x-4 mb-6">
                       <div className="p-3 bg-white/10 rounded-xl">
                         <Code className="w-6 h-6 text-white" />
@@ -75,21 +68,10 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
                       stagger={0.03}
                       duration={0.8}
                     >
-                      I'm a passionate Full Stack Web Developer with extensive experience in creating 
-                      scalable web applications using modern technologies. My expertise spans across 
-                      Next.js, MERN Stack, Docker, PHP, MySQL, and JavaScript, with a focus on delivering 
-                      exceptional user experiences. I also leverage AI and Machine Learning techniques to solve real-world problems and build innovative solutions.
-                    </TextSplit>
-                    <TextSplit 
-                      className="text-lg text-gray-300 leading-relaxed"
-                      animation="words"
-                      stagger={0.03}
-                      duration={0.8}
-                    >
-                      I specialize in responsive design, performance optimization, and RESTful API 
-                      development. With a proven track record of enhancing user experiences through 
-                      strong problem-solving skills, I'm committed to delivering high-quality solutions.
-                    </TextSplit>
+                     I'm a passionate Full Stack Developer skilled in Next.js, MERN Stack, PHP, MySQL, JavaScript, and AI/ML, delivering responsive, user-centric web applications. I specialize in RESTful API development, performance optimization, and dynamic UI/UX design, ensuring seamless, high-quality digital experiences. With expertise in Docker, Tailwind CSS, and machine learning frameworks like PyTorch and Keras, 
+                     I create innovative, efficient solutions, leveraging strong problem-solving and collaborative skills to drive impactful web development outcomes.
+                        </TextSplit>
+                  
                   </div>
                 </Float>
               </ScrollReveal>
@@ -98,7 +80,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
               <FadeSlideIn duration={900} delay={100}>
                 <ScrollReveal animation="fadeLeft" duration={1.5} stagger={0.2} start="top 90%" delay={0.2}>
                 <Float y={5} duration={3} delay={0.5}>
-                  <div className="p-6 glass-morphism-strong rounded-2xl hover-lift-3d transition-all duration-300">
+                  <div className="p-6 glass-morphism-strong glass-dim rounded-2xl hover-lift-3d transition-all duration-300">
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="p-2 bg-white/10 rounded-lg">
                         <Award className="w-5 h-5 text-white" />
@@ -124,7 +106,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
               <FadeSlideIn duration={900}>
                 <ScrollReveal animation="fadeRight" duration={1.5} stagger={0.2} start="top 90%">
                 <Float y={5} duration={3} delay={0.1}>
-                  <div className="p-6 glass-morphism-strong rounded-2xl hover-lift-3d transition-all duration-300 group">
+                  <div className="p-6 glass-morphism-strong glass-dim rounded-2xl hover-lift-3d transition-all duration-300 group">
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="p-3 bg-white/10 rounded-xl group-hover:bg-white/20 transition-colors">
                         <MapPin className="w-6 h-6 text-white" />
@@ -142,7 +124,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
               <FadeSlideIn duration={900} delay={100}>
                 <ScrollReveal animation="fadeRight" duration={1.5} stagger={0.2} start="top 90%" delay={0.2}>
                 <Float y={5} duration={3} delay={0.2}>
-                  <div className="p-6 glass-morphism-strong rounded-2xl hover-lift-3d transition-all duration-300 group">
+                  <div className="p-6 glass-morphism-strong glass-dim rounded-2xl hover-lift-3d transition-all duration-300 group">
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="p-3 bg-white/10 rounded-xl group-hover:bg-white/20 transition-colors">
                         <Calendar className="w-6 h-6 text-white" />
@@ -160,7 +142,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
               <FadeSlideIn duration={900} delay={200}>
                 <ScrollReveal animation="fadeRight" duration={1.5} stagger={0.2} start="top 90%" delay={0.4}>
                 <Float y={5} duration={3} delay={0.3}>
-                  <div className="p-6 glass-morphism-strong rounded-2xl hover-lift-3d transition-all duration-300">
+                  <div className="p-6 glass-morphism-strong glass-dim rounded-2xl hover-lift-3d transition-all duration-300">
                     <h3 className="text-xl font-bold text-white mb-4">Languages Known</h3>
                     <div className="grid grid-cols-2 gap-3">
                       {['English', 'Urdu', 'Tamil', 'Hindi'].map((lang, index) => (
@@ -180,7 +162,7 @@ const About = forwardRef<HTMLDivElement>((props, ref) => {
               <FadeSlideIn duration={900} delay={300}>
                 <ScrollReveal animation="fadeRight" duration={1.5} stagger={0.2} start="top 90%" delay={0.6}>
                 <Float y={5} duration={3} delay={0.4}>
-                  <div className="p-6 glass-morphism-strong rounded-2xl hover-lift-3d transition-all duration-300">
+                  <div className="p-6 glass-morphism-strong glass-dim rounded-2xl hover-lift-3d transition-all duration-300">
                     <h3 className="text-xl font-bold text-white mb-4">Quick Stats</h3>
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">

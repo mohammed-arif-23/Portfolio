@@ -18,49 +18,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const cursorFollowerRef = useRef<HTMLDivElement>(null);
   const [floatingElements, setFloatingElements] = useState<any[]>([]);
   const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
-    // Custom Cursor
-    const cursor = cursorRef.current;
-    const cursorFollower = cursorFollowerRef.current;
-  
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX;
-      const y = e.clientY;
-      if (cursor) {
-        cursor.style.left = `${x}px`;
-        cursor.style.top = `${y}px`;
-      }
-      if (cursorFollower) {
-        cursorFollower.style.left = `${x - 20}px`;
-        cursorFollower.style.top = `${y - 20}px`;
-      }
-    };
-
-    const handleMouseEnter = () => {
-      if (cursor) cursor.style.transform = 'scale(1.5)';
-    };
-    const handleMouseLeave = () => {
-      if (cursor) cursor.style.transform = 'scale(1)';
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    const interactiveElements = document.querySelectorAll('a, button, .hover-lift-3d, .card-3d');
-    interactiveElements.forEach(element => {
-      element.addEventListener('mouseenter', handleMouseEnter);
-      element.addEventListener('mouseleave', handleMouseLeave);
-    });
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      interactiveElements.forEach(element => {
-        element.removeEventListener('mouseenter', handleMouseEnter);
-        element.removeEventListener('mouseleave', handleMouseLeave);
-      });
-    };
+    // Remove custom cursor effect
   }, []);
 
   useEffect(() => {
@@ -116,22 +78,34 @@ export default function Home() {
       end: 'bottom 20%'
     });
 
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      // Parallax for floating elements
+    // Parallax with rAF to avoid work on every scroll event
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateParallax = () => {
+      const scrolled = lastScrollY;
       const parallaxElements = document.querySelectorAll('.parallax-element');
       parallaxElements.forEach(el => {
         const speed = parseFloat(el.getAttribute('data-speed') || '0.5');
         const yPos = -(scrolled * speed);
-        (el as HTMLElement).style.transform = `translateY(${yPos}px)`;
+        (el as HTMLElement).style.transform = `translate3d(0, ${yPos}px, 0)`;
       });
+      ticking = false;
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
+    const onScroll = () => {
+      lastScrollY = window.scrollY;
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true } as any);
+    updateParallax();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', onScroll as any);
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
@@ -146,14 +120,8 @@ export default function Home() {
         />
       )}
       <SEO />
-  
       {/* Floating Elements */}
-      
-
-      <Aurora
-       
-      />
-      
+      <Aurora />
       <div ref={containerRef} className="relative">
         <Hero startAnimation={true} />
         <About />
@@ -162,10 +130,6 @@ export default function Home() {
         <Projects />
         <Contact />
       </div>
-
-      {/* --- Custom Cursor: Always at the very end of the React tree --- */}
-      <div ref={cursorRef} className="custom-cursor"></div>
-      <div ref={cursorFollowerRef} className="custom-cursor-follower"></div>
     </>
   );
 }
