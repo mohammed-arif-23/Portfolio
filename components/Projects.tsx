@@ -18,7 +18,7 @@ const projects = [
     description: 'A full-stack, real-time digital twin simulator of a V8 engine-powered car. This project features physics-based engine dynamics, an interactive 3D visualization using Three.js, a live telemetry dashboard, and a RESTful backend with persistent state management.',
     technologies: ['Next.js', 'Three.js', 'React Three Fiber', 'MongoDB', 'Node.js', 'Tailwind CSS'],
     liveUrl: '#',
-    githubUrl: 'https://github.com/mohammed-arif-23/v8-digital-twin-simulator',
+    githubUrl: 'https://github.com/mohammed-arif-23/digital-twin',
   },
   {
     title: 'Pixels to Plates',
@@ -146,4 +146,5 @@ const Projects = forwardRef<HTMLDivElement>((props, ref) => {
   );
 });
 Projects.displayName = 'Projects';
+
 export default Projects;
