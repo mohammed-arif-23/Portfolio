@@ -1,340 +1,368 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Github, Linkedin, Instagram, Mail, MapPin, Briefcase, Download } from 'lucide-react';
-import TextType from '@/components/TextType';
-import { RippleButton, MorphButton } from '@/components/MicroInteractions';
+import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
+import MagneticWrapper from './MagneticWrapper';
+import SplitType from 'split-type';
+import { GlitchMorphText } from './ui/glitch-morph-text';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// MIUX-style text split function
-function splitTextIntoSpans(element: HTMLElement) {
-  const text = element.textContent || '';
-  element.innerHTML = '';
-  
-  text.split('').forEach((char, index) => {
-    const span = document.createElement('div');
-    span.style.position = 'relative';
-    span.style.display = 'inline-block';
-    span.textContent = char === ' ' ? '\u00A0' : char;
-    element.appendChild(span);
-  });
-}
+const BOOT_LOGS = [
+  "> INITIALIZING KERNEL...",
+  "> LOADING CREATIVE MODULES...",
+  "> BYPASSING SECURITY PROTOCOLS...",
+  "> CONNECTING TO SERVER...",
+  "> ACCESS GRANTED TO PORTFOLIO"
+];
+
+const PROFILE_IMG = "Images/profile.png";
 
 export default function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const welcomeRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
-  const greetingRef = useRef<HTMLParagraphElement>(null);
-  const typewriterRef = useRef<HTMLDivElement>(null);
-  const buttonsRef = useRef<HTMLDivElement>(null);
-  const socialRef = useRef<HTMLDivElement>(null);
+
+  const [bootStage, setBootStage] = useState<'booting' | 'complete'>('booting');
+  const [logs, setLogs] = useState<string[]>([]);
+  const [nameHover, setNameHover] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Generate particle data once to avoid hydration mismatch
+  const particles = useMemo(() =>
+    Array.from({ length: 15 }, () => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: 10 + Math.random() * 20,
+      delay: Math.random() * 5
+    })),
+    []
+  );
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Set initial states with blur for all elements
-      const allElements = [
-        greetingRef.current,
-        titleRef.current,
-        typewriterRef.current,
-        descRef.current,
-        buttonsRef.current,
-        socialRef.current,
-        imageRef.current
-      ].filter(Boolean);
+    // 1. Terminal Boot Sequence (Self-Driving)
+    const runBootSequence = async () => {
+      // Type logs
+      for (const log of BOOT_LOGS) {
+        setLogs(prev => [...prev, log]);
+        await new Promise(r => setTimeout(r, Math.random() * 200 + 50));
+      }
 
-      gsap.set(allElements, {
-        opacity: 0,
-        filter: 'blur(10px)',
-        y: 30,
-        scale: 0.95
+      // Short pause
+      await new Promise(r => setTimeout(r, 600));
+
+      // Collapse Terminal
+      const tl = gsap.timeline({
+        onStart: () => {
+          setBootStage('complete');
+        },
+        onComplete: () => {
+          if (terminalRef.current) terminalRef.current.style.display = 'none';
+        }
       });
 
-      // Animate greeting first
-      if (greetingRef.current) {
-        gsap.to(greetingRef.current, {
-          opacity: 1,
-          filter: 'blur(0px)',
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          delay: 0.2,
-          ease: 'power3.out'
+      tl.to(terminalRef.current, {
+        scaleY: 0.005,
+        duration: 0.2,
+        ease: 'power4.in'
+      })
+        .to(terminalRef.current, {
+          width: 0,
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power4.in'
         });
-      }
+    };
 
-      // MIUX-style title animation with text split and blur
-      const titleElement = titleRef.current;
-      if (titleElement) {
-        // First animate the title container
-        gsap.to(titleElement, {
-          opacity: 1,
-          filter: 'blur(0px)',
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          delay: 0.5,
-          ease: 'power3.out'
-        });
+    runBootSequence();
+    setHasMounted(true);
 
-        splitTextIntoSpans(titleElement);
-        const chars = titleElement.querySelectorAll('div');
-        
-        gsap.set(chars, { 
-          opacity: 0, 
-          y: '100%', 
-          rotateX: 90,
-          transformOrigin: '50% 100%'
-        });
-        
-        gsap.to(chars, {
-          opacity: 1,
-          y: '0%',
-          rotateX: 0,
-          duration: 0.8,
-          stagger: 0.05,
-          delay: 0.6,
-          ease: 'power3.out'
-        });
-      }
-
-      // Animate typewriter section
-      if (typewriterRef.current) {
-        gsap.to(typewriterRef.current, {
-          opacity: 1,
-          filter: 'blur(0px)',
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          delay: 0.8,
-          ease: 'power3.out'
-        });
-      }
-
-      // Animate description with blur
-      if (descRef.current) {
-        gsap.to(descRef.current, {
-          opacity: 1,
-          filter: 'blur(0px)',
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          delay: 1.1,
-          ease: 'power3.out'
-        });
-      }
-
-      // Animate buttons
-      if (buttonsRef.current) {
-        gsap.to(buttonsRef.current, {
-          opacity: 1,
-          filter: 'blur(0px)',
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          delay: 1.4,
-          ease: 'power3.out'
-        });
-      }
-
-      // Animate social links
-      if (socialRef.current) {
-        gsap.to(socialRef.current, {
-          opacity: 1,
-          filter: 'blur(0px)',
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-          delay: 1.7,
-          ease: 'power3.out'
-        });
-      }
-
-      // Animate image with clip-path reveal, blur and parallax
-      if (imageRef.current) {
-        gsap.fromTo(
-          imageRef.current,
-          { 
-            opacity: 0, 
-            scale: 0.9,
-            filter: 'blur(15px)',
-            clipPath: 'inset(100% 0% 0% 0%)'
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            filter: 'blur(0px)',
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 1.2,
-            delay: 0.3,
-            ease: 'power3.out',
-          }
-        );
-
-        // Add parallax effect to image
-        gsap.to(imageRef.current, {
-          y: '-20%',
-          scrollTrigger: {
-            trigger: imageRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          }
-        });
-      }
-    }, heroRef);
-
-    return () => ctx.revert();
   }, []);
 
-  const socialLinks = [
-    {
-      name: 'LinkedIn',
-      icon: Linkedin,
-      href: 'https://www.linkedin.com/in/mohammed-arif-0ab6402a1',
-      color: 'hover:text-blue-600'
-    },
-    {
-      name: 'GitHub',
-      icon: Github,
-      href: 'https://github.com/mohammed-arif-23/',
-      color: 'hover:text-gray-800'
-    },
-    {
-      name: 'Email',
-      icon: Mail,
-      href: 'mailto:mohammedarif2303@gmail.com',
-      color: 'hover:text-red-600'
-    },
-    {
-      name: 'Instagram',
-      icon: Instagram,
-      href: 'https://instagram.com/mohammedarif__',
-      color: 'hover:text-pink-600'
-    },
-  ];
+  useEffect(() => {
+    if (bootStage !== 'complete') return;
+
+    let titleSplit: SplitType | null = null;
+    let ctx: gsap.Context;
+
+    // 2. Main Hero Reveal
+    const runReveal = () => {
+      ctx = gsap.context(() => {
+
+        // Setup Text Split with 3D transform
+        if (textRef.current) {
+          titleSplit = new SplitType(textRef.current, { types: 'chars' });
+          gsap.set(titleSplit.chars, { y: '120%', opacity: 0, rotateY: -90, transformOrigin: 'center' });
+        }
+
+        // Initial States
+        gsap.set(welcomeRef.current, { opacity: 0, scale: 0.9 });
+        gsap.set(imageRef.current, { opacity: 0, scale: 0.8, filter: 'grayscale(100%) blur(10px)' });
+
+        const tl = gsap.timeline();
+
+        // Reveal Sequence
+        tl.to(welcomeRef.current, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          ease: 'power2.out',
+          delay: 0.1
+        })
+          .to(welcomeRef.current, {
+            opacity: 0,
+            y: -20,
+            duration: 0.4,
+            ease: 'power2.in',
+            delay: 0.4
+          })
+          .add(() => {
+            // Image Reveal (Subtle background fade in)
+            if (imageRef.current) {
+              gsap.to(imageRef.current, {
+                opacity: 1, // 100% opacity
+                scale: 1,
+                filter: 'grayscale(0%) blur(0px)',
+                duration: 1.5,
+                ease: 'power2.out'
+              });
+            }
+
+            // Name Reveal - Enhanced 3D Flip
+            if (titleSplit && titleSplit.chars) {
+              gsap.to(titleSplit.chars, {
+                y: '0%',
+                opacity: 1,
+                rotateY: 0,
+                duration: 1.4,
+                stagger: 0.05,
+                ease: 'expo.out'
+              });
+            }
+          }, '-=0.2') // Start with text
+          // Socials & Elements
+          .fromTo('.hero-social',
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 },
+            '-=1'
+          );
+
+      }, containerRef);
+    };
+
+    const timer = setTimeout(runReveal, 50);
+
+    // Parallax Logic
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const xPos = (clientX / window.innerWidth - 0.5);
+      const yPos = (clientY / window.innerHeight - 0.5);
+
+      if (textRef.current) {
+        gsap.to(textRef.current, {
+          x: xPos * 60,
+          y: yPos * 60,
+          duration: 1,
+          ease: 'power2.out',
+        });
+      }
+
+      // Reverse Parallax for Image (Depth effect)
+      if (imageRef.current) {
+        gsap.to(imageRef.current, {
+          x: -xPos * 30,
+          y: -yPos * 30,
+          duration: 1.2,
+          ease: 'power2.out'
+        });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Scroll-based Parallax with GSAP
+    if (textRef.current) {
+      gsap.to(textRef.current, {
+        y: -150,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+        }
+      });
+    }
+
+    if (imageRef.current) {
+      gsap.to(imageRef.current, {
+        y: 100,
+        scale: 1.1,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+        }
+      });
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (ctx) ctx.revert();
+      if (titleSplit) titleSplit.revert();
+      clearTimeout(timer);
+    }
+  }, [bootStage]);
 
   return (
-    <section ref={heroRef} className="relative min-h-screen flex items-center pt-16 pb-8 md:py-18 overflow-hidden" aria-label="Hero">
-      {/* Mesh Gradient Background */}
-      <div className="absolute inset-0 -z-10 mesh-gradient" />
-      
-      {/* Noise Texture Overlay - Above gradient, below content */}
-      <div 
-        className="absolute inset-0 z-0 opacity-[0.65] mix-blend-overlay pointer-events-none"
-        style={{
-          backgroundImage: 'url(https://www.richardsancho.com/img/noise.png)',
-          backgroundRepeat: 'repeat',
-          backgroundSize: '200px 200px'
-        }}
-      />
-      <div className="container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-8 gap-2  md:gap-10 items-center">
-          {/* Image - First on mobile, Left on desktop */}
-          <div className="lg:col-span-5 order-1 lg:order-1">
-            <div
-              ref={imageRef}
-              className="relative aspect-square lg:aspect-[3/4] rounded-3xl overflow-hidden max-w-xs sm:max-w-sm lg:max-w-md mx-auto lg:mx-0"
-            >
-              <img
-                src="/images/profile.png"
-                alt="Mohammed Arif"
-                className="w-full h-full  shadow-3xl object-cover"
-              />
-           
-            </div>
-          </div>
+    <section
+      ref={containerRef}
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-[#050505]"
+    >
+      {/* Solid Black Background */}
+      <div className="absolute inset-0 bg-black"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(204,255,0,0.02),transparent_50%)]"></div>
 
-          {/* Content - Second on mobile, Right on desktop */}
-          <div className="lg:col-span-7 order-2 lg:order-2">
-            <p ref={greetingRef} className="body-18 text-brand-dark/70 mb-2 font-medium">Hello, I'm</p>
-            <h1
-              ref={titleRef}
-              className="heading-64 text-brand-dark mb-4 font-cookie leading-tight"
-            >
-              Mohammed Arif .T
-            </h1>
-            
-            {/* Typing subtitle */}
-            <div ref={typewriterRef} className="mb-6 h-12">
-              <TextType
-                text={[
-                  'Full Stack Developer',
-                  'Web Development Enthusiast',
-                  'UI/UX Advocate',
-                  'Problem‑Solving Coder',
-                  'AI & ML Architect',
-                  'Responsive Design Specialist',
-                ]}
-                className="text-2xl md:text-3xl text-brand-dark font-semibold"
-                cursorClassName="text-2xl md:text-3xl text-black"
-                typingSpeed={45}
-                deletingSpeed={28}
-                pauseDuration={1400}
-              />
-            </div>
+      {/* Floating Particles - CSS Only */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {hasMounted && particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-brand-accent/30 rounded-full blur-sm"
+            style={{
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animation: `float ${particle.duration}s ease-in-out infinite`,
+              animationDelay: `${particle.delay}s`
+            }}
+          />
+        ))}
+      </div>
 
-            <div ref={descRef} className="space-y-4 mb-8">
-              <p className="body-20 text-brand-dark leading-relaxed">
-                Passionate Full Stack Developer specializing in Next.js, MERN Stack, and AI/ML. 
-                I craft responsive, innovative web applications with a strong focus on performance, 
-                user experience, and cutting-edge technologies.
-              </p>
-            </div>
+      {/* Depth Parallax Layers */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(204,255,0,0.1),transparent_40%)] animate-pulse-slower"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(204,255,0,0.08),transparent_50%)] animate-pulse-slow"></div>
+      </div>
 
-            {/* CTA Buttons */}
-            <div ref={buttonsRef} className="flex gap-3 md:gap-4 flex-wrap mb-8">
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 border-neutral-900 bg-neutral-900 text-white hover:bg-transparent hover:text-neutral-900 transition-all font-semibold"
-              >
-                <Mail className="w-5 h-5" />
-                Get In Touch
-              </a>
-              <a
-                href="/My_Resume.pdf"
-                download
-                className="group relative inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-brand-dark text-brand-dark bg-transparent overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl font-semibold"
-              >
-                <div className="absolute inset-0 bg-brand-dark scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                <Download className="w-5 h-5 relative z-10 group-hover:translate-y-1 group-hover:text-brand-light transition-all duration-300" />
-                <span className="relative z-10 group-hover:text-brand-light transition-colors duration-300">
-                  <span className="inline-block group-hover:animate-pulse">Download</span> CV
-                </span>
-                <div className="absolute inset-0 rounded-full bg-brand-accent/20 scale-0 group-hover:scale-100 transition-transform duration-500 delay-100"></div>
-              </a>
-            </div>
-
-            {/* Social Links */}
-            <div ref={socialRef} className="flex flex-col gap-4">
-              <p className="text-sm font-semibold text-brand-dark/60 uppercase tracking-wider">Connect With Me</p>
-              <div className="flex gap-3">
-                {socialLinks.map((social) => {
-                  const Icon = social.icon;
-                  return (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`group relative p-4 rounded-full border-2 border-brand-dark/20 text-brand-dark bg-brand-light hover:border-brand-dark overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-lg ${social.color}`}
-                      aria-label={social.name}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/10 to-brand-dark/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <Icon className="w-5 h-5 relative z-10 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300" />
-                      <div className="absolute inset-0 rounded-full bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-500"></div>
-                      <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-brand-accent/20 to-brand-dark/20 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300 -z-10"></div>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+      {/* TERMINAL OVERLAY */}
+      <div
+        ref={terminalRef}
+        className="absolute inset-0 z-[100] bg-[#050505] flex items-center justify-center font-mono text-[#ccff00] p-10"
+      >
+        {/* ... Terminal Content ... */}
+        <div className="w-full max-w-2xl">
+          {logs.map((log, i) => (
+            <div key={i} className="mb-2 text-lg md:text-xl opacity-80">{log}</div>
+          ))}
+          <div className="animate-pulse">_</div>
         </div>
       </div>
-    </section>
+
+      {/* HERO CONTENT */}
+      <div
+        className={`relative z-10 w-full h-full flex flex-col items-center justify-center transition-opacity duration-500 ${bootStage === 'complete' ? 'opacity-100' : 'opacity-0'}`}
+      >
+        {/* Welcome Tag */}
+        <div ref={welcomeRef} className="absolute top-[20%] text-sm font-mono text-brand-accent tracking-widest uppercase select-none z-30">
+          WELCOME DEV!!
+        </div>
+
+        {/* IMAGE (Centered) with Orbital Rings */}
+        <div
+          ref={imageRef}
+          className="group/image relative w-[500px] h-[500px] md:w-[600px] md:h-[600px] rounded-full opacity-0 z-10 flex items-center justify-center"
+        >
+          {/* Orbital Ring 1 - Slow Rotate */}
+          <div className="absolute inset-[-30px] rounded-full border-2 border-brand-accent/20 animate-[spin_25s_linear_infinite]">
+            <div className="absolute top-0 left-1/2 w-2 h-2 bg-brand-accent rounded-full -translate-x-1/2 blur-sm"></div>
+          </div>
+
+          {/* Orbital Ring 2 - Counter Rotate */}
+          <div className="absolute inset-[-60px] rounded-full border border-brand-accent/10 animate-[spin_40s_linear_infinite_reverse]">
+            <div className="absolute top-1/2 right-0 w-1.5 h-1.5 bg-brand-accent/50 rounded-full -translate-y-1/2 blur-sm"></div>
+          </div>
+
+          {/* Orbital Ring 3 - Fastest */}
+          <div className="absolute inset-[-90px] rounded-full border border-brand-accent/5 animate-[spin_15s_linear_infinite]">
+            <div className="absolute bottom-0 left-1/2 w-1 h-1 bg-brand-accent/30 rounded-full -translate-x-1/2 blur-sm"></div>
+          </div>
+
+          {/* Hover Glow Pulse */}
+          <div className="absolute inset-0 rounded-full bg-brand-accent/0 group-hover/image:bg-brand-accent/10 transition-all duration-1000 blur-3xl scale-150 group-hover/image:scale-[1.8]"></div>
+
+          {/* Subtle glow ring */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-accent/10 via-transparent to-transparent blur-xl"></div>
+          <div className="absolute inset-0 rounded-full ring-1 ring-brand-accent/20 group-hover/image:ring-brand-accent/40 transition-all duration-500"></div>
+
+          {/* Image */}
+          <div className="relative w-full h-full rounded-full overflow-hidden">
+            <img
+              src={PROFILE_IMG}
+              alt="Mohammed Arif"
+              className="w-full h-full object-contain group-hover/image:scale-105 transition-transform duration-700"
+            />
+          </div>
+        </div>
+
+        {/* TEXT OVERLAY (Pinned Top/Bottom & Centered & Blend Mode) */}
+        <div
+          ref={textRef}
+          className="absolute inset-0 w-full h-full pointer-events-none z-50 mix-blend-difference flex flex-col py-0"
+        >
+          {/* Top Text - MOHAMMED */}
+          <div className="w-full flex justify-center pt-2">
+            <h1
+              className={`pointer-events-auto cursor-pointer text-[13.5vw] leading-none font-bold font-cookie text-[#ffffff] select-none tracking-tighter whitespace-nowrap transition-transform duration-500 ${nameHover ? 'skew-x-2 scale-105' : 'skew-x-0 scale-100'}`}
+              onMouseEnter={() => setNameHover(true)}
+              onMouseLeave={() => setNameHover(false)}
+            >
+              <GlitchMorphText text="MOHAMMED" />
+            </h1>
+          </div>
+
+          {/* Bottom Text - ARIF */}
+          <div className="w-full flex justify-center pb-2">
+            <h1
+              className={`pointer-events-auto cursor-pointer text-[13.5vw] leading-none font-bold font-cookie text-[#ffffff] select-none tracking-tighter whitespace-nowrap transition-transform duration-500 ${nameHover ? '-skew-x-2 scale-105' : 'skew-x-0 scale-100'}`}
+              onMouseEnter={() => setNameHover(true)}
+              onMouseLeave={() => setNameHover(false)}
+            >
+              <GlitchMorphText text="ARIF" />
+            </h1>
+          </div>
+        </div>
+
+
+        {/* Socials & Scroll Down */}
+        <div className="absolute bottom-6 flex flex-col items-center gap-6 z-40 mix-blend-difference">
+          <div className="flex gap-6">
+            <MagneticWrapper>
+              <a href="https://github.com/mohammed-arif-23" target="_blank" rel="noopener noreferrer" className="hero-social group block text-[#ededed] hover:text-[#ccff00] transition-all duration-300 p-3 relative">
+                <div className="absolute inset-0 bg-brand-accent/0 group-hover:bg-brand-accent/20 rounded-full blur-xl transition-all duration-500 scale-0 group-hover:scale-150"></div>
+                <Github size={24} className="relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+              </a>
+            </MagneticWrapper>
+            <MagneticWrapper>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hero-social group block text-[#ededed] hover:text-[#ccff00] transition-all duration-300 p-3 relative">
+                <div className="absolute inset-0 bg-brand-accent/0 group-hover:bg-brand-accent/20 rounded-full blur-xl transition-all duration-500 scale-0 group-hover:scale-150"></div>
+                <Linkedin size={24} className="relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+              </a>
+            </MagneticWrapper>
+            <MagneticWrapper>
+              <a href="mailto:contact@example.com" className="hero-social group block text-[#ededed] hover:text-[#ccff00] transition-all duration-300 p-3 relative">
+                <div className="absolute inset-0 bg-brand-accent/0 group-hover:bg-brand-accent/20 rounded-full blur-xl transition-all duration-500 scale-0 group-hover:scale-150"></div>
+                <Mail size={24} className="relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+              </a>
+            </MagneticWrapper>
+          </div>
+
+        </div>
+      </div>
+    </section >
   );
 }

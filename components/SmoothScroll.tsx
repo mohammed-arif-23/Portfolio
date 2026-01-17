@@ -13,20 +13,31 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   useEffect(() => {
     // Initialize Lenis
     const lenis = new Lenis({
-      duration: 0.9,
+      duration: 1.2, // Standard smooth scroll duration
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
+      wheelMultiplier: 1.0, // Standard multiplier
+      touchMultiplier: 2.0, // Better touch responsiveness
       infinite: false,
     });
 
     lenisRef.current = lenis;
 
-    // GSAP integration
-    lenis.on('scroll', ScrollTrigger.update);
+    // GSAP integration & Skew Effect
+    lenis.on('scroll', (e: any) => {
+      ScrollTrigger.update();
+
+      // Skew effect based on velocity
+      const skew = e.velocity * 0.05; // Reduced sensitivity
+      gsap.to(document.body, {
+        skewY: skew,
+        duration: 0.5,
+        ease: 'power3.out',
+        overwrite: 'auto'
+      });
+    });
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
@@ -36,7 +47,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove(() => {});
+      gsap.ticker.remove(() => { });
     };
   }, []);
 

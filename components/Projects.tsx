@@ -1,277 +1,205 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight } from 'lucide-react';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const projects = [
-  {
-   title: 'CinemaHub - Movie Booking Platform',
-   description: 'A full-stack, real-time movie ticket booking application. Features include a rich movie catalog, interactive seat selection, instant booking confirmations, and a responsive UI. Built with Next.js, React, and Firebase, it also integrates real email notifications.',
-   technologies: ['Next.js', 'React', 'Firebase', 'Tailwind CSS', 'Framer Motion', 'Nodemailer'],
-   liveUrl: 'http://cinemahub-arif.vercel.app/',
-   githubUrl: 'https://github.com/mohammed-arif-23/cinemahub',
- },
- {
-   title: 'V8 Engine Digital Twin Simulator',
-   description: 'A full-stack, real-time digital twin simulator of a V8 engine-powered car. This project features physics-based engine dynamics, an interactive 3D visualization using Three.js, a live telemetry dashboard, and a RESTful backend with persistent state management.',
-   technologies: ['Next.js', 'Three.js', 'React Three Fiber', 'MongoDB', 'Node.js', 'Tailwind CSS'],
-   liveUrl: '#',
-   githubUrl: 'https://github.com/mohammed-arif-23/digital-twin',
- },
- {
-   title: 'Pixels to Plates',
-   description: 'A revolutionary image recognition platform that analyzes food images using advanced machine learning. Built with Django and Keras, it features real-time image processing, nutritional analysis, recipe suggestions, and personalized meal planning with dietary restrictions support.',
-   technologies: ['Django', 'Keras', 'Python', 'TensorFlow', 'Flask', 'DenseNet'],
-   liveUrl: '#',
-   githubUrl: 'https://github.com/mohammed-arif-23/pixelstoplates',
- },
- {
-   title: 'This Portfolio Website',
-   description: 'A modern, interactive portfolio built with Next.js, React, and Tailwind CSS. It features animated backgrounds, 3D effects, sequential scroll animations, and a responsive design. It showcases projects, skills, and experience with a focus on performance and user experience.',
-   technologies: ['Next.js','Three.js', 'React', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'Lucide Icons', 'React.Bits', 'GSAP', 'Nodemailer'],
-   liveUrl: '#',
-   githubUrl: '#',
- },
-
- {
-   title: 'AI Movie Recommender',
-   description: 'A Streamlit application that recommends movies based on genre similarity and release year. It uses cosine similarity on the MovieLens dataset to find relevant films, which are then displayed in an organized grid. The app is built with Streamlit, Pandas, and Scikit-learn.',
-   technologies: ['Streamlit', 'Pandas', 'NumPy', 'Scikit-learn', 'Python','Machine Learning'],
-   liveUrl: 'https://arif-nm-movieapi.streamlit.app/',
-   githubUrl: 'https://github.com/mohammed-arif-23/nm-movieapi',
- },
- {
-   title: 'Multi-Digit Handwritten Number Predictor',
-   description: 'A deep learning-based web application for recognizing multi-digit handwritten numbers. It uses a CNN model trained on the MNIST dataset, with a Flask backend for inference and an interactive web canvas for user input. The project provides real-time predictions for drawn digits.',
-   technologies: ['PyTorch', 'Flask', 'Python', 'CNN', 'HTML', 'CSS', 'JavaScript'],
-   liveUrl: '#',
-   githubUrl: 'https://github.com/mohammed-arif-23/multi-digit-handwritten-number-predictor',
- },
+const PROJECTS = [
+    {
+        id: "01",
+        title: "AVSEC",
+        category: "College Website",
+        year: "2024",
+        img: "/images/project-thumb-avsengg.png",
+        description: "Official website of AVS Engineering College featuring high-performance architecture and modern design in Tamil Nadu Zone",
+        stack: ["PHP", "MySQL", "Vanilla HTML and CSS"],
+        link: "https://www.avsenggcollege.ac.in/",
+        githubUrl: "#",
+        color: "#0a0a0a"
+    },
+    {
+        id: "02",
+        title: "SSWC",
+        category: "College Website",
+        year: "2024",
+        img: "/images/project-thumb-sswc.png",
+        description: "Modern website for Sakthi Kailash Women's College showcasing courses, departments, admissions, and campus information with mobile-first design.",
+        stack: ["PHP", "MySQL", "Vanilla HTML and CSS"],
+        link: "https://www.sakthikailashcollege.org/",
+        githubUrl: "#",
+        color: "#050505"
+    },
+    {
+        id: "03",
+        title: "AVS Omalur",
+        category: "College Website",
+        year: "2024",
+        img: "/images/project-thumb-avsomalur.png",
+        description: "Production-ready college website for AVS Arts and Science College, Omalur featuring academic programs, events, notices, and user-friendly navigation for students and faculty.",
+        stack: ["PHP", "MySQL", "Vanilla HTML and CSS"],
+        link: "https://www.avscollegeomalur.edu.in/",
+        githubUrl: "#",
+        color: "#000000"
+    },
+    {
+        id: "04",
+        title: "CinemaHub",
+        category: "Movie Booking Platform",
+        year: "2024",
+        img: "images/project-thumb-1.png",
+        description: "Real-time movie ticket booking platform with interactive seat selection and automated email notifications.",
+        stack: ["Next.js", "React", "Node.js", "Express"],
+        link: "http://cinemahub-arif.vercel.app/",
+        githubUrl: "https://github.com/mohammed-arif-23/cinemahub",
+        color: "#080808"
+    },
+    {
+        id: "05",
+        title: "Pixels to Plates",
+        category: "AI Food Analysis",
+        year: "2023",
+        img: "/images/project-thumb-pixels-to-plates.png",
+        description: "Machine learning platform for food recognition and nutritional analysis using computer vision.",
+        stack: ["Python", "TensorFlow", "OpenCV", "Keras"],
+        link: "https://pixelstoplates.streamlit.app/",
+        githubUrl: "https://github.com/mohammed-arif-23/pixelstoplates",
+        color: "#0a0a0a"
+    },
+    {
+        id: "06",
+        title: "Movie AI",
+        category: "Recommender System",
+        year: "2023",
+        img: "/images/project-thumb-3.png",
+        description: "Content-based movie recommendation engine using cosine similarity algorithms.",
+        stack: ["Python", "Streamlit", "Pandas"],
+        link: "https://arif-nm-movieapi.streamlit.app/",
+        githubUrl: "https://github.com/mohammed-arif-23/nm-movieapi",
+        color: "#050505"
+    }
 ];
+
 export default function Projects() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const pinContainerRef = useRef<HTMLDivElement>(null);
-  const [currentProject, setCurrentProject] = useState(0);
+    const containerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    const pinContainer = pinContainerRef.current;
-    
-    if (!section || !pinContainer) return;
+    return (
+        <section ref={containerRef} className="relative w-full bg-[#080808] pt-2 pb-2 px-4 md:px-0 flex flex-col items-center">
 
-    let ctx = gsap.context(() => {
-      const slides = pinContainer.querySelectorAll('.project-slide');
-      
-      // Set initial states with blur for all elements
-      slides.forEach((slide) => {
-        const title = slide.querySelector('.project-title');
-        const description = slide.querySelector('.project-description');
-        const techTags = slide.querySelectorAll('.tech-tag');
-        const buttons = slide.querySelectorAll('.project-button');
-        const visualElement = slide.querySelector('.project-visual');
-        
-        const allElements = [title, description, visualElement, ...Array.from(techTags || []), ...Array.from(buttons || [])].filter(Boolean);
-        
-        if (allElements.length > 0) {
-          gsap.set(allElements, {
-            opacity: 0,
-            filter: 'blur(10px)',
-          });
-        }
-      });
-      
-      slides.forEach((slide, index) => {
-        const title = slide.querySelector('.project-title');
-        const description = slide.querySelector('.project-description');
-        const techTags = slide.querySelectorAll('.tech-tag');
-        const buttons = slide.querySelectorAll('.project-button');
-        const visualElement = slide.querySelector('.project-visual');
-
-        // Create a timeline for each slide
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: slide,
-            start: 'top 80%',
-            end: 'bottom 40%',
-            toggleActions: 'play none none none',
-            onEnter: () => setCurrentProject(index),
-            onEnterBack: () => setCurrentProject(index),
-          },
-        });
-
-        // Animate title
-        if (title) {
-          tl.fromTo(
-            title,
-            { opacity: 0, y: 50, filter: 'blur(10px)' },
-            { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.6, ease: 'power2.out' },
-            0
-          );
-        }
-
-        // Animate description
-        if (description) {
-          tl.fromTo(
-            description,
-            { opacity: 0, y: 30, filter: 'blur(10px)' },
-            { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.6, ease: 'power2.out' },
-            0.2
-          );
-        }
-
-        // Animate tech tags with stagger
-        if (techTags.length > 0) {
-          tl.fromTo(
-            techTags,
-            { opacity: 0, scale: 0.8, y: 20, filter: 'blur(10px)' },
-            { 
-              opacity: 1, 
-              scale: 1, 
-              y: 0, 
-              filter: 'blur(0px)',
-              duration: 0.4, 
-              ease: 'back.out(1.7)',
-              stagger: 0.05
-            },
-            0.4
-          );
-        }
-
-        // Animate buttons
-        if (buttons.length > 0) {
-          tl.fromTo(
-            buttons,
-            { opacity: 0, x: -20, filter: 'blur(10px)' },
-            { 
-              opacity: 1, 
-              x: 0, 
-              filter: 'blur(0px)',
-              duration: 0.5, 
-              ease: 'power2.out',
-              stagger: 0.1
-            },
-            0.6
-          );
-        }
-
-        // Animate visual element
-        if (visualElement) {
-          tl.fromTo(
-            visualElement,
-            { opacity: 0, scale: 0.9, rotate: -5, filter: 'blur(10px)' },
-            { 
-              opacity: 1, 
-              scale: 1, 
-              rotate: 0, 
-              filter: 'blur(0px)',
-              duration: 0.8, 
-              ease: 'power2.out'
-            },
-            0.3
-          );
-        }
-      });
-    }, section);
-
-    return () => {
-      if (ctx) {
-        ctx.revert();
-      }
-    };
-  }, []);
-
-  return (
-    <section ref={sectionRef} className="relative bg-[#201d1d] py-5">
-      <div ref={pinContainerRef} className="relative w-full">
-   
-        {/* Project Slides */}
-        <div className="relative">
-          {projects.map((project, index) => (
-            <div
-              key={project.title}
-              className="project-slide relative flex items-center justify-center py-12 md:py-20 lg:min-h-screen"
-            >
-              <div className="w-full flex items-center justify-center px-6 sm:px-8 md:px-12 lg:px-20">
-                <div className="max-w-6xl w-full">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                    {/* Left Column - Project Info */}
-                    <div className="space-y-6 lg:space-y-8">
-                      <div className="space-y-4">
-                        <h2 className="project-title text-[#fbfbf2] text-3xl sm:text-3xl md:text-3xl lg:text-4xl font-bold leading-tight">
-                          {project.title}
-                        </h2>
-                      </div>
-                      
-                      <p className="project-description text-[#fbfbf2]/80 text-base sm:text-lg md:text-xl leading-relaxed">
-                        {project.description}
-                      </p>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        {project.technologies.map((tech, idx) => (
-                          <span
-                            key={idx}
-                            className="tech-tag px-4 py-2 bg-[#cfd2cd]/10 border border-[#cfd2cd]/30 text-[#fbfbf2] text-sm font-semibold rounded-full hover:bg-[#cfd2cd]/20 transition-colors"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="project-button group inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#fbfbf2] text-[#201d1d] text-lg font-bold rounded-full hover:bg-[#cfd2cd] transition-all duration-300 hover:scale-105"
-                          >
-                            View Live
-                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                          </a>
-                        )}
-                        {project.githubUrl && (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="project-button group inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#fbfbf2] text-[#fbfbf2] text-lg font-bold rounded-full hover:bg-[#fbfbf2] hover:text-[#201d1d] transition-all duration-300 hover:scale-105"
-                          >
-                            Source Code
-                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Right Column - Visual Element */}
-                    <div className="project-visual relative hidden lg:block">
-                      <div className="aspect-square bg-gradient-to-br from-[#cfd2cd]/20 to-[#fbfbf2]/10 rounded-3xl border border-[#cfd2cd]/30 flex items-center justify-center">
-                        <div className="text-center space-y-4">
-                          <div className="w-24 h-24 mx-auto bg-[#fbfbf2]/10 rounded-2xl flex items-center justify-center">
-                            <span className="text-4xl font-bold text-[#fbfbf2]">{String(index + 1).padStart(2, '0')}</span>
-                          </div>
-                          <div className="space-y-2">
-                            <h3 className="text-[#fbfbf2] text-2xl font-bold">{project.title}</h3>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="w-full max-w-[90vw] md:max-w-7xl mx-auto mb-20 px-4 md:px-0">
+                <h2 className="text-sm font-mono text-brand-accent tracking-[0.5em] uppercase opacity-70 mb-4">
+                    Selected_Works
+                </h2>
+                <p className="text-white/40 text-sm max-w-md">
+                    Immersive digital experiences crafted with precision and passion.
+                </p>
             </div>
-          ))}
-        </div>
 
-      
-      </div>
-    </section>
-  );
+            <div className="w-full flex flex-col gap-0 md:gap-0">
+                {PROJECTS.map((project, index) => (
+                    <div
+                        key={project.id}
+                        className="group sticky top-0 w-full min-h-screen md:h-screen flex flex-col md:flex-row items-center justify-center overflow-hidden"
+                        style={{
+                            backgroundColor: project.color,
+                            zIndex: index + 1
+                        }}
+                    >
+                        {/* Fullscreen Hover Image (Performance Optimized: Clip-Path wipe) */}
+                        <div
+                            className="absolute blur-sm inset-0 z-0 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] pointer-events-none will-change-[clip-path]"
+                            style={{ clipPath: 'inset(0 100% 0 0)' }} // Start hidden (wiped right)
+                        >
+                            <div className="absolute inset-0 bg-black/40 z-10"></div>
+                            <img
+                                src={project.img}
+                                alt=""
+                                className="w-full h-full object-cover scale-100 transition-transform duration-[1.5s] ease-out"
+                            />
+                        </div>
+
+                        <div className="absolute blur-sm inset-0 z-0 overflow-hidden pointer-events-none transition-[width] duration-1000 ease-[cubic-bezier(0.87,0,0.13,1)] w-0 group-hover:w-full">
+                            <div className="absolute inset-0 bg-black/20 z-10 mix-blend-multiply"></div>
+                            <img
+                                src={project.img}
+                                alt=""
+                                className="w-screen h-screen object-cover max-w-none"
+                            />
+                        </div>
+
+
+                        <div className="relative z-10 w-full h-full max-w-[95vw] md:max-w-[90vw] grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center py-24 md:py-0 border-t border-white/10 md:border-none">
+
+                            {/* Left: Content */}
+                            <div className="flex flex-col justify-center items-center md:items-start order-2 md:order-1 px-4 md:px-0 text-white transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:group-hover:translate-x-8 mix-blend-difference text-center md:text-left">
+                                <span className="font-mono text-brand-accent text-xs md:text-base mb-6 bg-white/5 w-fit px-3 py-1 rounded-full border border-white/10 backdrop-blur-md group-hover:border-brand-accent/50 transition-colors duration-500">
+                                    {project.id} — {project.category}
+                                </span>
+                                <h3 className="text-4xl md:text-9xl font-black mb-8 leading-[0.85] tracking-tighter group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/50 transition-all duration-500">
+                                    {project.title}
+                                </h3>
+                                <p className="text-white/60 text-base md:text-xl font-light mb-10 max-w-sm md:max-w-md leading-relaxed group-hover:text-white/90 transition-colors duration-500">
+                                    {project.description}
+                                </p>
+
+                                <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3 mb-12">
+                                    {project.stack.map((tech) => (
+                                        <span key={tech} className="px-3 py-1 md:px-4 md:py-1.5 border border-white/10 rounded-full text-[10px] md:text-xs text-white/40 font-mono uppercase hover:bg-white/10 hover:text-white transition-colors duration-300">
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center">
+                                    {project.link !== "#" && (
+                                        <a
+                                            href={project.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group/btn relative w-full sm:w-fit pl-6 pr-12 py-4 rounded-full bg-transparent border border-white/20 overflow-hidden flex items-center justify-center sm:justify-start gap-4 transition-all duration-500 hover:border-white hover:pl-8 hover:pr-14"
+                                        >
+                                            <div className="absolute inset-0 bg-white translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
+                                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] uppercase text-white group-hover/btn:text-black transition-colors duration-500">
+                                                View Live
+                                            </span>
+                                            <ArrowUpRight size={16} className="relative z-10 text-white group-hover/btn:text-black transition-colors duration-500 group-hover/btn:rotate-45 transform ease-out" />
+                                        </a>
+                                    )}
+                                    {project.githubUrl !== "#" && (
+                                        <a
+                                            href={project.githubUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group/btn relative w-full sm:w-fit px-8 py-4 rounded-full bg-transparent border border-white/20 overflow-hidden flex items-center justify-center gap-4 transition-all duration-500 hover:border-white hover:bg-white"
+                                        >
+                                            <div className="absolute inset-0 bg-white translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
+                                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] uppercase text-white group-hover/btn:text-black transition-colors duration-500">
+                                                GitHub
+                                            </span>
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Right: Image (Fades out) */}
+                            <div className="relative w-full h-[30vh] md:h-[70vh] order-1 md:order-2 overflow-hidden rounded transform transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:group-hover:scale-95 md:group-hover:opacity-0 md:group-hover:blur-md origin-right">
+                                <img
+                                    src={project.img}
+                                    alt={project.title}
+                                    className="relative w-full h-full object-contain md:object-cover transition-all duration-1000"
+                                    loading="eager"
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* End Spacer */}
+            <div className="w-full h-[8vh] flex items-center justify-center">
+                <p className="text-white/20 font-mono text-xs">MORE IN ARCHIVE</p>
+            </div>
+
+        </section>
+    );
 }

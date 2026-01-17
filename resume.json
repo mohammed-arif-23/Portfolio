@@ -1,0 +1,313 @@
+{
+    "basics": {
+        "name": "T Mohammed Arif",
+        "headline": "Part-Time Full Stack Developer | Next.js & Node.js | Real-World Web & Automation Systems",
+        "email": "mohammedarif2303@gmail.com",
+        "phone": "+91 7904645033",
+        "location": "Salem, Tamilnadu",
+        "url": {
+            "label": "Portfolio",
+            "href": "https://arif.zone.id/"
+        },
+        "customFields": [
+            {
+                "id": "fzrquqxzgff7k93e51h2cbk1",
+                "icon": "linkedin-logo",
+                "name": "Linkedin",
+                "value": "https://www.linkedin.com/in/mohammedarif2303/"
+            }
+        ],
+        "picture": {
+            "url": "https://storage.rxresu.me/cmcg5h19a00dg1980uju0j8s9/pictures/ph4xpymi3nc91tbfe2fdogq7.jpg",
+            "size": 64,
+            "aspectRatio": 1,
+            "borderRadius": 0,
+            "effects": {
+                "hidden": false,
+                "border": false,
+                "grayscale": false
+            }
+        }
+    },
+    "sections": {
+        "summary": {
+            "name": "Summary",
+            "columns": 1,
+            "separateLinks": true,
+            "visible": true,
+            "id": "summary",
+            "content": "<p>Part-time Full Stack Developer with hands-on experience building, deploying, and maintaining real-world web applications for educational institutions and healthcare operations. Skilled in Next.js-based systems, backend APIs, authentication, automation workflows, and practical problem-solving through software. Comfortable owning projects end-to-end and working directly with non-technical stakeholders.</p>"
+        },
+        "awards": {
+            "name": "Awards",
+            "columns": 1,
+            "separateLinks": true,
+            "visible": true,
+            "id": "awards",
+            "items": []
+        },
+        "certifications": {
+            "name": "Certifications",
+            "columns": 2,
+            "separateLinks": true,
+            "visible": true,
+            "id": "certifications",
+            "items": [
+                {
+                    "id": "ts20qnwp8ye69z8u4ycif5b8",
+                    "visible": true,
+                    "name": "Course Completion in React.js - 2024",
+                    "issuer": "Infosys Springboard",
+                    "date": "",
+                    "summary": "",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                },
+                {
+                    "id": "h82k2xuovgecgqamii2byjwy",
+                    "visible": true,
+                    "name": "1st Place in Web Development at Spring Fest - 2024",
+                    "issuer": "KSR College of Technology",
+                    "date": "",
+                    "summary": "",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                },
+                {
+                    "id": "q1fa0d6hxfm7zx52p0psf359",
+                    "visible": true,
+                    "name": "1st Place in Code Debugging - 2024",
+                    "issuer": "Mahendra Institutions of Technology",
+                    "date": "",
+                    "summary": "",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                },
+                {
+                    "id": "zvh2xdlvf36rqh2trayqcjil",
+                    "visible": true,
+                    "name": "25 Days Internship on CUDA Python and NVIDIA Boards - 2025",
+                    "issuer": "ADVI Group of Technologies",
+                    "date": "",
+                    "summary": "",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                }
+            ]
+        },
+        "education": {
+            "name": "Education",
+            "columns": 3,
+            "separateLinks": true,
+            "visible": true,
+            "id": "education",
+            "items": [
+                {
+                    "id": "zl7ai4e31nraigr4g9clanov",
+                    "visible": true,
+                    "institution": "AVS ENGINEERING COLLEGE, SALEM",
+                    "studyType": "",
+                    "area": "B.Tech IT : 8.55 CGPA : 2023-2027",
+                    "score": "",
+                    "date": "",
+                    "summary": "",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                },
+                {
+                    "id": "j94z160si7ldi12n7uj1bfiy",
+                    "visible": true,
+                    "institution": "ST. PAUL'S HSS, Salem",
+                    "studyType": "",
+                    "area": "12th Standard : 86.4% : 2023",
+                    "score": "",
+                    "date": "",
+                    "summary": "",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                },
+                {
+                    "id": "vnjr9ttm1y3ef0h12gx1eft9",
+                    "visible": true,
+                    "institution": "THE GUGAI HSS, Salem",
+                    "studyType": "",
+                    "area": "10th Standard : 100% (Covid Batch) : 2020",
+                    "score": "",
+                    "date": "",
+                    "summary": "",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                }
+            ]
+        },
+        "experience": {
+            "name": "Experience",
+            "columns": 1,
+            "separateLinks": true,
+            "visible": true,
+            "id": "experience",
+            "items": [
+                {
+                    "id": "vallihospital-parttime",
+                    "visible": true,
+                    "name": "Part-Time Full Stack Developer & Automation Support",
+                    "location": "Valli Super Specialty Hospital, Salem",
+                    "date": "2024 - Present",
+                    "summary": "<ul><li><p>Working as a part-time developer supporting hospital web systems, automation, and internal tools.</p></li><li><p>Developing and maintaining applications using Next.js, Node.js, MongoDB with authentication, API routes, validation, and error handling.</p></li><li><p>Creating automation workflows using Zapier and AI tools integrating WhatsApp, Telegram, Instagram comments, and internal processes.</p></li><li><p>Performed practical data analysis to identify inefficiencies and help reduce operational expenses.</p></li><li><p>Modified and managed Zoho Creator applications used by hospital staff.</p></li><li><p>Managed hospital website content, LinkedIn page, and basic posters using Canva and AI tools.</p></li><li><p>Worked directly with doctors, receptionists, and staff to gather requirements and simplify workflows.</p></li><li><p>Handled ongoing maintenance, bug fixes, updates, and hybrid on-site/remote support.</p></li></ul>",
+                    "url": {
+                        "label": "",
+                        "href": ""
+                    }
+                }
+            ]
+        },
+        "projects": {
+            "name": "Projects",
+            "columns": 1,
+            "separateLinks": true,
+            "visible": true,
+            "id": "projects",
+            "items": [
+                {
+                    "id": "opibnx3bjkq6ir9y64ds14co",
+                    "visible": true,
+                    "name": "College Websites",
+                    "description": "AVS & Sakthi Kailash Educational Institutions",
+                    "date": "March 2024 - Present",
+                    "summary": "<ul><li><p>Designed and developed multiple institutional websites actively used by students, staff, and visitors.</p></li><li><p>Handled frontend development, backend integrations, deployment, and post-launch maintenance.</p></li><li><p>Improved page performance and mobile usability through frontend and database optimizations.</p></li><li><p>Worked under OD and hybrid work arrangements while coordinating with institutions.</p></li></ul>",
+                    "keywords": [],
+                    "url": {
+                        "label": "AVSEC",
+                        "href": "https://www.avsenggcollege.ac.in/"
+                    }
+                }
+            ]
+        },
+        "skills": {
+            "name": "Skills",
+            "columns": 1,
+            "separateLinks": true,
+            "visible": true,
+            "id": "skills",
+            "items": [
+                {
+                    "id": "i2ijsqhwauf8z6ggi2z7taiv",
+                    "visible": true,
+                    "name": "Full Stack Development",
+                    "description": "Experience building and maintaining web applications using React.js, Next.js, JavaScript (ES6+), HTML5, CSS3, Node.js, and REST APIs. Comfortable with authentication, API integration, validation, error handling, and frontend-backend coordination.",
+                    "level": 0,
+                    "keywords": []
+                },
+                {
+                    "id": "il8abwbm90os50zdk7zpvotc",
+                    "visible": true,
+                    "name": "Databases, Tools & Automation",
+                    "description": "MongoDB, MySQL, Supabase, Prisma ORM, Firebase (authentication, hosting, database), Git version control, Zapier automation workflows, Zoho Creator, Canva, and AI-assisted productivity tools. Academic exposure to machine learning using TensorFlow, Keras, and PyTorch.",
+                    "level": 0,
+                    "keywords": []
+                }
+            ]
+        },
+        "languages": {
+            "name": "Languages",
+            "columns": 1,
+            "separateLinks": true,
+            "visible": true,
+            "id": "languages",
+            "items": [
+                {
+                    "id": "cffxvnunaqkdca2lxufkk724",
+                    "visible": true,
+                    "name": "English, Urdu (Native), Tamil, Hindi (Conversational)",
+                    "description": "",
+                    "level": 0
+                }
+            ]
+        },
+        "custom": {
+            "ny3q2u7k7t0orp5pa0b9pd0v": {
+                "name": "Declaration",
+                "columns": 1,
+                "separateLinks": true,
+                "visible": true,
+                "id": "ny3q2u7k7t0orp5pa0b9pd0v",
+                "items": [
+                    {
+                        "id": "na2n1o6dhgbhwa6j5ghvxfv9",
+                        "visible": true,
+                        "summary": "<p>I hereby declare that the information furnished above is true and correct to the best of my knowledge and belief</p>",
+                        "url": {
+                            "label": "",
+                            "href": ""
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "metadata": {
+        "template": "rhyhorn",
+        "layout": [
+            [
+                [
+                    "profiles",
+                    "summary",
+                    "experience",
+                    "education",
+                    "projects",
+                    "volunteer",
+                    "references"
+                ],
+                [
+                    "skills",
+                    "interests",
+                    "certifications",
+                    "awards",
+                    "publications",
+                    "languages",
+                    "custom.ny3q2u7k7t0orp5pa0b9pd0v"
+                ]
+            ]
+        ],
+        "page": {
+            "margin": 8,
+            "format": "a4",
+            "options": {
+                "breakLine": false,
+                "pageNumbers": true
+            }
+        },
+        "theme": {
+            "background": "#ffffff",
+            "text": "#000000",
+            "primary": "#57534e"
+        },
+        "typography": {
+            "font": {
+                "family": "DM Sans",
+                "subset": "latin",
+                "variants": [
+                    "regular"
+                ],
+                "size": 13.55
+            },
+            "lineHeight": 1.35,
+            "hideIcons": false,
+            "underlineLinks": true
+        }
+    }
+}
