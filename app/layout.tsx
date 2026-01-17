@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "Arif Zone",
     images: [
       {
-        url: "/profile.png", // Ensure this exists or I should create it
+        url: "images/profile.png", // Ensure this exists or I should create it
         width: 1200,
         height: 630,
         alt: "T Mohammed Arif Portfolio"
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "T Mohammed Arif | Full Stack Developer",
     description: "Building real-world web systems and automation workflows.",
-    images: ["/profile.png"],
+    images: ["images/profile.png"],
     creator: "@mohammedarif2303"
   },
   robots: {

@@ -18,7 +18,7 @@ const BOOT_LOGS = [
   "> ACCESS GRANTED TO PORTFOLIO"
 ];
 
-const PROFILE_IMG = "Images/profile.png";
+const PROFILE_IMG = "images/profile.png";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -348,13 +348,13 @@ export default function Hero() {
               </a>
             </MagneticWrapper>
             <MagneticWrapper>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hero-social group block text-[#ededed] hover:text-[#ccff00] transition-all duration-300 p-3 relative">
+              <a href="https://www.linkedin.com/in/mohammedarif2303/" target="_blank" rel="noopener noreferrer" className="hero-social group block text-[#ededed] hover:text-[#ccff00] transition-all duration-300 p-3 relative">
                 <div className="absolute inset-0 bg-brand-accent/0 group-hover:bg-brand-accent/20 rounded-full blur-xl transition-all duration-500 scale-0 group-hover:scale-150"></div>
                 <Linkedin size={24} className="relative z-10 group-hover:rotate-12 transition-transform duration-300" />
               </a>
             </MagneticWrapper>
             <MagneticWrapper>
-              <a href="mailto:contact@example.com" className="hero-social group block text-[#ededed] hover:text-[#ccff00] transition-all duration-300 p-3 relative">
+              <a href="mailto:mohammedarif2303@gmail.com" className="hero-social group block text-[#ededed] hover:text-[#ccff00] transition-all duration-300 p-3 relative">
                 <div className="absolute inset-0 bg-brand-accent/0 group-hover:bg-brand-accent/20 rounded-full blur-xl transition-all duration-500 scale-0 group-hover:scale-150"></div>
                 <Mail size={24} className="relative z-10 group-hover:rotate-12 transition-transform duration-300" />
               </a>

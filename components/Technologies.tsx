@@ -14,8 +14,6 @@ const TECH_ITEMS = [
     { name: "Tailwind", src: "/images/logos/Tailwind.svg" },
     { name: "Node.js", src: "/images/logos/Node.js.svg" },
     { name: "MongoDB", src: "/images/logos/MongoDB.svg" },
-    { name: "Three.js", src: "/images/logos/Three.js.svg" },
-    { name: "Prisma", src: "/images/logos/Prisma.svg" },
     { name: "Python", src: "/images/logos/Python.svg" },
     { name: "Supabase", src: "/images/logos/Supabase.svg" },
     { name: "Redux", src: "/images/logos/Redux.svg" },
@@ -24,6 +22,20 @@ const TECH_ITEMS = [
     { name: "PyTorch", src: "/images/logos/PyTorch.svg" },
     { name: "TensorFlow", src: "/images/logos/TensorFlow.svg" },
     { name: "PHP", src: "/images/logos/PHP.svg" },
+    { name: "Bootstrap", src: "/images/logos/Bootstrap.svg" },
+    { name: "Git", src: "/images/logos/Git.svg" },
+    { name: "C++", src: "/images/logos/C++.svg" },
+    { name: "CSS3", src: "/images/logos/CSS3.svg" },
+    { name: "Django", src: "/images/logos/Django.svg" },
+    { name: "Express", src: "/images/logos/Express.svg" },
+    { name: "Firebase", src: "/images/logos/Firebase.svg" },
+    { name: "Flask", src: "/images/logos/Flask.svg" },
+    { name: "HTML5", src: "/images/logos/HTML5.svg" },
+    { name: "Java", src: "/images/logos/Java.svg" },
+    { name: "JavaScript", src: "/images/logos/JavaScript.svg" },
+    { name: "Keras", src: "/images/logos/Keras.svg" },
+    { name: "C#", src: "/images/logos/cS.svg" },
+    { name: "GSAP", src: "/images/logos/gsap-black.svg" },
 ];
 
 export default function Technologies() {
@@ -54,7 +66,7 @@ export default function Technologies() {
             y: Math.random() * (height - 100) + 50,
             vx: (Math.random() - 0.5) * 1.5,
             vy: (Math.random() - 0.5) * 1.5,
-            radius: mobile ? 30 : 60, // Physical radius (visual is 112px => 56px radius, adding buffer)
+            radius: mobile ? 20 : 60, // Physical radius
             mass: 1
         }));
     }, []);
@@ -237,7 +249,7 @@ export default function Technologies() {
                     // Offset is roughly radius (approx) to center the square div
                     // Mobile: w-12 is 48px, half is 24
                     // Desktop: w-28 is 112px, half is 56
-                    const offset = node.radius < 40 ? 24 : 56;
+                    const offset = node.radius < 40 ? 18 : 56;
                     el.style.transform = `translate(${node.x - offset}px, ${node.y - offset}px) scale(${dragRef.current.index === i ? 1.1 : 1})`;
                     el.style.zIndex = dragRef.current.index === i ? "100" : "20";
                 }
@@ -279,14 +291,12 @@ export default function Technologies() {
             </div>
 
             <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
-
-            {/* Nodes */}
             <div className="absolute inset-0 z-20 pointer-events-none">
                 {TECH_ITEMS.map((item, i) => (
                     <div
                         key={i}
                         id={`node-icon-${i}`}
-                        className={`absolute top-0 left-0 p-2 md:p-3 lg:p-5 bg-[#111] border border-white/10 rounded-full shadow-2xl flex items-center justify-center will-change-transform ${isMobile ? 'w-12 h-12' : 'w-28 h-28'}`}
+                        className={`absolute top-0 left-0 p-1.5 md:p-3 lg:p-5 bg-gradient-to-br from-[#333] to-[#222] border border-white/10 rounded-full shadow-2xl flex items-center justify-center will-change-transform ${isMobile ? 'w-9 h-9' : 'w-28 h-28'}`}
                     >
                         <img src={item.src} alt={item.name} className="w-full h-full object-contain pointer-events-none drop-shadow-md select-none" draggable={false} />
                     </div>
