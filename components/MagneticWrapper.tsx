@@ -44,7 +44,7 @@ export default function MagneticWrapper({
             onClick={onClick}
             animate={{ x, y }}
             transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-            className={`cursor-none ${className}`} // Enforce no system cursor
+            className={`cursor-auto md:cursor-none ${className}`} // Enforce no system cursor on desktop only
         >
             {children}
         </motion.div>

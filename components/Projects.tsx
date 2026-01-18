@@ -2,7 +2,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const PROJECTS = [
     {
@@ -82,6 +85,31 @@ const PROJECTS = [
 export default function Projects() {
     const containerRef = useRef<HTMLElement>(null);
 
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            // Mobile Animation: Wipe in image when in view
+            const projects = document.querySelectorAll('.project-card');
+
+            projects.forEach((project) => {
+                const image = project.querySelector('.project-image-container');
+
+                ScrollTrigger.create({
+                    trigger: project,
+                    start: 'top center',
+                    end: 'bottom center',
+                    onEnter: () => {
+                        gsap.to(image, { clipPath: 'inset(0 0 0 0)', duration: 0.8, ease: 'power3.out' });
+                    },
+                    onLeaveBack: () => {
+                        gsap.to(image, { clipPath: 'inset(0 100% 0 0)', duration: 0.8, ease: 'power3.out' });
+                    }
+                });
+            });
+
+        }, containerRef);
+        return () => ctx.revert();
+    }, []);
+
     return (
         <section ref={containerRef} className="relative w-full bg-[#080808] pt-2 pb-2 px-4 md:px-0 flex flex-col items-center">
 
@@ -98,26 +126,23 @@ export default function Projects() {
                 {PROJECTS.map((project, index) => (
                     <div
                         key={project.id}
-                        className="group sticky top-0 w-full min-h-screen md:h-screen flex flex-col md:flex-row items-center justify-center overflow-hidden"
+                        className="project-card group sticky top-0 w-full min-h-screen md:h-screen flex flex-col md:flex-row items-center justify-center overflow-hidden"
                         style={{
                             backgroundColor: project.color,
                             zIndex: index + 1
                         }}
                     >
-                        {/* Fullscreen Hover Image (Performance Optimized: Clip-Path wipe) */}
+                        {/* Background Image (Wipes in on Scroll/Hover) */}
                         <div
-                            className="absolute blur-sm inset-0 z-0 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] pointer-events-none will-change-[clip-path]"
-                            style={{ clipPath: 'inset(0 100% 0 0)' }} // Start hidden (wiped right)
+                            className="project-image-container absolute blur-sm inset-0 z-0 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] pointer-events-none will-change-[clip-path]"
+                            style={{ clipPath: 'inset(0 100% 0 0)' }} // Start hidden
                         >
                             <div className="absolute inset-0 bg-black/40 z-10"></div>
-                            <img
-                                src={project.img}
-                                alt=""
-                                className="w-full h-full object-cover scale-100 transition-transform duration-[1.5s] ease-out"
-                            />
+
                         </div>
 
-                        <div className="absolute blur-sm inset-0 z-0 overflow-hidden pointer-events-none transition-[width] duration-1000 ease-[cubic-bezier(0.87,0,0.13,1)] w-0 group-hover:w-full">
+                        {/* Interactive Clear Image (Desktop Hover) */}
+                        <div className="hidden md:block absolute blur-sm inset-0 z-0 overflow-hidden pointer-events-none transition-[width] duration-1000 ease-[cubic-bezier(0.87,0,0.13,1)] w-0 group-hover:w-full">
                             <div className="absolute inset-0 bg-black/20 z-10 mix-blend-multiply"></div>
                             <img
                                 src={project.img}
@@ -125,7 +150,6 @@ export default function Projects() {
                                 className="w-screen h-screen object-cover max-w-none"
                             />
                         </div>
-
 
                         <div className="relative z-10 w-full h-full max-w-[95vw] md:max-w-[90vw] grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center py-24 md:py-0 border-t border-white/10 md:border-none">
 
@@ -137,13 +161,13 @@ export default function Projects() {
                                 <h3 className="text-4xl md:text-9xl font-black mb-8 leading-[0.85] tracking-tighter group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/50 transition-all duration-500">
                                     {project.title}
                                 </h3>
-                                <p className="text-white/60 text-base md:text-xl font-light mb-10 max-w-sm md:max-w-md leading-relaxed group-hover:text-white/90 transition-colors duration-500">
+                                <p className="text-white/80 md:text-white/60 text-base md:text-xl font-light mb-10 max-w-sm md:max-w-md leading-relaxed group-hover:text-white/90 transition-colors duration-500">
                                     {project.description}
                                 </p>
 
                                 <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3 mb-12">
                                     {project.stack.map((tech) => (
-                                        <span key={tech} className="px-3 py-1 md:px-4 md:py-1.5 border border-white/10 rounded-full text-[10px] md:text-xs text-white/40 font-mono uppercase hover:bg-white/10 hover:text-white transition-colors duration-300">
+                                        <span key={tech} className="px-3 py-1 md:px-4 md:py-1.5 border border-white/10 rounded-full text-[10px] md:text-xs text-white/60 md:text-white/40 font-mono uppercase hover:bg-white/10 hover:text-white transition-colors duration-300">
                                             {tech}
                                         </span>
                                     ))}
@@ -155,13 +179,13 @@ export default function Projects() {
                                             href={project.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group/btn relative w-full sm:w-fit pl-6 pr-12 py-4 rounded-full bg-transparent border border-white/20 overflow-hidden flex items-center justify-center sm:justify-start gap-4 transition-all duration-500 hover:border-white hover:pl-8 hover:pr-14"
+                                            className="group/btn relative w-full sm:w-fit pl-6 pr-12 py-4 rounded-full bg-white/5 md:bg-transparent border border-white/20 overflow-hidden flex items-center justify-center sm:justify-start gap-4 transition-all duration-500 hover:border-white hover:pl-8 hover:pr-14"
                                         >
-                                            <div className="absolute inset-0 bg-white translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
-                                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] uppercase text-white group-hover/btn:text-black transition-colors duration-500">
+                                            <div className="absolute inset-0 bg-white translate-y-0 md:translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
+                                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] uppercase text-black md:text-white group-hover/btn:text-black transition-colors duration-500">
                                                 View Live
                                             </span>
-                                            <ArrowUpRight size={16} className="relative z-10 text-white group-hover/btn:text-black transition-colors duration-500 group-hover/btn:rotate-45 transform ease-out" />
+                                            <ArrowUpRight size={16} className="relative z-10 text-black md:text-white group-hover/btn:text-black transition-colors duration-500 group-hover/btn:rotate-45 transform ease-out" />
                                         </a>
                                     )}
                                     {project.githubUrl !== "#" && (
@@ -180,8 +204,8 @@ export default function Projects() {
                                 </div>
                             </div>
 
-                            {/* Right: Image (Fades out) */}
-                            <div className="relative w-full h-[30vh] md:h-[70vh] order-1 md:order-2 overflow-hidden rounded transform transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:group-hover:scale-95 md:group-hover:opacity-0 md:group-hover:blur-md origin-right">
+                            {/* Right: Image (Desktop only - Fades out on hover) */}
+                            <div className="hidden md:block relative w-full h-[30vh] md:h-[70vh] order-1 md:order-2 overflow-hidden rounded transform transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:group-hover:scale-95 md:group-hover:opacity-0 md:group-hover:blur-md origin-right">
                                 <img
                                     src={project.img}
                                     alt={project.title}

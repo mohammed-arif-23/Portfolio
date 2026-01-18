@@ -172,9 +172,9 @@ export default function Contact() {
                     style={{ '--mouse-x': '0px', '--mouse-y': '0px' } as React.CSSProperties}
                 >
 
-                    {/* Spotlight Glow */}
+                    {/* Spotlight Glow (Desktop Only) */}
                     <div
-                        className="absolute inset-0 z-0 opacity-0 group-hover/form:opacity-100 transition-opacity duration-500 pointer-events-none"
+                        className="hidden md:block absolute inset-0 z-0 opacity-0 group-hover/form:opacity-100 transition-opacity duration-500 pointer-events-none"
                         style={{
                             background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)'
                         }}

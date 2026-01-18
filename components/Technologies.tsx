@@ -66,7 +66,7 @@ export default function Technologies() {
             y: Math.random() * (height - 100) + 50,
             vx: (Math.random() - 0.5) * 1.5,
             vy: (Math.random() - 0.5) * 1.5,
-            radius: mobile ? 20 : 60, // Physical radius
+            radius: mobile ? 25 : 60, // Physical radius
             mass: 1
         }));
     }, []);
