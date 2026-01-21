@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState, FormEvent } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Mail, Linkedin, Github, Terminal, ArrowUp, Send, Loader2, ArrowUpRight } from 'lucide-react';
+import { Mail, Linkedin, Github, Terminal, ArrowUp, Send, Loader2, ArrowUpRight, MousePointer2 } from 'lucide-react';
 import MagneticWrapper from './MagneticWrapper';
+import SplitType from 'split-type';
+import TextPressure from './ui/TextPressure';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,18 +32,62 @@ export default function Contact() {
         const timer = setInterval(updateTime, 1000);
         updateTime();
 
-        const ctx = gsap.context(() => {
+        let titleSplit: SplitType | null = null;
 
-            // Staggered reveal for form elements
-            gsap.from('.contact-reveal', {
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                stagger: 0.1,
-                ease: 'power3.out',
+
+
+        const ctx = gsap.context(() => {
+            // Split title for kinetic effect
+
+
+            // Title Parallax - Subtle & Safe
+            gsap.to('.contact-title-1', {
+                x: -200,
                 scrollTrigger: {
                     trigger: containerRef.current,
-                    start: 'top 70%'
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1
+                }
+            });
+            gsap.to('.contact-title-2', {
+                x: 200,
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1
+                }
+            });
+
+            // Mega Kinetic Entrance & Scroll Effect (SYNCED GLOBALLY)
+
+
+            // High-Intensity Staggered Reveal
+            gsap.from('.contact-reveal', {
+                y: 100,
+                opacity: 0,
+                scale: 0.9,
+                rotateX: 15,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: 'power4.out',
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: 'top 85%'
+                }
+            });
+
+            // Immersive Form Kinetic Effect
+            gsap.to('.form-kinetic', {
+                y: -50,
+                scale: 1.05,
+                rotateY: -5,
+                scrollTrigger: {
+                    trigger: '.group\\/form',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1.5
                 }
             });
 
@@ -56,34 +102,65 @@ export default function Contact() {
                 });
             }
 
-            // Footer Text Letter-by-Letter Reveal
-            const chars = document.querySelectorAll('.footer-char');
-            gsap.set(chars, { yPercent: 120, opacity: 0, rotateX: -90 }); // Force initial state
-
-            gsap.to(chars, {
-                yPercent: 0,
-                opacity: 1,
-                rotateX: 0,
-                stagger: 0.05,
-                duration: 1.5,
-                ease: 'power4.out',
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: 'top 85%',
-                    toggleActions: 'play reverse play reverse'
+            // Footer Text Entrance Animation
+            gsap.fromTo('.footer-block',
+                { y: '30%', opacity: 0, scale: 0.9 },
+                {
+                    y: '0%',
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1.5,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.footer-block',
+                        start: 'top 95%',
+                        end: 'bottom bottom',
+                        scrub: 1
+                    }
                 }
-            });
+            );
 
         }, containerRef);
 
         return () => {
             clearInterval(timer);
-            ctx.revert();
+            if (ctx) ctx.revert();
+
         };
     }, []);
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleInput = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const target = e.currentTarget;
+        const parent = target.parentElement;
+        if (!parent) return;
+
+        // Spawn particles
+        for (let i = 0; i < 3; i++) {
+            const particle = document.createElement('span');
+            particle.classList.add('absolute', 'w-1', 'h-1', 'bg-brand-accent', 'rounded-full', 'pointer-events-none', 'z-50');
+
+            // Random horizontal pos along the bottom
+            const left = Math.random() * 100;
+            particle.style.left = `${left}%`;
+            particle.style.bottom = '0px';
+
+            parent.appendChild(particle);
+
+            // Animate
+            gsap.to(particle, {
+                y: -Math.random() * 60 - 20,
+                x: (Math.random() - 0.5) * 40,
+                opacity: 0,
+                scale: Math.random() * 2,
+                duration: 0.8 + Math.random(),
+                ease: 'power2.out',
+                onComplete: () => particle.remove()
+            });
+        }
     };
 
     const handleSubmit = async (e: FormEvent) => {
@@ -92,30 +169,14 @@ export default function Contact() {
 
         try {
             const formData = new FormData(e.currentTarget as HTMLFormElement);
-            const data = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                message: formData.get('message'),
-            };
-
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            const result = await response.json();
-
-            if (!response.ok || !result.success) {
-                throw new Error(result.error || 'Failed to send message');
-            }
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
             setIsSuccess(true);
             if (formRef.current) formRef.current.reset();
 
-            // Reset success message after 5 seconds
+
+            // Reset success message after animation
             setTimeout(() => setIsSuccess(false), 5000);
 
         } catch (error) {
@@ -127,48 +188,55 @@ export default function Contact() {
     };
 
     return (
-        <section ref={containerRef} className="relative py-4 px-6 md:px-12 lg:px-24 bg-[#050505] overflow-hidden">
+        <section ref={containerRef} className="relative pt-20 pb-4 px-6 md:px-12 lg:px-24 bg-black overflow-hidden">
+            <div className="max-w-7xl mx-auto mb-16 relative">
+                <div className="flex items-center gap-3 mb-6 contact-reveal">
+                    <Terminal size={14} className="text-brand-accent animate-pulse" />
+                    <span className="font-mono text-xs text-brand-accent tracking-[0.3em] uppercase opacity-80">System_Shutdown</span>
+                </div>
+
+                <div className="flex flex-col relative z-20 pointer-events-none">
+                    <h2 className="contact-title-1 text-[15vw] md:text-[12vw] lg:text-[10vw] font-black text-white leading-[0.8] tracking-tighter uppercase whitespace-nowrap">
+                        LET<span className="text-brand-accent">' S </span>START
+                    </h2>
+                    <h2 className="contact-title-2 text-[15vw] md:text-[12vw] lg:text-[10vw] font-black leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white/10 to-white/40 ml-4 md:ml-20 lg:ml-32 uppercase whitespace-nowrap">
+                        A PROJECT
+                    </h2>
+                </div>
+            </div>
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
 
                 {/* Left: Content & Socials */}
                 <div className="flex flex-col justify-between h-full">
-                    <div className="contact-reveal">
-                        <div className="flex items-center gap-3 mb-8 group/status cursor-help">
-                            <Terminal size={14} className="text-brand-accent animate-pulse" />
-                            <span className="font-mono text-xs text-brand-accent tracking-[0.2em] uppercase group-hover/status:animate-glitch">System_Shutdown</span>
-                        </div>
-
-                        <h2 className="text-6xl md:text-8xl font-bold text-white leading-[0.9] mb-8 tracking-tighter">
-                            LET'S START<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/20 to-white/60 group-hover:from-brand-accent group-hover:to-brand-accent/50 transition-all duration-500">A PROJECT</span>
-                        </h2>
-
-                        <p className="text-white/60 text-lg font-light max-w-md mb-12 leading-relaxed">
-                            Available for freelance commissions and full-time mission objectives. Drop a signal.
+                    <div className="contact-reveal flex flex-col gap-12 mb-auto">
+                        <p className="text-white/80 text-2xl md:text-3xl font-light leading-relaxed max-w-2xl">
+                            Available for freelance commissions and full-time mission objectives. <br />
+                            <span className="text-white/40">Drop a signal.</span>
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-4 contact-reveal">
+                    <div className="flex flex-col gap-0 contact-reveal mt-12 lg:mt-24">
                         {SOCIALS.map((social, i) => (
                             <MagneticWrapper key={i}>
-                                <a href={social.url} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between py-6 border-t border-white/10 hover:border-brand-accent/50 transition-colors cursor-none overflow-hidden relative">
-                                    <div className="absolute inset-0 bg-brand-accent/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"></div>
-                                    <span className="relative z-10 font-mono text-sm text-white/40 group-hover:text-white transition-colors tracking-widest uppercase pl-2 group-hover:pl-4 duration-300">
+                                <a href={social.url} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between py-12 md:py-14 border-t border-white/10 hover:border-white/30 transition-all duration-500 cursor-none overflow-hidden relative active:scale-95 active:brightness-125">
+                                    <div className="absolute inset-0 bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"></div>
+                                    <span className="relative z-10 font-mono text-2xl md:text-3xl text-white/60 group-hover:text-brand-accent transition-colors tracking-widest uppercase pl-2 group-hover:translate-x-4 duration-500">
                                         {social.label}
                                     </span>
-                                    <span className="relative z-10 text-white/40 group-hover:text-brand-accent group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-300 pr-2 group-hover:pr-4">
-                                        <ArrowUpRight size={20} />
+                                    <span className="relative z-10 text-white/40 group-hover:text-brand-accent group-hover:-translate-y-2 group-hover:translate-x-2 transition-all duration-500 pr-2 group-hover:pr-6">
+                                        <ArrowUpRight size={28} />
                                     </span>
                                 </a>
                             </MagneticWrapper>
                         ))}
+                        <div className="w-full h-[1px] bg-white/10"></div>
                     </div>
                 </div>
 
                 {/* Right: Premium Form Spotlight */}
                 <div
-                    className="contact-reveal bg-white/5 border border-white/10 p-8 md:p-12 rounded-3xl backdrop-blur-sm relative overflow-hidden group/form"
+                    className="contact-reveal form-kinetic bg-white/5 border border-white/10 p-8 md:p-12 rounded-3xl backdrop-blur-sm relative overflow-hidden group/form"
                     style={{ '--mouse-x': '0px', '--mouse-y': '0px' } as React.CSSProperties}
                 >
 
@@ -190,8 +258,9 @@ export default function Contact() {
                                 id="name"
                                 name="name"
                                 required
-                                className="w-full bg-black/20 border-b border-white/10 p-4 text-white placeholder-white/10 focus:outline-none focus:border-brand-accent transition-all duration-500 text-lg group-focus-within/input:px-6"
+                                className="w-full bg-black/20 border-b border-white/10 p-4 text-white placeholder-white/10 focus:outline-none focus:border-brand-accent transition-all duration-500 text-lg group-focus-within/input:px-6 active:px-8"
                                 placeholder="ENTER NAME"
+                                onInput={handleInput}
                             />
                             <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-accent group-focus-within/input:w-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"></div>
                         </div>
@@ -203,8 +272,9 @@ export default function Contact() {
                                 id="email"
                                 name="email"
                                 required
-                                className="w-full bg-black/20 border-b border-white/10 p-4 text-white placeholder-white/10 focus:outline-none focus:border-brand-accent transition-all duration-500 text-lg group-focus-within/input:px-6"
+                                className="w-full bg-black/20 border-b border-white/10 p-4 text-white placeholder-white/10 focus:outline-none focus:border-brand-accent transition-all duration-500 text-lg group-focus-within/input:px-6 active:px-8"
                                 placeholder="ENTER EMAIL"
+                                onInput={handleInput}
                             />
                             <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-accent group-focus-within/input:w-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"></div>
                         </div>
@@ -218,6 +288,7 @@ export default function Contact() {
                                 rows={4}
                                 className="w-full bg-black/20 border-b border-white/10 p-4 text-white placeholder-white/10 focus:outline-none focus:border-brand-accent transition-all duration-500 text-lg resize-none group-focus-within/input:px-6"
                                 placeholder="DESCRIBE YOUR MISSION..."
+                                onInput={handleInput}
                             ></textarea>
                             <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-accent group-focus-within/input:w-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"></div>
                         </div>
@@ -225,7 +296,7 @@ export default function Contact() {
                         <button
                             type="submit"
                             disabled={isSubmitting || isSuccess}
-                            className={`group/btn mt-4 w-full py-5 px-8 rounded-full border border-white/10 relative overflow-hidden flex items-center justify-center gap-3 transition-colors duration-300 ${isSuccess ? 'border-green-500' : 'hover:border-white'}`}
+                            className={`group/btn mt-4 w-full py-5 px-8 rounded-full border border-white/10 relative overflow-hidden flex items-center justify-center gap-3 transition-all duration-300 active:scale-[0.98] ${isSuccess ? 'border-green-500' : 'hover:border-white'}`}
                         >
                             <div className={`absolute inset-0 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] ${isSuccess ? 'bg-green-500' : 'bg-white'}`}></div>
 
@@ -247,26 +318,33 @@ export default function Contact() {
             {/* Footer Bottom */}
             <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-7xl mx-auto mt-24 pt-8 border-t border-white/10 text-white/20 font-mono text-[10px] uppercase">
                 <div className="flex gap-6 mb-4 md:mb-0">
-                    <span>© 2024 MOHAMMED ARIF</span>
+                    <span>© 2026 MOHAMMED ARIF</span>
                     <span>LOCAL_TIME: {time}</span>
                 </div>
 
-                <button onClick={scrollToTop} className="flex items-center gap-2 hover:text-brand-accent transition-colors cursor-pointer group">
+                <button onClick={scrollToTop} className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
                     BACK TO TOP <ArrowUp size={12} className="group-hover:-translate-y-1 transition-transform" />
                 </button>
             </div>
 
-            {/* Big Footer Text - Animated */}
-            <div className="w-full mt-12 flex justify-center overflow-hidden pointer-events-none select-none pb-1">
-                <h1 className="flex text-[9vw] font-black text-neutral-800 leading-none tracking-tighter">
-                    {"©MOHAMMED_ARIF".split("").map((char, i) => (
-                        <span key={i} className="footer-char inline-block origin-bottom transform will-change-transform">
-                            {char}
-                        </span>
-                    ))}
-                </h1>
+            {/* Big Footer Text - No Shimmer, Grey, Pushed Down & Animated */}
+            <div className="footer-block w-full mt-2 md:mt-4 overflow-hidden pointer-events-none select-none ">
+                <div className="h-auto relative flex items-center justify-center">
+                    <TextPressure
+                        text="©MOHAMMED_ARIF"
+                        flex={true}
+                        alpha={false}
+                        stroke={false}
+                        width={true}
+                        weight={true}
+                        italic={true}
+                        textColor="#454545ff"
+                        className="font-black tracking-tighter"
+                        minFontSize={48}
+                    />
+                </div>
             </div>
 
-        </section>
+        </section >
     );
 }

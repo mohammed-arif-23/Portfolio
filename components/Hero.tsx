@@ -143,13 +143,7 @@ export default function Hero() {
                 ease: 'expo.out'
               });
             }
-          }, '-=0.2') // Start with text
-          // Socials & Elements
-          .fromTo('.hero-social',
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 },
-            '-=1'
-          );
+          }, '-=0.2'); // Start with text
 
       }, containerRef);
     };
@@ -184,31 +178,72 @@ export default function Hero() {
 
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Scroll-based Parallax with GSAP
+    // Scroll-based MEGA Kinetic Parallax
     if (textRef.current) {
+      const chars = textRef.current.querySelectorAll('.char');
+
       gsap.to(textRef.current, {
-        y: -150,
+        y: -50,
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
           end: 'bottom top',
-          scrub: 1.5,
+          scrub: true,
+        }
+      });
+
+      // Mega kinetic effect on chars - Pushed to MAX
+      gsap.to(chars, {
+        rotateX: 75,
+        scale: 1.25,
+        skewX: 18,
+        opacity: 0.1, // Fades down with image
+        filter: 'blur(15px)', // Blurs with image
+        stagger: {
+          amount: 0.8,
+          from: "center"
+        },
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 2,
         }
       });
     }
 
     if (imageRef.current) {
-      gsap.to(imageRef.current, {
-        y: 100,
-        scale: 1.1,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1.5,
+      // MEGA Scroll Interaction: Fades down and blurs as requested
+      gsap.fromTo(imageRef.current,
+        { opacity: 1, filter: 'blur(0px)', scale: 1 },
+        {
+          y: 60,
+          scale: 1.1,
+          opacity: 0.3, // Pushed further (fade down)
+          filter: 'blur(12px)', // Pushed further (blur)
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          }
         }
-      });
+      );
     }
+
+    // Socials MEGA Pop (Fixing static icons)
+    gsap.fromTo('.hero-social',
+      { scale: 0, opacity: 0, y: 50 },
+      {
+        scale: 1,
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: 'elastic.out(1, 0.3)',
+        delay: 2.5 // After main reveal sequence
+      }
+    );
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -221,7 +256,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-[#050505]"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black"
     >
       {/* Solid Black Background */}
       <div className="absolute inset-0 bg-black"></div>
@@ -275,20 +310,20 @@ export default function Hero() {
         {/* IMAGE (Centered) with Orbital Rings */}
         <div
           ref={imageRef}
-          className="group/image relative w-[500px] h-[500px] md:w-[600px] md:h-[600px] rounded-full opacity-0 z-10 flex items-center justify-center"
+          className="group/image relative w-[280px] h-[280px] md:w-[600px] md:h-[600px] rounded-full opacity-0 z-10 flex items-center justify-center"
         >
           {/* Orbital Ring 1 - Slow Rotate */}
-          <div className="absolute inset-[-30px] rounded-full border-2 border-brand-accent/20 animate-[spin_25s_linear_infinite]">
+          <div className="absolute inset-[-15px] md:inset-[-30px] rounded-full border-2 border-brand-accent/20 animate-[spin_25s_linear_infinite]">
             <div className="absolute top-0 left-1/2 w-2 h-2 bg-brand-accent rounded-full -translate-x-1/2 blur-sm"></div>
           </div>
 
           {/* Orbital Ring 2 - Counter Rotate */}
-          <div className="absolute inset-[-60px] rounded-full border border-brand-accent/10 animate-[spin_40s_linear_infinite_reverse]">
+          <div className="absolute inset-[-30px] md:inset-[-60px] rounded-full border border-brand-accent/10 animate-[spin_40s_linear_infinite_reverse]">
             <div className="absolute top-1/2 right-0 w-1.5 h-1.5 bg-brand-accent/50 rounded-full -translate-y-1/2 blur-sm"></div>
           </div>
 
           {/* Orbital Ring 3 - Fastest */}
-          <div className="absolute inset-[-90px] rounded-full border border-brand-accent/5 animate-[spin_15s_linear_infinite]">
+          <div className="absolute inset-[-45px] md:inset-[-90px] rounded-full border border-brand-accent/5 animate-[spin_15s_linear_infinite]">
             <div className="absolute bottom-0 left-1/2 w-1 h-1 bg-brand-accent/30 rounded-full -translate-x-1/2 blur-sm"></div>
           </div>
 
@@ -312,7 +347,7 @@ export default function Hero() {
         {/* TEXT OVERLAY (Pinned Top/Bottom & Centered & Blend Mode) */}
         <div
           ref={textRef}
-          className="absolute inset-0 w-full h-full pointer-events-none z-50 mix-blend-difference flex flex-col py-0"
+          className="absolute inset-0 w-full h-full pointer-events-none z-50 mix-blend-difference flex flex-col md:pb-0 pb-32 justify-center md:justify-start py-0"
         >
           {/* Top Text - MOHAMMED */}
           <div className="w-full flex justify-center pt-2">

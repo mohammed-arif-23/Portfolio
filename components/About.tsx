@@ -22,67 +22,90 @@ export default function About() {
   useEffect(() => {
     const ctx = gsap.context(() => {
 
+      // Mobile Title Parallax - MEGA 50% PUSH
+      gsap.to('.about-title-1', {
+        x: -150, // Pushed 49% further
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5
+        }
+      });
+      gsap.to('.about-title-2', {
+        x: 150, // Pushed 49% further
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5
+        }
+      });
+
       // Bio Text - Word by Word Reveal
       const bioText = document.querySelector('.about-bio');
       if (bioText) {
         const words = bioText.textContent?.split(' ') || [];
-        bioText.innerHTML = words.map(word => `<span class="inline-block opacity-0">${word}&nbsp;</span>`).join('');
+        bioText.innerHTML = words.map(word => `<span class="inline-block opacity-0 translate-y-4 mb-1">${word}&nbsp;</span>`).join('');
 
         gsap.to('.about-bio span', {
           opacity: 1,
           y: 0,
+          scale: 1,
+          rotate: 0,
           duration: 0.8,
-          stagger: 0.03,
-          ease: 'power2.out',
+          stagger: {
+            amount: 1.2,
+            from: "start"
+          },
+          ease: 'power4.out',
           scrollTrigger: {
             trigger: bioText,
-            start: 'top 75%',
-            toggleActions: 'play reverse play reverse'
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
           }
         });
       }
 
-      // Stats Cards - Enhanced Entrance
+      // MEGA Stats Cards Entrance
       gsap.fromTo('.about-card',
         {
           y: 100,
           opacity: 0,
-          rotateX: -15,
-          scale: 0.9
+          rotateY: 45,
+          rotateX: 10,
+          scale: 0.7
         },
         {
           y: 0,
           opacity: 1,
+          rotateY: 0,
           rotateX: 0,
           scale: 1,
-          duration: 1.2,
-          stagger: 0.15,
-          ease: 'power3.out',
+          duration: 1.5,
+          stagger: 0.2, // Pushed 49% further
+          ease: 'power4.out',
           scrollTrigger: {
             trigger: '.about-cards-grid',
-            start: 'top 80%',
-            toggleActions: 'play reverse play reverse'
+            start: 'top 90%',
+            toggleActions: 'play none none reverse'
           }
         }
       );
 
-      // CV Button - Delayed Bounce
+      // CV Button - Full Scroll Interaction
       gsap.fromTo('.about-cv',
+        { scale: 0.9, opacity: 0, y: 30 },
         {
-          y: 80,
-          opacity: 0,
-          scale: 0.8
-        },
-        {
-          y: 0,
-          opacity: 1,
           scale: 1,
-          duration: 1,
-          ease: 'back.out(1.4)',
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'back.out(2)',
           scrollTrigger: {
             trigger: '.about-cv',
-            start: 'top 85%',
-            toggleActions: 'play reverse play reverse'
+            start: 'top 95%',
+            toggleActions: 'play none none reverse'
           }
         }
       );
@@ -93,16 +116,16 @@ export default function About() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-screen text-[#ededed] pt-8 pb-8 md:pt-12 md:pb-12 px-6 md:px-12 lg:px-24 flex flex-col lg:flex-row gap-8 lg:gap-24">
+    <section ref={containerRef} className="relative w-full min-h-screen text-[#ededed] pt-8 pb-8 md:pt-12 md:pb-12 px-6 md:px-12 lg:px-24 flex flex-col lg:flex-row gap-8 lg:gap-24 bg-black">
 
       {/* LEFT: Sticky Title - Only sticky on desktop */}
       <div className="w-full lg:w-1/3 relative z-10 lg:h-[150vh]">
         <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center py-8 lg:py-0">
           <div className="overflow-hidden flex flex-col">
-            <h2 className="text-[15vw] md:text-[12vw] lg:text-[7vw] font-bold leading-none tracking-tighter text-[#333]">
+            <h2 className="about-title-1 text-[15vw] md:text-[12vw] lg:text-[7vw] font-bold leading-none tracking-tighter text-[#333]">
               ABOUT
             </h2>
-            <h2 className="text-[15vw] md:text-[12vw] lg:text-[7vw] font-bold leading-none tracking-tighter text-[#ccff00] ml-8 md:ml-12 lg:ml-24 -mt-2 lg:-mt-4 relative z-20">
+            <h2 className="about-title-2 text-[15vw] md:text-[12vw] lg:text-[7vw] font-bold leading-none tracking-tighter text-[#ccff00] ml-8 md:ml-12 lg:ml-24 -mt-2 lg:-mt-4 relative z-20">
               ME.
             </h2>
           </div>

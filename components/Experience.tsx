@@ -49,24 +49,65 @@ export default function Experience() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animate responsibility cards on scroll
+      // Section Title Parallax
+      gsap.to('.exp-bg-text', {
+        x: 100,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1
+        }
+      });
+
+      // MEGA 3D Responsibility Unfold - Pushed to MAX
       gsap.fromTo('.responsibility-card',
         {
-          y: 50,
+          y: 120, // Pushed further
           opacity: 0,
-          scale: 0.95
+          scale: 0.6,
+          rotateX: 80, // Massive unfold
+          rotateY: 25,
+          transformOrigin: 'top center'
         },
         {
           y: 0,
           opacity: 1,
           scale: 1,
-          duration: 0.8,
-          stagger: 0.08,
-          ease: 'power3.out',
+          rotateX: 0,
+          rotateY: 0,
+          duration: 1,
+          stagger: {
+            amount: 1,
+            from: "start"
+          },
+          ease: 'power4.out',
           scrollTrigger: {
             trigger: '.responsibility-grid',
-            start: 'top 80%',
-            toggleActions: 'play reverse play reverse'
+            start: 'top 90%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+
+      // MEGA Tech Stack "Bounce" Reveal
+      gsap.fromTo('.exp-tech-tag',
+        {
+          scale: 0,
+          opacity: 0,
+          y: 20
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'back.out(3)',
+          scrollTrigger: {
+            trigger: '.exp-tech-container',
+            start: 'top 95%',
+            toggleActions: 'play none none reverse'
           }
         }
       );
@@ -76,13 +117,13 @@ export default function Experience() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full py-32 px-4 md:px-12 bg-[#080808] flex items-center justify-center overflow-hidden">
+    <section ref={containerRef} className="relative w-full py-32 px-4 md:px-12 bg-black flex items-center justify-center overflow-hidden">
 
       <div className="max-w-5xl mx-auto w-full relative z-10">
 
         {/* Section Title */}
         <div className="mb-16 flex items-end gap-6 border-b border-white/10 pb-6">
-          <span className="text-8xl md:text-9xl text-white/5 font-black leading-none absolute -top-12 -left-8 md:-left-16 pointer-events-none select-none">
+          <span className="exp-bg-text text-8xl md:text-9xl text-white/5 font-black leading-none absolute -top-12 -left-8 md:-left-16 pointer-events-none select-none">
             EXP
           </span>
           <h2 className="text-sm font-mono text-brand-accent tracking-[0.5em] uppercase relative z-10">
@@ -141,9 +182,9 @@ export default function Experience() {
           </div>
 
           {/* Tech Tags */}
-          <div className="flex flex-wrap gap-2">
+          <div className="exp-tech-container flex flex-wrap gap-2">
             {techStack.map((tech) => (
-              <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-white/50 font-mono hover:text-white hover:border-brand-accent/50 hover:bg-brand-accent/5 transition-all duration-300">
+              <span key={tech} className="exp-tech-tag px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-white/50 font-mono hover:text-white hover:border-brand-accent/50 hover:bg-brand-accent/5 transition-all duration-300">
                 {tech}
               </span>
             ))}

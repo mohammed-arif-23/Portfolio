@@ -263,6 +263,29 @@ export default function Technologies() {
         };
         loop();
 
+        // Scroll-triggered momentum "Pump"
+        ScrollTrigger.create({
+            trigger: containerRef.current,
+            start: 'top 80%',
+            onEnter: () => {
+                nodesRef.current.forEach(node => {
+                    node.vx += (Math.random() - 0.5) * 15;
+                    node.vy += (Math.random() - 0.5) * 15;
+                });
+            }
+        });
+
+        // Title Parallax
+        gsap.to('.tech-bg-title', {
+            y: 50,
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1
+            }
+        });
+
         return () => {
             cancelAnimationFrame(animationId);
             window.removeEventListener('resize', resize);
@@ -278,14 +301,14 @@ export default function Technologies() {
     }, []);
 
     return (
-        <section ref={containerRef} className="relative w-full min-h-[50vh] md:min-h-[60vh] py-8 md:py-12 mt-2 md:mt-4 bg-[#050505] overflow-hidden select-none active:cursor-grabbing">
+        <section ref={containerRef} className="relative w-full min-h-[50vh] md:min-h-[60vh] py-8 md:py-12 mt-2 md:mt-4 bg-black overflow-hidden select-none active:cursor-grabbing">
 
             {/* Background Decor */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
 
             {/* Centered Title */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4">
-                <h2 className="text-[7vw] md:text-[5vw] lg:text-[3vw] font-bold text-[#ededed] opacity-10 tracking-tighter text-center leading-tight md:leading-none">
+                <h2 className="tech-bg-title text-[7vw] md:text-[5vw] lg:text-[3vw] font-bold text-[#ededed] opacity-10 tracking-tighter text-center leading-tight md:leading-none">
                     Technologies<br />I've worked with
                 </h2>
             </div>
