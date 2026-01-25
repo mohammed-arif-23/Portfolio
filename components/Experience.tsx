@@ -18,7 +18,7 @@ const responsibilities = [
   },
   {
     icon: <Zap size={20} />,
-    text: "Creating automation workflows using Zapier and AI tools integrating WhatsApp, Telegram, Instagram comments, and internal processes."
+    text: "Creating automation workflows using AI tools to simplify the duty works of doctors and nurses."
   },
   {
     icon: <BarChart3 size={20} />,
@@ -42,7 +42,7 @@ const responsibilities = [
   }
 ];
 
-const techStack = ["Next.js", "Node.js", "MongoDB", "Zapier", "Zoho Creator", "WhatsApp API", "Canva", "AI Tools"];
+const techStack = ["Next.js", "Node.js", "MongoDB", "Prompt Engineering", "Zoho Creator", "RTOS", "Canva", "AI Tools"];
 
 export default function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
