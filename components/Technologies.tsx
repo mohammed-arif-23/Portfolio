@@ -132,9 +132,9 @@ export default function Technologies() {
             window.addEventListener('mousemove', onMouseMove);
             window.addEventListener('mouseup', onMouseUp);
             // Add minimal touch support too
-            container.addEventListener('touchstart', (e) => onMouseDown({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any));
-            window.addEventListener('touchmove', (e) => onMouseMove({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any));
-            window.addEventListener('touchend', onMouseUp);
+            container.addEventListener('touchstart', (e) => onMouseDown({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any), { passive: true });
+            window.addEventListener('touchmove', (e) => onMouseMove({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any), { passive: true });
+            window.addEventListener('touchend', onMouseUp, { passive: true });
         }
 
         const updatePhysics = () => {
@@ -293,8 +293,7 @@ export default function Technologies() {
                 container.removeEventListener('mousedown', onMouseDown);
                 window.removeEventListener('mousemove', onMouseMove);
                 window.removeEventListener('mouseup', onMouseUp);
-                container.removeEventListener('touchstart', (e) => onMouseDown({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any));
-                window.removeEventListener('touchmove', (e) => onMouseMove({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any));
+                // Note: passive listeners are removed the same way — the options object doesn't affect removeEventListener
                 window.removeEventListener('touchend', onMouseUp);
             }
         };

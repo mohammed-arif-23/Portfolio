@@ -9,40 +9,20 @@ gsap.registerPlugin(ScrollTrigger);
 
 const responsibilities = [
   {
-    icon: <Code size={20} />,
-    text: "Working as a part-time developer supporting hospital web systems, automation, and internal tools."
+    icon: <Settings size={20} />,
+    text: "Managed and optimized critical hospital software and hardware systems, providing rapid technical troubleshooting to medical staff to ensure seamless daily operations."
   },
   {
     icon: <Database size={20} />,
-    text: "Developing and maintaining applications using Next.js, Node.js, MongoDB with authentication, API routes, validation, and error handling."
-  },
-  {
-    icon: <Zap size={20} />,
-    text: "Creating automation workflows using AI tools to simplify the duty works of doctors and nurses."
-  },
-  {
-    icon: <BarChart3 size={20} />,
-    text: "Performed practical data analysis to identify inefficiencies and help reduce operational expenses."
-  },
-  {
-    icon: <Settings size={20} />,
-    text: "Modified and managed Zoho Creator applications used by hospital staff."
+    text: "Handled secure data management with minimal user interfaces and streamlined administrative workflows using SQL and MongoDB, resolving backend errors and improving data retrieval times."
   },
   {
     icon: <Globe size={20} />,
-    text: "Managed hospital website content, LinkedIn page, and basic posters using Canva and AI tools."
+    text: "Leveraged design and digital marketing skills to create high-quality informational posters and digital assets for hospital campaigns, bridging technical operations with patient-facing communications."
   },
-  {
-    icon: <Users size={20} />,
-    text: "Worked directly with doctors, receptionists, and staff to gather requirements and simplify workflows."
-  },
-  {
-    icon: <Wrench size={20} />,
-    text: "Handled ongoing maintenance, bug fixes, updates, and hybrid on-site/remote support."
-  }
 ];
 
-const techStack = ["Next.js", "Node.js", "MongoDB", "Prompt Engineering", "Zoho Creator", "RTOS", "Canva", "AI Tools"];
+const techStack = ["SQL", "MongoDB", "Hardware Support", "Canva", "Digital Marketing", "AI Tools"];
 
 export default function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -138,18 +118,18 @@ export default function Experience() {
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
             <div>
               <h3 className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:text-brand-accent transition-colors">
-                Digital Operations & Systems Manager – Hospital Administration
+                Software Technician
               </h3>
               <div className="flex items-center gap-3">
-                <span className="text-lg text-white/60">Hybrid</span>
+                <span className="text-lg text-white/60">Valli Super Specialty Hospital, Salem</span>
                 <span className="px-2 py-0.5 bg-brand-accent/20 text-brand-accent text-xs font-mono rounded uppercase tracking-wider">
-                  Current
+                  Part-time
                 </span>
               </div>
             </div>
 
             <div className="text-right">
-              <span className="block font-mono text-xl text-white">2025 — Present</span>
+              <span className="block font-mono text-xl text-white">Nov 2025 — Present</span>
             </div>
           </div>
 

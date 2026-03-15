@@ -1,62 +1,66 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<Lenis | null>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  // ref for desktop skew — targets body directly, no wrapper div needed
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    // Initialize Lenis
+    if (isInitialized.current) return;
+    isInitialized.current = true;
+
+    // Touch device = native scroll, do NOT initialize Lenis at all
+    // Uses pointer/hover media query to detect actual touch hardware
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+    if (isTouch) {
+      // Native scroll on mobile — GSAP ScrollTrigger works perfectly without Lenis
+      ScrollTrigger.refresh();
+      return;
+    }
+
+    // ── Desktop only: Lenis v1.3.x ───────────────────────────────────────────
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
+      lerp: 0.08,
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 2.0, // Ensure touch feels responsive
       infinite: false,
     });
 
-    lenisRef.current = lenis;
+    // Keep GSAP ScrollTrigger in sync with Lenis virtual scroll position
+    lenis.on('scroll', () => ScrollTrigger.update());
 
-    // GSAP integration & Skew Effect
+    // Subtle skew on body (no wrapper div needed)
     lenis.on('scroll', (e: any) => {
-      ScrollTrigger.update();
-
-      // Skew effect based on velocity
-      // Mobile often produces lower velocity values, so we might need to boost it slightly or just ensure it's applied
-      const skew = e.velocity * 0.05;
-
-      // Apply skew to a wrapper instead of body for better compatibility
-      if (contentRef.current) {
-        gsap.to(contentRef.current, {
-          skewY: skew,
-          duration: 0.5,
-          ease: 'power3.out',
-          overwrite: 'auto',
-          force3D: true // Hardware acceleration
-        });
-      }
+      gsap.to(document.body, {
+        skewY: e.velocity * 0.04,
+        duration: 0.6,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
     });
 
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
+    const rafCallback = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(rafCallback);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove(() => { });
+      gsap.ticker.remove(rafCallback);
+      // Reset body skew on unmount
+      gsap.set(document.body, { skewY: 0 });
+      isInitialized.current = false;
     };
   }, []);
 
-  return <div ref={contentRef} className="w-full min-h-screen will-change-transform">{children}</div>;
+  // NO wrapper div — children rendered directly into the DOM tree
+  // A wrapper div (even with no styles) was creating a block-formatting-context
+  // that interfered with native scroll position detection on mobile browsers.
+  return <>{children}</>;
 }
