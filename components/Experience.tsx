@@ -3,26 +3,46 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Code, Database, Zap, BarChart3, Settings, Globe, Users, Wrench } from 'lucide-react';
+import { Code, Database, Zap, BarChart3, Settings, Globe, Users, Wrench, Palette } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const responsibilities = [
   {
     icon: <Settings size={20} />,
-    text: "Managed and optimized critical hospital software and hardware systems, providing rapid technical troubleshooting to medical staff to ensure seamless daily operations."
+    text: "Critical Infrastructure Management: Managed and optimized essential hospital software and hardware systems to ensure 24/7 operational stability in a high-pressure medical environment."
+  },
+  {
+    icon: <Zap size={20} />,
+    text: "Rapid Technical Resolution: Provided high-priority troubleshooting and support to medical staff, minimizing system downtime and ensuring uninterrupted patient care."
+  },
+  {
+    icon: <BarChart3 size={20} />,
+    text: "Performance Optimization: Proactively audited and tuned system configurations to streamline daily clinical operations and improve hardware reliability."
   },
   {
     icon: <Database size={20} />,
-    text: "Handled secure data management with minimal user interfaces and streamlined administrative workflows using SQL and MongoDB, resolving backend errors and improving data retrieval times."
+    text: "Database Administration: Leveraged SQL and MongoDB to manage sensitive medical data, ensuring high integrity and security standards were met."
+  },
+  {
+    icon: <Code size={20} />,
+    text: "Query Optimization: Resolved complex backend errors and refined data structures, significantly reducing data retrieval times for administrative staff."
+  },
+  {
+    icon: <Wrench size={20} />,
+    text: "Workflow Automation: Developed streamlined administrative workflows using minimal user interfaces, reducing manual data entry hurdles and human error."
   },
   {
     icon: <Globe size={20} />,
-    text: "Leveraged design and digital marketing skills to create high-quality informational posters and digital assets for hospital campaigns, bridging technical operations with patient-facing communications."
+    text: "Cross-Functional Branding: Bridged the gap between technical backend operations and patient-facing communications by designing high-quality informational assets."
   },
+  {
+    icon: <Palette size={20} />,
+    text: "Digital Campaign Design: Created engaging posters and digital collateral for hospital campaigns, effectively translating complex medical information into accessible visual content."
+  }
 ];
 
-const techStack = ["SQL", "MongoDB", "Hardware Support", "Canva", "Digital Marketing", "AI Tools"];
+const techStack = ["Next.js", "Node.js", "MongoDB", "SQL", "Prompt Engineering", "Zoho Creator", "Automation", "Canva", "AI Tools"];
 
 export default function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -118,12 +138,12 @@ export default function Experience() {
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
             <div>
               <h3 className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:text-brand-accent transition-colors">
-                Software Technician
+                Software Technician (Part-time) – Valli Super Specialty Hospital Salem
               </h3>
               <div className="flex items-center gap-3">
-                <span className="text-lg text-white/60">Valli Super Specialty Hospital, Salem</span>
+                <span className="text-lg text-white/60">On-site / Hybrid</span>
                 <span className="px-2 py-0.5 bg-brand-accent/20 text-brand-accent text-xs font-mono rounded uppercase tracking-wider">
-                  Part-time
+                  Current
                 </span>
               </div>
             </div>
