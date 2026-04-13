@@ -3,200 +3,237 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Code, Database, Zap, BarChart3, Settings, Globe, Users, Wrench, Palette } from 'lucide-react';
+import anime from 'animejs';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const responsibilities = [
-  {
-    icon: <Settings size={20} />,
-    text: "Critical Infrastructure Management: Managed and optimized essential hospital software and hardware systems to ensure 24/7 operational stability in a high-pressure medical environment."
-  },
-  {
-    icon: <Zap size={20} />,
-    text: "Rapid Technical Resolution: Provided high-priority troubleshooting and support to medical staff, minimizing system downtime and ensuring uninterrupted patient care."
-  },
-  {
-    icon: <BarChart3 size={20} />,
-    text: "Performance Optimization: Proactively audited and tuned system configurations to streamline daily clinical operations and improve hardware reliability."
-  },
-  {
-    icon: <Database size={20} />,
-    text: "Database Administration: Leveraged SQL and MongoDB to manage sensitive medical data, ensuring high integrity and security standards were met."
-  },
-  {
-    icon: <Code size={20} />,
-    text: "Query Optimization: Resolved complex backend errors and refined data structures, significantly reducing data retrieval times for administrative staff."
-  },
-  {
-    icon: <Wrench size={20} />,
-    text: "Workflow Automation: Developed streamlined administrative workflows using minimal user interfaces, reducing manual data entry hurdles and human error."
-  },
-  {
-    icon: <Globe size={20} />,
-    text: "Cross-Functional Branding: Bridged the gap between technical backend operations and patient-facing communications by designing high-quality informational assets."
-  },
-  {
-    icon: <Palette size={20} />,
-    text: "Digital Campaign Design: Created engaging posters and digital collateral for hospital campaigns, effectively translating complex medical information into accessible visual content."
-  }
+const IMPACTS = [
+  { num: "01", headline: "Infrastructure at Scale", body: "Owned and maintained critical hospital software and hardware stacks — ensuring zero-downtime 24/7 across a live medical facility." },
+  { num: "02", headline: "Zero Downtime Resolution", body: "First-response technical support for medical staff. Diagnosed and resolved high-priority system failures before they impacted patient care." },
+  { num: "03", headline: "Query & DB Optimization", body: "Tuned SQL and MongoDB queries, restructured data pipelines and cut administrative retrieval times significantly." },
+  { num: "04", headline: "Automation Engineering", body: "Built streamlined Zoho Creator and custom workflows eliminating manual data entry and reducing human error across departments." },
+  { num: "05", headline: "Campaign Design", body: "Designed digital campaigns and medical information visuals — bridging clinical complexity with clear, impactful communication." },
 ];
 
-const techStack = ["Next.js", "Node.js", "MongoDB", "SQL", "Prompt Engineering", "Zoho Creator", "Automation", "Canva", "AI Tools"];
+const TECH_TAGS = ["Next.js", "Node.js", "MongoDB", "SQL", "Zoho Creator", "Automation", "Prompt Eng.", "AI Tools"];
 
 export default function Experience() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const scopeRef = useRef<HTMLDivElement>(null);
+  const svgPathRef = useRef<SVGPathElement>(null);
 
   useEffect(() => {
+
+    /* ── Anime.js draw SVG thread ── */
+    if (svgPathRef.current) {
+      ScrollTrigger.create({
+        trigger: scopeRef.current,
+        start: 'top 60%',
+        once: true,
+        onEnter: () => {
+          anime({
+            targets: svgPathRef.current,
+            strokeDashoffset: [anime.setDashoffset, 0],
+            easing: 'easeInOutSine',
+            duration: 3500,
+          });
+        }
+      });
+    }
+
+    /* ── Anime.js: impact rows rise in ── */
+    ScrollTrigger.create({
+      trigger: '.impact-list',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        anime({
+          targets: '.impact-row',
+          opacity: [0, 1],
+          translateX: [-60, 0],
+          delay: anime.stagger(100),
+          duration: 900,
+          easing: 'easeOutExpo',
+        });
+      }
+    });
+
+    /* ── Anime.js: tech tags pop ── */
+    ScrollTrigger.create({
+      trigger: '.exp-tags',
+      start: 'top 90%',
+      once: true,
+      onEnter: () => {
+        anime({
+          targets: '.exp-tag',
+          scale: [0, 1],
+          opacity: [0, 1],
+          delay: anime.stagger(50),
+          duration: 500,
+          easing: 'easeOutBack',
+        });
+      }
+    });
+
+    /* ── GSAP: structural reveals ── */
     const ctx = gsap.context(() => {
-      // Section Title Parallax
-      gsap.to('.exp-bg-text', {
-        x: 100,
+
+      // Giant company name crashes DOWN from top
+      gsap.fromTo('.exp-company',
+        { yPercent: -110, opacity: 0 },
+        {
+          yPercent: 0, opacity: 1, duration: 1.4, ease: 'power4.out',
+          scrollTrigger: { trigger: scopeRef.current, start: 'top 75%', once: true }
+        }
+      );
+
+      // Role slides up from bottom
+      gsap.fromTo('.exp-role',
+        { yPercent: 110, opacity: 0 },
+        {
+          yPercent: 0, opacity: 1, duration: 1.2, ease: 'power4.out', delay: 0.2,
+          scrollTrigger: { trigger: scopeRef.current, start: 'top 72%', once: true }
+        }
+      );
+
+      // Year badge pops
+      gsap.fromTo('.exp-badge',
+        { scale: 0, rotation: -90, opacity: 0 },
+        {
+          scale: 1, rotation: 0, opacity: 1, duration: 1, ease: 'back.out(2)',
+          scrollTrigger: { trigger: scopeRef.current, start: 'top 65%', once: true }
+        }
+      );
+
+      // Horizontal rules expand
+      gsap.fromTo('.exp-rule',
+        { scaleX: 0, transformOrigin: 'left center' },
+        {
+          scaleX: 1, duration: 1.6, ease: 'power3.out',
+          scrollTrigger: { trigger: scopeRef.current, start: 'top 78%', once: true }
+        }
+      );
+
+      // Parallax on the watermark number
+      gsap.to('.exp-watermark', {
+        yPercent: 30,
+        ease: 'none',
         scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1
+          trigger: scopeRef.current, start: 'top bottom', end: 'bottom top', scrub: true
         }
       });
 
-      // MEGA 3D Responsibility Unfold - Pushed to MAX
-      gsap.fromTo('.responsibility-card',
-        {
-          y: 120, // Pushed further
-          opacity: 0,
-          scale: 0.6,
-          rotateX: 80, // Massive unfold
-          rotateY: 25,
-          transformOrigin: 'top center'
-        },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          rotateX: 0,
-          rotateY: 0,
-          duration: 1,
-          stagger: {
-            amount: 1,
-            from: "start"
-          },
-          ease: 'power4.out',
-          scrollTrigger: {
-            trigger: '.responsibility-grid',
-            start: 'top 90%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
+    }, scopeRef);
 
-      // MEGA Tech Stack "Bounce" Reveal
-      gsap.fromTo('.exp-tech-tag',
-        {
-          scale: 0,
-          opacity: 0,
-          y: 20
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: 'back.out(3)',
-          scrollTrigger: {
-            trigger: '.exp-tech-container',
-            start: 'top 95%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
+    return () => { ctx.revert(); ScrollTrigger.getAll().forEach(t => t.kill()); };
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full py-32 px-4 md:px-12 bg-black flex items-center justify-center overflow-hidden">
+    /* Light cream — matches brand palette */
+    <section ref={scopeRef} className="relative w-full bg-[#E4DDD3] py-24 xl:py-40 px-6 md:px-16 xl:px-32 overflow-hidden">
 
-      <div className="max-w-5xl mx-auto w-full relative z-10">
+      {/* Film grain */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }}
+      />
 
-        {/* Section Title */}
-        <div className="mb-16 flex items-end gap-6 border-b border-white/10 pb-6">
-          <span className="exp-bg-text text-8xl md:text-9xl text-white/5 font-black leading-none absolute -top-12 -left-8 md:-left-16 pointer-events-none select-none">
-            EXP
+      {/* Giant watermark */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+        <span
+          className="exp-watermark text-[40vw] leading-none font-black text-[#00A19B]/[0.06] will-change-transform"
+          style={{ fontFamily: '"Climate Crisis", sans-serif', fontVariationSettings: '"YEAR" 1979' }}
+        >
+          ARIF
+        </span>
+      </div>
+
+      {/* SVG thread */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-50">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path
+            ref={svgPathRef}
+            d="M -100,800 C 400,100 900,1400 1400,400 C 1900,-300 2500,900 3000,300"
+            fill="none" stroke="#00A19B" strokeWidth="3" strokeLinecap="round"
+          />
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-[1600px] mx-auto">
+
+        {/* ── HEADER: label ── */}
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-[#00A19B]/50 text-xs tracking-[0.5em] uppercase font-mono">Professional Experience · 01</span>
+          <span className="exp-badge will-change-transform flex items-center justify-center w-14 h-14 md:w-20 md:h-20 rounded-full border border-[#00A19B]/40 text-[#00A19B] opacity-0">
+            <span className="text-[9px] md:text-xs font-mono tracking-widest text-center leading-tight uppercase">NOV<br />2025</span>
           </span>
-          <h2 className="text-sm font-mono text-brand-accent tracking-[0.5em] uppercase relative z-10">
-            Professional_History (1)
+        </div>
+
+        <div className="exp-rule w-full h-px bg-[#00A19B]/25 mb-10 origin-left" />
+
+        {/* ── COMPANY (crashes down) ── */}
+        <div className="overflow-hidden mb-2">
+          <h2
+            className="exp-company text-[#00A19B] text-[clamp(2.5rem,9vw,140px)] leading-[0.8] tracking-tight uppercase will-change-transform"
+            style={{ fontFamily: '"Climate Crisis", sans-serif', fontVariationSettings: '"YEAR" 2024' }}
+          >
+            VALLI SUPER SPECIALITY HOSPITAL
           </h2>
         </div>
 
-        {/* Single Experience Card (Feature Layout) */}
-        <div className="group relative w-full bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 hover:bg-white/[0.07] transition-colors duration-500">
+        {/* ── ROLE (slides up) ── */}
+        <div className="overflow-hidden mb-12 md:mb-20">
+          <h3
+            className="exp-role text-[#00A19B] text-[clamp(1rem,3.5vw,52px)] font-bold uppercase tracking-tight will-change-transform"
+            style={{ fontFamily: '"Bangers", sans-serif', letterSpacing: '0.06em' }}
+          >
+            Software Technician · Part-Time · On-site / Hybrid
+          </h3>
+        </div>
 
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
-            <div>
-              <h3 className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:text-brand-accent transition-colors">
-                Software Technician (Part-time) – Valli Super Specialty Hospital Salem
-              </h3>
-              <div className="flex items-center gap-3">
-                <span className="text-lg text-white/60">On-site / Hybrid</span>
-                <span className="px-2 py-0.5 bg-brand-accent/20 text-brand-accent text-xs font-mono rounded uppercase tracking-wider">
-                  Current
-                </span>
-              </div>
-            </div>
-
-            <div className="text-right">
-              <span className="block font-mono text-xl text-white">Nov 2025 — Present</span>
-            </div>
-          </div>
-
-          {/* Animated Responsibility Cards */}
-          <div className="responsibility-grid grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-            {responsibilities.map((item, i) => (
-              <div
-                key={i}
-                className="responsibility-card group/card relative p-4 bg-white/[0.02] border border-white/5 rounded-lg hover:bg-white/[0.05] hover:border-brand-accent/30 transition-all duration-300 hover:scale-[1.02]"
+        {/* ── IMPACT LIST ─────────────────────────── */}
+        <div className="impact-list flex flex-col border-t border-[#E4DDD3]/8 mb-16 md:mb-24">
+          {IMPACTS.map((item, i) => (
+            <div
+              key={i}
+              className="impact-row group flex flex-col md:flex-row md:items-start gap-4 md:gap-10 py-8 md:py-10 border-b border-[#00A19B]/12 hover:border-[#00A19B]/50 transition-colors duration-500 cursor-default opacity-0 will-change-transform"
+            >
+              {/* Number */}
+              <span
+                className="flex-none text-[#00A19B]/20 text-5xl md:text-7xl font-black leading-none group-hover:text-[#00A19B]/45 transition-colors duration-400 will-change-auto"
+                style={{ fontFamily: '"Climate Crisis", sans-serif', fontVariationSettings: '"YEAR" 1985' }}
               >
-                {/* Gradient Accent */}
-                <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/0 to-brand-accent/5 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-lg"></div>
-
-                {/* Icon */}
-                <div className="relative flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover/card:bg-brand-accent/20 group-hover/card:scale-110 transition-all duration-300">
-                    {item.icon}
-                  </div>
-
-                  {/* Text */}
-                  <p className="text-sm text-white/60 leading-relaxed group-hover/card:text-white/80 transition-colors">
-                    {item.text}
-                  </p>
-                </div>
-
-                {/* Hover Glow */}
-                <div className="absolute -inset-px bg-gradient-to-r from-brand-accent/0 via-brand-accent/20 to-brand-accent/0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 blur-sm rounded-lg -z-10"></div>
-              </div>
-            ))}
-          </div>
-
-          {/* Tech Tags */}
-          <div className="exp-tech-container flex flex-wrap gap-2">
-            {techStack.map((tech) => (
-              <span key={tech} className="exp-tech-tag px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-white/50 font-mono hover:text-white hover:border-brand-accent/50 hover:bg-brand-accent/5 transition-all duration-300">
-                {tech}
+                {item.num}
               </span>
-            ))}
-          </div>
 
-          {/* Background Glow */}
-          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-brand-accent/5 rounded-full blur-[100px] pointer-events-none group-hover:bg-brand-accent/10 transition-colors duration-700"></div>
+              {/* Content */}
+              <div className="flex-1 flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-16">
+                <h4
+                  className="text-[#00A19B] text-xl md:text-2xl xl:text-3xl font-bold uppercase tracking-tight flex-shrink-0 group-hover:text-[#002f2d] transition-colors duration-400"
+                  style={{ fontFamily: '"Bangers", sans-serif', letterSpacing: '0.04em' }}
+                >
+                  {item.headline}
+                </h4>
+                <p className="text-[#00A19B]/50 text-sm md:text-base leading-relaxed max-w-[520px] group-hover:text-[#00A19B]/80 transition-colors duration-400">
+                  {item.body}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
 
+        {/* ── TECH TAGS ── */}
+        <div className="exp-rule w-full h-px bg-[#00A19B]/20 mb-8 origin-left" />
+        <div className="exp-tags flex flex-wrap gap-2.5">
+          {TECH_TAGS.map((tag) => (
+            <span
+              key={tag}
+              className="exp-tag px-4 py-2 rounded-full border border-[#00A19B]/25 text-[#00A19B]/60 text-xs font-mono tracking-widest uppercase hover:border-[#00A19B] hover:text-[#00A19B] hover:bg-[#00A19B]/8 transition-all duration-300 cursor-default will-change-transform opacity-0"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
 
       </div>
-
-    </section >
+    </section>
   );
 }

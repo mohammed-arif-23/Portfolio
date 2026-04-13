@@ -1,328 +1,383 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import anime from 'animejs';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Data derived strictly from public/images/logos
 const TECH_ITEMS = [
     { name: "Next.js", src: "/images/logos/Next.js.svg" },
     { name: "React", src: "/images/logos/React.svg" },
     { name: "TypeScript", src: "/images/logos/TypeScript.svg" },
     { name: "Tailwind", src: "/images/logos/Tailwind.svg" },
-    { name: "Node.js", src: "/images/logos/Node.js.svg" },
-    { name: "MongoDB", src: "/images/logos/MongoDB.svg" },
-    { name: "Python", src: "/images/logos/Python.svg" },
-    { name: "Supabase", src: "/images/logos/Supabase.svg" },
-    { name: "Redux", src: "/images/logos/Redux.svg" },
-    { name: "MySQL", src: "/images/logos/MySQL.svg" },
-    { name: "OpenCV", src: "/images/logos/OpenCV.svg" },
-    { name: "PyTorch", src: "/images/logos/PyTorch.svg" },
-    { name: "TensorFlow", src: "/images/logos/TensorFlow.svg" },
-    { name: "PHP", src: "/images/logos/PHP.svg" },
-    { name: "Bootstrap", src: "/images/logos/Bootstrap.svg" },
-    { name: "Git", src: "/images/logos/Git.svg" },
-    { name: "C++", src: "/images/logos/C++.svg" },
-    { name: "CSS3", src: "/images/logos/CSS3.svg" },
-    { name: "Django", src: "/images/logos/Django.svg" },
-    { name: "Express", src: "/images/logos/Express.svg" },
-    { name: "Firebase", src: "/images/logos/Firebase.svg" },
-    { name: "Flask", src: "/images/logos/Flask.svg" },
-    { name: "HTML5", src: "/images/logos/HTML5.svg" },
-    { name: "Java", src: "/images/logos/Java.svg" },
     { name: "JavaScript", src: "/images/logos/JavaScript.svg" },
-    { name: "Keras", src: "/images/logos/Keras.svg" },
-    { name: "C#", src: "/images/logos/cS.svg" },
+    { name: "HTML5", src: "/images/logos/HTML5.svg" },
     { name: "GSAP", src: "/images/logos/gsap-black.svg" },
+    { name: "Node.js", src: "/images/logos/Node.js.svg" },
+    { name: "Python", src: "/images/logos/Python.svg" },
+    { name: "PHP", src: "/images/logos/PHP.svg" },
+    { name: "Django", src: "/images/logos/Django.svg" },
+    { name: "MongoDB", src: "/images/logos/MongoDB.svg" },
+    { name: "MySQL", src: "/images/logos/MySQL.svg" },
+    { name: "Supabase", src: "/images/logos/Supabase.svg" },
+    { name: "Firebase", src: "/images/logos/Firebase.svg" },
+    { name: "TensorFlow", src: "/images/logos/TensorFlow.svg" },
+    { name: "PyTorch", src: "/images/logos/PyTorch.svg" },
+    { name: "OpenCV", src: "/images/logos/OpenCV.svg" },
+    { name: "Redux", src: "/images/logos/Redux.svg" },
+    { name: "C++", src: "/images/logos/C++.svg" },
+    { name: "Git", src: "/images/logos/Git.svg" },
+    { name: "Express", src: "/images/logos/Express.svg" },
 ];
 
+const N = TECH_ITEMS.length;
+const CX = 500;
+const CY = 500;
+const R = 360;
+const CIRC = 2 * Math.PI * R;
+
+// Pre-compute icon positions (0–1000 virtual space) — rounded to prevent SSR hydration mismatch
+const positions = TECH_ITEMS.map((_, i) => {
+    const a = ((i * 360) / N - 90) * (Math.PI / 180);
+    return {
+        x: Math.round((CX + R * Math.cos(a)) * 10000) / 10000,
+        y: Math.round((CY + R * Math.sin(a)) * 10000) / 10000,
+    };
+});
+
 export default function Technologies() {
-    const containerRef = useRef<HTMLElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [isMobile, setIsMobile] = useState(false);
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const orbitRef = useRef<HTMLDivElement>(null);
+    const circleRef = useRef<SVGCircleElement>(null);
+    const [activeIdx, setActiveIdx] = useState(0);
+    const [dragging, setDragging] = useState(false);
 
-    // Refs for physics state to avoid re-renders during animation loop
-    const nodesRef = useRef<any[]>([]);
-    const dragRef = useRef<{ active: boolean; index: number; startX: number; startY: number }>({
-        active: false, index: -1, startX: 0, startY: 0
-    });
-    const mouseRef = useRef({ x: -1000, y: -1000 });
+    // Physics state — kept in refs so RAF loop doesn't re-render
+    const angleRef = useRef(0);   // current rotation degrees
+    const velocityRef = useRef(0);   // degrees/frame
+    const rafRef = useRef<number | null>(null);
+    const isDragRef = useRef(false);
+    const lastAngleRef = useRef(0);
+    const lastTimeRef = useRef(0);
+    const lastScrollY = useRef(0);
+    const inViewRef = useRef(false);  // is section visible?
 
-    // Initialize
-    useEffect(() => {
-        if (!containerRef.current) return;
-        const width = containerRef.current.offsetWidth;
-        const height = containerRef.current.offsetHeight;
-
-        const mobile = width < 768;
-        setIsMobile(mobile);
-
-        // Create physics nodes
-        nodesRef.current = TECH_ITEMS.map((item) => ({
-            ...item,
-            x: Math.random() * (width - 100) + 50,
-            y: Math.random() * (height - 100) + 50,
-            vx: (Math.random() - 0.5) * 1.5,
-            vy: (Math.random() - 0.5) * 1.5,
-            radius: mobile ? 25 : 60, // Physical radius
-            mass: 1
-        }));
+    /* ── Apply rotation to DOM directly (no React re-render) ── */
+    const applyRotation = useCallback((deg: number) => {
+        if (!orbitRef.current) return;
+        orbitRef.current.style.transform = `rotate(${deg}deg)`;
+        // Counter-rotate each icon inner so they stay upright
+        document.querySelectorAll<HTMLElement>('.orbit-icon-inner').forEach(el => {
+            el.style.transform = `rotate(${-deg}deg)`;
+        });
+        // Update active index: which icon is nearest the top (12 o'clock)
+        const norm = ((deg % 360) + 360) % 360;
+        // top = 270° in orbit terms (because we start icons at -90°)
+        let best = 0, bestDiff = Infinity;
+        TECH_ITEMS.forEach((_, i) => {
+            const iconAngle = (i * 360) / N; // 0–360
+            const atTop = (iconAngle + norm) % 360; // position when orbit rotated
+            const diff = Math.min(Math.abs(atTop - 270), 360 - Math.abs(atTop - 270));
+            if (diff < bestDiff) { bestDiff = diff; best = i; }
+        });
+        setActiveIdx(best);
     }, []);
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        let animationId: number;
-
-        const resize = () => {
-            if (containerRef.current) {
-                canvas.width = containerRef.current.offsetWidth;
-                canvas.height = containerRef.current.offsetHeight;
-            }
-        };
-        resize();
-        window.addEventListener('resize', resize);
-
-        const onMouseDown = (e: MouseEvent) => {
-            if (!containerRef.current) return;
-            const rect = containerRef.current.getBoundingClientRect();
-            const mx = e.clientX - rect.left;
-            const my = e.clientY - rect.top;
-
-            // Check click on nodes
-            nodesRef.current.forEach((node, i) => {
-                const dx = mx - node.x;
-                const dy = my - node.y;
-                if (dx * dx + dy * dy < node.radius * node.radius) {
-                    dragRef.current = { active: true, index: i, startX: mx, startY: my };
-                    node.vx = 0;
-                    node.vy = 0;
-                }
-            });
-        };
-
-        const onMouseMove = (e: MouseEvent) => {
-            if (!containerRef.current) return;
-            const rect = containerRef.current.getBoundingClientRect();
-            mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-
-            if (dragRef.current.active && dragRef.current.index !== -1) {
-                const node = nodesRef.current[dragRef.current.index];
-                // Smoothly pull towards mouse (springy feel)
-                const targetX = mouseRef.current.x;
-                const targetY = mouseRef.current.y;
-                node.vx = (targetX - node.x) * 0.2;
-                node.vy = (targetY - node.y) * 0.2;
-            }
-        };
-
-        const onMouseUp = () => {
-            dragRef.current = { active: false, index: -1, startX: 0, startY: 0 };
-        };
-
-        // Attach listeners to container for better DX (instead of window or canvas)
-        const container = containerRef.current;
-        if (container) {
-            container.addEventListener('mousedown', onMouseDown);
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
-            // Add minimal touch support too
-            container.addEventListener('touchstart', (e) => onMouseDown({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any), { passive: true });
-            window.addEventListener('touchmove', (e) => onMouseMove({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } as any), { passive: true });
-            window.addEventListener('touchend', onMouseUp, { passive: true });
-        }
-
-        const updatePhysics = () => {
-            const width = canvas.width;
-            const height = canvas.height;
-            const nodes = nodesRef.current;
-
-            // 1. Move & Wall Bounce
-            nodes.forEach((node, i) => {
-                // Drag override
-                if (dragRef.current.active && dragRef.current.index === i) {
-                    node.x += node.vx;
-                    node.y += node.vy;
-                    return; // Skip normal physics for dragged node
-                }
-
-                node.x += node.vx;
-                node.y += node.vy;
-
-                // Boundaries
-                const r = node.radius;
-                const bounce = -0.7; // Lose energy on wall hit
-                if (node.x < r) { node.x = r; node.vx *= bounce; }
-                if (node.x > width - r) { node.x = width - r; node.vx *= bounce; }
-                if (node.y < r) { node.y = r; node.vy *= bounce; }
-                if (node.y > height - r) { node.y = height - r; node.vy *= bounce; }
-
-                // Friction
-                node.vx *= 0.99;
-                node.vy *= 0.99;
-            });
-
-            // 2. Resolve Collisions (Iterative for stability)
-            for (let k = 0; k < 4; k++) { // 4 iterations
-                for (let i = 0; i < nodes.length; i++) {
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const n1 = nodes[i];
-                        const n2 = nodes[j];
-
-                        const dx = n2.x - n1.x;
-                        const dy = n2.y - n1.y;
-                        const distSq = dx * dx + dy * dy;
-                        const minDist = n1.radius + n2.radius + 10; // Extra padding
-
-                        if (distSq < minDist * minDist && distSq > 0) {
-                            const dist = Math.sqrt(distSq);
-                            const overlap = minDist - dist;
-                            const nx = dx / dist;
-                            const ny = dy / dist;
-
-                            // Separate positions
-                            const moveX = nx * overlap * 0.5;
-                            const moveY = ny * overlap * 0.5;
-
-                            if (!dragRef.current.active || dragRef.current.index !== i) {
-                                n1.x -= moveX;
-                                n1.y -= moveY;
-                            }
-                            if (!dragRef.current.active || dragRef.current.index !== j) {
-                                n2.x += moveX;
-                                n2.y += moveY;
-                            }
-
-                            // Bounce (Exchange velocity)
-                            // This is a simplified impulse response
-                            const sepVel = (n2.vx - n1.vx) * nx + (n2.vy - n1.vy) * ny;
-                            if (sepVel < 0) { // Only if moving towards each other
-                                const bounce = 0.8; // Bounciness 0-1
-                                const impulse = -(1 + bounce) * sepVel * 0.5; // Equal mass
-
-                                if (!dragRef.current.active || dragRef.current.index !== i) {
-                                    n1.vx -= impulse * nx;
-                                    n1.vy -= impulse * ny;
-                                }
-                                if (!dragRef.current.active || dragRef.current.index !== j) {
-                                    n2.vx += impulse * nx;
-                                    n2.vy += impulse * ny;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
-        const draw = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const nodes = nodesRef.current;
-
-            // Draw Lines
-            ctx.lineWidth = 2;
-            nodes.forEach((n1, i) => {
-                nodes.forEach((n2, j) => {
-                    if (j <= i) return; // avoid duplicates
-                    const dx = n2.x - n1.x;
-                    const dy = n2.y - n1.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 300) {
-                        ctx.beginPath();
-                        ctx.moveTo(n1.x, n1.y);
-                        ctx.lineTo(n2.x, n2.y);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - dist / 300) * 0.05})`;
-                        ctx.stroke();
-                    }
-                });
-            });
-
-            // Update DOM elements using direct transform for performance
-            nodes.forEach((node, i) => {
-                const el = document.getElementById(`node-icon-${i}`);
-                if (el) {
-                    // Offset is roughly radius (approx) to center the square div
-                    // Mobile: w-12 is 48px, half is 24
-                    // Desktop: w-28 is 112px, half is 56
-                    const offset = node.radius < 40 ? 18 : 56;
-                    el.style.transform = `translate(${node.x - offset}px, ${node.y - offset}px) scale(${dragRef.current.index === i ? 1.1 : 1})`;
-                    el.style.zIndex = dragRef.current.index === i ? "100" : "20";
-                }
-            });
-        };
-
+    /* ── Start inertia loop (shared by scroll + drag) ── */
+    const startInertia = useCallback(() => {
         const loop = () => {
-            updatePhysics();
-            draw();
-            animationId = requestAnimationFrame(loop);
+            if (isDragRef.current) return;
+            velocityRef.current *= 0.965; // friction
+            if (Math.abs(velocityRef.current) < 0.04) {
+                rafRef.current = null;
+                return;
+            }
+            angleRef.current += velocityRef.current;
+            applyRotation(angleRef.current);
+            rafRef.current = requestAnimationFrame(loop);
         };
-        loop();
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(loop);
+    }, [applyRotation]);
 
-        // Scroll-triggered momentum "Pump"
-        ScrollTrigger.create({
-            trigger: containerRef.current,
-            start: 'top 80%',
-            onEnter: () => {
-                nodesRef.current.forEach(node => {
-                    node.vx += (Math.random() - 0.5) * 15;
-                    node.vy += (Math.random() - 0.5) * 15;
-                });
-            }
-        });
+    /* ── Scroll → velocity injection ── */
+    useEffect(() => {
+        // Track visibility so scroll only spins when section is on screen
+        const observer = new IntersectionObserver(
+            ([entry]) => { inViewRef.current = entry.isIntersecting; },
+            { threshold: 0.1 }
+        );
+        if (sectionRef.current) observer.observe(sectionRef.current);
 
-        // Title Parallax
-        gsap.to('.tech-bg-title', {
-            y: 50,
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 1
-            }
-        });
+        const onScroll = () => {
+            if (!inViewRef.current) return;
+            const dy = window.scrollY - lastScrollY.current;
+            lastScrollY.current = window.scrollY;
+            // Convert px scroll delta → degrees of spin
+            velocityRef.current += dy * 0.008;
+            // Clamp to avoid violent jumps on fast scroll
+            velocityRef.current = Math.max(-18, Math.min(18, velocityRef.current));
+            if (!rafRef.current && !isDragRef.current) startInertia();
+        };
+
+        lastScrollY.current = window.scrollY;
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            observer.disconnect();
+        };
+    }, [startInertia]);
+
+    /* ── Get angle from pointer relative to orbit center ── */
+    const getPointerAngle = (clientX: number, clientY: number): number => {
+        if (!orbitRef.current) return 0;
+        const rect = orbitRef.current.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        return Math.atan2(clientY - cy, clientX - cx) * (180 / Math.PI);
+    };
+
+    /* ── Pointer events ── */
+    useEffect(() => {
+        const el = orbitRef.current;
+        if (!el) return;
+
+        const onPointerDown = (e: PointerEvent) => {
+            e.preventDefault();
+            isDragRef.current = true;
+            setDragging(true);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            velocityRef.current = 0;
+            lastAngleRef.current = getPointerAngle(e.clientX, e.clientY);
+            lastTimeRef.current = performance.now();
+            el.setPointerCapture(e.pointerId);
+        };
+
+        const onPointerMove = (e: PointerEvent) => {
+            if (!isDragRef.current) return;
+            const now = performance.now();
+            const dt = Math.max(now - lastTimeRef.current, 1);
+            const newAngle = getPointerAngle(e.clientX, e.clientY);
+            let delta = newAngle - lastAngleRef.current;
+            // Clamp wrap-around (from -179 → 179 etc.)
+            if (delta > 180) delta -= 360;
+            if (delta < -180) delta += 360;
+
+            angleRef.current += delta;
+            velocityRef.current = (delta / dt) * 16; // normalize to 60fps
+            lastAngleRef.current = newAngle;
+            lastTimeRef.current = now;
+            applyRotation(angleRef.current);
+        };
+
+        const onPointerUp = () => {
+            if (!isDragRef.current) return;
+            isDragRef.current = false;
+            setDragging(false);
+            startInertia();
+        };
+
+        el.addEventListener('pointerdown', onPointerDown);
+        el.addEventListener('pointermove', onPointerMove);
+        el.addEventListener('pointerup', onPointerUp);
+        el.addEventListener('pointercancel', onPointerUp);
 
         return () => {
-            cancelAnimationFrame(animationId);
-            window.removeEventListener('resize', resize);
-            if (container) {
-                container.removeEventListener('mousedown', onMouseDown);
-                window.removeEventListener('mousemove', onMouseMove);
-                window.removeEventListener('mouseup', onMouseUp);
-                // Note: passive listeners are removed the same way — the options object doesn't affect removeEventListener
-                window.removeEventListener('touchend', onMouseUp);
-            }
+            el.removeEventListener('pointerdown', onPointerDown);
+            el.removeEventListener('pointermove', onPointerMove);
+            el.removeEventListener('pointerup', onPointerUp);
+            el.removeEventListener('pointercancel', onPointerUp);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
         };
-    }, []);
+    }, [applyRotation, startInertia]);
+
+    /* ── GSAP scroll animation for section entry ── */
+    useEffect(() => {
+        // Draw the SVG ring on enter with Anime.js
+        if (circleRef.current) {
+            const el = circleRef.current;
+            el.style.strokeDasharray = `${CIRC}`;
+            el.style.strokeDashoffset = `${CIRC}`;
+            ScrollTrigger.create({
+                trigger: sectionRef.current,
+                start: 'top 70%',
+                once: true,
+                onEnter: () => {
+                    // Draw ring
+                    anime({ targets: el, strokeDashoffset: [CIRC, 0], duration: 2600, easing: 'easeInOutSine' });
+                    // Icons scale in
+                    anime({
+                        targets: '.orbit-icon-inner',
+                        opacity: [0, 1], scale: [0, 1],
+                        delay: anime.stagger(55, { start: 300 }),
+                        duration: 550, easing: 'easeOutBack',
+                    });
+                    // Auto-spin to give hint it's draggable
+                    setTimeout(() => {
+                        velocityRef.current = 1.8;
+                        startInertia();
+                    }, 1200);
+                }
+            });
+        }
+
+        // GSAP title reveal
+        const ctx = gsap.context(() => {
+            gsap.fromTo('.tech-title-word',
+                { yPercent: 110 },
+                {
+                    yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.1,
+                    scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', once: true }
+                }
+            );
+        }, sectionRef);
+
+        return () => {
+            ctx.revert();
+            ScrollTrigger.getAll().forEach(t => t.kill());
+        };
+    }, [startInertia]);
 
     return (
-        <section ref={containerRef} className="relative w-full min-h-[50vh] md:min-h-[60vh] py-8 md:py-12 mt-2 md:mt-4 bg-black overflow-hidden select-none active:cursor-grabbing">
+        /* Clean single-screen section — no scroll gimmicks, pure interaction */
+        <section
+            ref={sectionRef}
+            className="relative w-full bg-[#00A19B] overflow-hidden flex flex-col"
+            style={{ minHeight: '100svh' }}
+        >
 
-            {/* Background Decor */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
+            {/* Film grain */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+                style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }}
+            />
 
-            {/* Centered Title */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4">
-                <h2 className="tech-bg-title text-[7vw] md:text-[5vw] lg:text-[3vw] font-bold text-[#ededed] opacity-10 tracking-tighter text-center leading-tight md:leading-none">
-                    Technologies<br />I've worked with
-                </h2>
+            {/* ── TITLE ROW ── */}
+            <div className="flex-none flex items-end justify-between px-6 md:px-16 xl:px-24 pt-10 md:pt-14 pb-2 z-10">
+                <div className="flex flex-wrap gap-x-[0.2em]">
+                    {["THE", "ARSENAL"].map((w, i) => (
+                        <div key={i} className="overflow-hidden">
+                            <span
+                                className="tech-title-word inline-block text-[#E4DDD3] text-[clamp(2.2rem,8vw,120px)] leading-[0.85] tracking-tight uppercase will-change-transform"
+                                style={{ fontFamily: '"Climate Crisis", sans-serif', fontVariationSettings: '"YEAR" 2000' }}
+                            >{w}</span>
+                        </div>
+                    ))}
+                </div>
+                <span className="text-[#E4DDD3]/40 text-xs font-mono tracking-[0.3em] uppercase mb-2 hidden md:block">
+                    {N} technologies
+                </span>
             </div>
 
-            <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
-            <div className="absolute inset-0 z-20 pointer-events-none">
-                {TECH_ITEMS.map((item, i) => (
-                    <div
-                        key={i}
-                        id={`node-icon-${i}`}
-                        className={`absolute top-0 left-0 p-1.5 md:p-3 lg:p-5 bg-gradient-to-br from-[#333] to-[#222] border border-white/10 rounded-full shadow-2xl flex items-center justify-center will-change-transform ${isMobile ? 'w-9 h-9' : 'w-28 h-28'}`}
-                    >
-                        <img src={item.src} alt={item.name} className="w-full h-full object-contain pointer-events-none drop-shadow-md select-none" draggable={false} />
+            {/* ── ORBIT AREA ── */}
+            <div className="flex-1 relative flex items-center justify-center px-4 py-4">
+
+                {/* Hint text */}
+                <p className="absolute top-0 left-1/2 -translate-x-1/2 text-[#E4DDD3]/30 text-[10px] font-mono tracking-[0.4em] uppercase pointer-events-none select-none">
+                    drag to spin
+                </p>
+
+                {/* Center info overlay */}
+                <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                    <div className="flex flex-col items-center gap-2 md:gap-3 text-center">
+                        <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-[#00A19B] border border-[#E4DDD3]/20 flex items-center justify-center">
+                            <img
+                                src={TECH_ITEMS[activeIdx].src}
+                                alt={TECH_ITEMS[activeIdx].name}
+                                className="w-8 h-8 md:w-12 md:h-12 object-contain transition-all duration-200"
+                            />
+                        </div>
+                        <span
+                            className="text-[#E4DDD3] text-xl md:text-3xl uppercase tracking-widest transition-all duration-200"
+                            style={{ fontFamily: '"Bangers", sans-serif', letterSpacing: '0.12em' }}
+                        >
+                            {TECH_ITEMS[activeIdx].name}
+                        </span>
+                        <span className="text-[#E4DDD3]/30 text-[10px] font-mono tracking-widest uppercase">
+                            {String(activeIdx + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}
+                        </span>
                     </div>
-                ))}
+                </div>
+
+                {/* ── ORBIT WHEEL ── draggable container */}
+                <div
+                    ref={orbitRef}
+                    className="relative touch-none select-none will-change-transform z-10"
+                    style={{
+                        width: 'min(78vw, 78vh)',
+                        height: 'min(78vw, 78vh)',
+                        cursor: dragging ? 'grabbing' : 'grab',
+                    }}
+                >
+                    {/* SVG: ring + ticks */}
+                    <svg
+                        className="absolute inset-0 w-full h-full pointer-events-none"
+                        viewBox="0 0 1000 1000"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        {/* Ghost outer ring */}
+                        <circle cx={CX} cy={CY} r={R + 28} fill="none" stroke="#E4DDD3" strokeWidth="0.5" opacity="0.1" />
+                        {/* Animated main ring */}
+                        <circle
+                            ref={circleRef}
+                            cx={CX} cy={CY} r={R}
+                            fill="none"
+                            stroke="#E4DDD3"
+                            strokeWidth="1.5"
+                            opacity="0.35"
+                            strokeLinecap="round"
+                        />
+                        {/* Ghost inner ring */}
+                        <circle cx={CX} cy={CY} r={R - 28} fill="none" stroke="#E4DDD3" strokeWidth="0.5" opacity="0.08" />
+                        {/* Tick marks */}
+                        {positions.map((pos, i) => {
+                            const a = ((i * 360) / N - 90) * (Math.PI / 180);
+                            return (
+                                <line
+                                    key={i}
+                                    x1={CX + (R - 14) * Math.cos(a)} y1={CY + (R - 14) * Math.sin(a)}
+                                    x2={CX + (R + 14) * Math.cos(a)} y2={CY + (R + 14) * Math.sin(a)}
+                                    stroke="#E4DDD3" strokeWidth="1" opacity="0.18"
+                                />
+                            );
+                        })}
+                    </svg>
+
+                    {/* Tech icons — positioned around circumference */}
+                    {TECH_ITEMS.map((item, i) => (
+                        <div
+                            key={item.name}
+                            className="absolute pointer-events-none"
+                            style={{
+                                width: 'clamp(38px, 7%, 64px)',
+                                height: 'clamp(38px, 7%, 64px)',
+                                left: `${positions[i].x / 10}%`,
+                                top: `${positions[i].y / 10}%`,
+                                transform: 'translate(-50%, -50%)',
+                            }}
+                        >
+                            {/* Inner div counter-rotates to keep icons upright */}
+                            <div
+                                className="orbit-icon-inner w-full h-full rounded-full flex items-center justify-center p-2 border transition-all duration-200 opacity-0 will-change-transform"
+                                style={{
+                                    backgroundColor: i === activeIdx ? '#E4DDD3' : 'rgba(228,221,211,0.08)',
+                                    borderColor: i === activeIdx ? '#E4DDD3' : 'rgba(228,221,211,0.22)',
+                                    boxShadow: i === activeIdx ? '0 0 20px rgba(228,221,211,0.35)' : 'none',
+                                    transform: 'rotate(0deg)',
+                                }}
+                            >
+                                <img
+                                    src={item.src}
+                                    alt={item.name}
+                                    className="w-full h-full object-contain"
+                                    draggable={false}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
             </div>
 
         </section>

@@ -1,224 +1,266 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUpRight } from 'lucide-react';
+import anime from 'animejs';
+import { createPortal } from 'react-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const AWARDS = [
     {
-        title: "1st Place",
-        project: "Web Development - Spring Fest",
+        id: "01",
+        rank: "1st Place",
+        event: "Web Development",
+        category: "Spring Fest · Open Category",
         org: "KSR College of Technology",
         year: "2024",
-        img: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1964&auto=format&fit=crop"
+        img: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1964&auto=format&fit=crop",
     },
     {
-        title: "1st Place",
-        project: "Code Debugging - National Level Symposium",
+        id: "02",
+        rank: "1st Place",
+        event: "Code Debugging",
+        category: "National Level Symposium",
         org: "Mahendra Institutions of Technology",
         year: "2024",
-        img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1740&auto=format&fit=crop"
+        img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1740&auto=format&fit=crop",
     },
 ];
 
+/* SVG Trophy path — drawn by Anime.js */
+const TrophyPath = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <path
+            className="trophy-path"
+            d="M25 8 h30 v28 c0 18 -30 18 -30 0 V8z M10 8 h15 v16 c0 8 -15 8 -15 0 V8z M55 8 h15 v16 c0 8 -15 8 -15 0 V8z M32 58 v14 M48 58 v14 M22 72 h36 M30 8 V4 M50 8 V4"
+            stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+        />
+    </svg>
+);
+
+const StarPath = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <path
+            className="star-path"
+            d="M40 8 L48 30 H72 L52 44 L60 66 L40 52 L20 66 L28 44 L8 30 H32 L40 8Z"
+            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+        />
+    </svg>
+);
+
 export default function Awards() {
-    const containerRef = useRef<HTMLDivElement>(null);
+    const scopeRef = useRef<HTMLElement>(null);
+    const svgRef = useRef<SVGPathElement>(null);
     const cursorRef = useRef<HTMLDivElement>(null);
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [hovered, setHovered] = useState<number | null>(null);
     const [mounted, setMounted] = useState(false);
 
+    useEffect(() => { setMounted(true); }, []);
+
+    /* Physics cursor follow */
     useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    useEffect(() => {
-        if (!mounted || !cursorRef.current) return;
-
-        // Reset follower element
-        gsap.set(cursorRef.current, {
-            xPercent: -50,
-            yPercent: -50,
-            scale: 0.5,
-            opacity: 0,
-            display: 'none'
-        });
-
-        // Physics state
-        const xSet = gsap.quickSetter(cursorRef.current, "x", "px");
-        const ySet = gsap.quickSetter(cursorRef.current, "y", "px");
-        const rSet = gsap.quickSetter(cursorRef.current, "rotate", "deg");
-
-        const pos = { x: 0, y: 0 };
-        const target = { x: 0, y: 0 };
-        const vel = { x: 0, y: 0 };
-        const drag = 0.1; // Inertia factor (lower = heavier)
-
+        if (!mounted) return;
+        const pos = { x: 0, y: 0 }, mouse = { x: 0, y: 0 };
+        const onMove = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+        window.addEventListener('mousemove', onMove);
+        let raf: number;
         const loop = () => {
-            // Lerp position (Inertia)
-            const dt = 1.0 - Math.pow(1.0 - drag, gsap.ticker.deltaRatio());
-            pos.x += (target.x - pos.x) * dt;
-            pos.y += (target.y - pos.y) * dt;
-
-            // Calculate velocity for Swing
-            vel.x = target.x - pos.x;
-            const rotation = vel.x * 0.1; // Swing multiplier
-
-            xSet(pos.x);
-            ySet(pos.y);
-            rSet(rotation);
-        };
-
-        gsap.ticker.add(loop);
-
-        const onMouseMove = (e: MouseEvent) => {
-            if (window.innerWidth < 768) return;
-            target.x = e.clientX;
-            target.y = e.clientY;
-        };
-
-        if (window.innerWidth >= 768) {
-            window.addEventListener('mousemove', onMouseMove);
-        }
-
-        // Header Parallax
-        gsap.to('.awards-header', {
-            x: -100,
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 1
+            pos.x += (mouse.x - pos.x) * 0.08;
+            pos.y += (mouse.y - pos.y) * 0.08;
+            if (cursorRef.current) {
+                cursorRef.current.style.transform = `translate(${pos.x - 160}px, ${pos.y - 100}px)`;
             }
-        });
-
-        // Scroll triggers for mobile
-        const items = document.querySelectorAll('.award-item');
-        const triggers: ScrollTrigger[] = [];
-        items.forEach((item, index) => {
-            triggers.push(
-                ScrollTrigger.create({
-                    trigger: item,
-                    start: 'top 60%',
-                    end: 'bottom 40%',
-                    onEnter: () => setActiveIndex(index),
-                    onEnterBack: () => setActiveIndex(index),
-                    onLeave: () => setActiveIndex((prev) => prev === index ? null : prev),
-                    onLeaveBack: () => setActiveIndex((prev) => prev === index ? null : prev)
-                })
-            );
-        });
-
-        return () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            gsap.ticker.remove(loop);
-            triggers.forEach(t => t.kill());
+            raf = requestAnimationFrame(loop);
         };
+        raf = requestAnimationFrame(loop);
+        return () => { window.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf); };
     }, [mounted]);
 
-    // Handle visibility separately to avoid conflicts
     useEffect(() => {
-        if (!mounted || !cursorRef.current || window.innerWidth < 768) return;
-
-        if (activeIndex !== null && window.innerWidth >= 768) {
-            gsap.set(cursorRef.current, { display: 'block' });
-            gsap.to(cursorRef.current, {
-                scale: 1.25, // Pushed further
-                opacity: 1,
-                duration: 0.5,
-                ease: "back.out(2)"
-            });
-        } else {
-            gsap.to(cursorRef.current, {
-                scale: 0.3,
-                opacity: 0,
-                duration: 0.4,
-                onComplete: () => {
-                    if (activeIndex === null) gsap.set(cursorRef.current, { display: 'none' });
+        /* SVG scroll path draw */
+        if (svgRef.current) {
+            const len = svgRef.current.getTotalLength?.() || 800;
+            svgRef.current.style.strokeDasharray = `${len}`;
+            svgRef.current.style.strokeDashoffset = `${len}`;
+            ScrollTrigger.create({
+                trigger: scopeRef.current,
+                start: 'top 70%',
+                once: true,
+                onEnter: () => {
+                    anime({ targets: svgRef.current, strokeDashoffset: [len, 0], duration: 3000, easing: 'easeInOutSine' });
                 }
             });
         }
-    }, [activeIndex, mounted]);
+
+        /* Anime.js: trophy + title animations */
+        ScrollTrigger.create({
+            trigger: '.award-cards-grid',
+            start: 'top 80%',
+            once: true,
+            onEnter: () => {
+                anime({
+                    targets: '.award-card',
+                    opacity: [0, 1],
+                    translateY: [80, 0],
+                    rotateX: [20, 0],
+                    delay: anime.stagger(150),
+                    duration: 1000,
+                    easing: 'easeOutExpo',
+                });
+                // Draw all trophy SVG paths
+                document.querySelectorAll('.trophy-path, .star-path').forEach(el => {
+                    const path = el as SVGPathElement;
+                    const len = path.getTotalLength?.() || 200;
+                    anime({
+                        targets: path,
+                        strokeDashoffset: [len, 0],
+                        easing: 'easeInOutSine',
+                        duration: 2000,
+                        delay: 400,
+                    });
+                });
+            }
+        });
+
+        const ctx = gsap.context(() => {
+            gsap.fromTo('.award-rule', { scaleX: 0, transformOrigin: 'left center' }, {
+                scaleX: 1, duration: 1.8, ease: 'power3.out',
+                scrollTrigger: { trigger: scopeRef.current, start: 'top 78%', once: true }
+            });
+            gsap.fromTo('.award-title-word', { yPercent: 115 }, {
+                yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.1,
+                scrollTrigger: { trigger: scopeRef.current, start: 'top 76%', once: true }
+            });
+        }, scopeRef);
+
+        return () => { ctx.revert(); ScrollTrigger.getAll().forEach(t => t.kill()); };
+    }, []);
 
     return (
-        <section ref={containerRef} className="relative w-full py-20 px-4 md:px-12 bg-black overflow-visible">
-            <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="awards-header mb-20 flex items-end justify-between border-b border-white/10 pb-8">
-                    <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter">
-                        HONORS <span className="text-brand-accent">&</span><br />AWARDS
-                    </h2>
-                    <span className="hidden md:block font-mono text-white/40 text-sm tracking-widest uppercase">
-                        RECOGNITION_ARCHIVE
-                    </span>
+        <section ref={scopeRef} className="relative w-full bg-[#E4DDD3] py-24 xl:py-36 px-6 md:px-16 xl:px-32 overflow-hidden">
+
+            {/* Film grain */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+                style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }}
+            />
+
+            {/* ── SVG BACKGROUND THREAD ── */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+                <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 800">
+                    <path
+                        ref={svgRef}
+                        d="M -50,700 C 200,100 500,800 750,200 C 900,0 1100,500 1150,300"
+                        fill="none" stroke="#00A19B" strokeWidth="2" strokeLinecap="round"
+                    />
+                </svg>
+            </div>
+
+            <div className="relative z-10 max-w-[1600px] mx-auto">
+
+                {/* ── TITLE ── */}
+                <div className="award-rule w-full h-[2px] bg-[#00A19B]/25 mb-10 origin-left" />
+                <div className="flex flex-wrap gap-x-[0.2em] mb-3 overflow-hidden">
+                    {["HONORS", "&", "WINS"].map((w, i) => (
+                        <div key={i} className="overflow-hidden">
+                            <span
+                                className="award-title-word inline-block text-[#00A19B] text-[clamp(3rem,11vw,170px)] leading-[0.85] tracking-tight uppercase will-change-transform"
+                                style={{ fontFamily: '"Climate Crisis", sans-serif', fontVariationSettings: '"YEAR" 2000' }}
+                            >{w}</span>
+                        </div>
+                    ))}
                 </div>
+                <p className="text-[#00A19B]/35 text-xs tracking-[0.4em] uppercase font-mono mb-16">
+                    National competitions · {AWARDS.length} first-place recognitions
+                </p>
 
-                {/* Awards List */}
-                <div className="flex flex-col group/list w-full max-w-7xl mx-auto">
-                    {AWARDS.map((award, i) => (
+                {/* ── AWARD CARDS ── */}
+                <div className="award-cards-grid grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" style={{ perspective: '1200px' }}>
+                    {AWARDS.map((a, i) => (
                         <div
-                            key={i}
-                            onMouseEnter={() => setActiveIndex(i)}
-                            onMouseLeave={() => setActiveIndex(null)}
-                            className={`award-item group relative flex flex-col md:flex-row md:items-center justify-between py-12 border-b transition-all duration-500 z-10 active:bg-white/[0.02] ${activeIndex === i ? 'border-brand-accent/50 bg-white/5 opacity-100' : 'border-white/10 opacity-100 md:opacity-50 md:group-hover/list:opacity-30 md:hover:!opacity-100'}`}
+                            key={a.id}
+                            className="award-card group relative opacity-0 will-change-transform cursor-none"
+                            onMouseEnter={() => setHovered(i)}
+                            onMouseLeave={() => setHovered(null)}
                         >
-                            {/* Left: Year & Org */}
-                            <div className="flex items-baseline gap-8 mb-4 md:mb-0">
-                                <span className={`font-mono text-sm md:text-base ${activeIndex === i ? 'text-brand-accent' : 'text-brand-accent/70'}`}>
-                                    {award.year}
-                                </span>
-                                <span className={`font-mono text-xs md:text-sm uppercase tracking-widest ${activeIndex === i ? 'text-white' : 'text-white/40'}`}>
-                                    {award.org}
-                                </span>
-                            </div>
-
-                            {/* Center: Title */}
-                            <div className="flex-1 md:text-center md:absolute md:left-1/2 md:-translate-x-1/2">
-                                <h3 className={`text-3xl md:text-5xl font-black transition-all ${activeIndex === i ? 'text-white' : 'text-white/60'}`}>
-                                    {award.title}
-                                </h3>
-                                <p className={`text-sm md:text-lg mt-2 font-light ${activeIndex === i ? 'text-white/90' : 'text-white/40'}`}>
-                                    {award.project}
-                                </p>
-                            </div>
-
-                            {/* Mobile Image Preview */}
+                            {/* Card face */}
                             <div
-                                className={`md:hidden overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${activeIndex === i ? 'max-h-[300px] mt-6 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'}`}
+                                className="relative overflow-hidden rounded-3xl border border-[#00A19B]/15 bg-[#E4DDD3] p-8 md:p-12 transition-all duration-500 group-hover:border-[#00A19B]/40 group-hover:shadow-2xl group-hover:shadow-[#00A19B]/10 group-hover:-translate-y-3"
+                                style={{ transformStyle: 'preserve-3d' }}
                             >
-                                <img
-                                    src={award.img}
-                                    alt={award.title}
-                                    className={`w-full rounded-lg transition-transform duration-1000 ${activeIndex === i ? 'scale-100' : 'scale-110'}`}
-                                />
-                            </div>
+                                {/* Number watermark */}
+                                <span
+                                    className="absolute top-0 right-4 text-[#00A19B]/[0.06] font-black pointer-events-none select-none leading-none"
+                                    style={{
+                                        fontFamily: '"Climate Crisis", sans-serif',
+                                        fontVariationSettings: '"YEAR" 1979',
+                                        fontSize: 'clamp(8rem, 20vw, 240px)',
+                                    }}
+                                >{a.id}</span>
 
-                            {/* Right: Icon */}
-                            <div className="hidden md:block opacity-0 group-hover:opacity-100 transition-all duration-500 text-white">
-                                <ArrowUpRight size={24} className="group-hover:rotate-45 transition-transform" />
+                                {/* Top row: SVG trophy + year */}
+                                <div className="flex items-start justify-between mb-10">
+                                    <div className="flex items-center gap-4">
+                                        {/* Animated trophy */}
+                                        <div className="w-14 h-16 text-[#00A19B] flex-shrink-0">
+                                            <TrophyPath className="w-full h-full" />
+                                        </div>
+                                        {/* Animated star row */}
+                                        <div className="flex gap-1">
+                                            {[...Array(3)].map((_, si) => (
+                                                <div key={si} className="w-5 h-5 text-[#00A19B]/60">
+                                                    <StarPath className="w-full h-full" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <span className="text-[#00A19B]/40 text-xs font-mono tracking-widest">{a.year}</span>
+                                </div>
+
+                                {/* Rank */}
+                                <div
+                                    className="text-[#00A19B] text-[clamp(2.5rem,7vw,90px)] leading-[0.85] font-black uppercase tracking-tight mb-4 group-hover:translate-x-1 transition-transform duration-400"
+                                    style={{ fontFamily: '"Bangers", sans-serif', letterSpacing: '0.03em' }}
+                                >
+                                    {a.rank}
+                                </div>
+
+                                {/* Event */}
+                                <div className="mb-2">
+                                    <div className="text-[#00A19B] text-xl md:text-2xl font-bold uppercase tracking-wide"
+                                        style={{ fontFamily: '"Bangers", sans-serif', letterSpacing: '0.05em' }}
+                                    >{a.event}</div>
+                                    <div className="text-[#00A19B]/50 text-sm font-mono tracking-wider mt-1">{a.category}</div>
+                                </div>
+
+                                {/* Org */}
+                                <div className="mt-6 pt-6 border-t border-[#00A19B]/12 flex items-center justify-between">
+                                    <span className="text-[#00A19B]/45 text-xs font-mono tracking-widest uppercase">{a.org}</span>
+                                    <div className="w-9 h-9 rounded-full border border-[#00A19B]/20 flex items-center justify-center group-hover:border-[#00A19B] group-hover:bg-[#00A19B] transition-all duration-400">
+                                        <svg className="text-[#00A19B] group-hover:text-[#E4DDD3] transition-colors duration-300" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                {/* Teal bottom line on hover */}
+                                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#00A19B] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-3xl" />
                             </div>
                         </div>
                     ))}
                 </div>
+
             </div>
 
-            {/* Desktop Cursor Follower Portal */}
-            {mounted && typeof document !== 'undefined' && createPortal(
+            {/* Cursor follower */}
+            {mounted && createPortal(
                 <div
                     ref={cursorRef}
-                    className="fixed top-0 left-0 pointer-events-none z-[99999] hidden md:block overflow-hidden rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.5)] border border-white/20 bg-black"
-                    style={{ width: '420px', height: '280px' }}
+                    className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-2xl overflow-hidden border border-[#00A19B]/30 shadow-2xl transition-opacity duration-300"
+                    style={{ width: '320px', height: '200px', opacity: hovered !== null ? 1 : 0, willChange: 'transform' }}
                 >
-                    {activeIndex !== null && (
-                        <img
-                            src={AWARDS[activeIndex].img}
-                            alt="Award Proof"
-                            className="w-full h-full object-cover scale-105 origin-center"
-                        />
-                    )}
+                    {hovered !== null && <img src={AWARDS[hovered].img} alt="" className="w-full h-full object-cover" />}
                 </div>,
                 document.body
             )}

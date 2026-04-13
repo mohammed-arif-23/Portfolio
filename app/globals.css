@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  /* Midnight & Acid Palette */
-  --background: #050505;
-  --foreground: #ededed;
+  /* Editorial Brutalism Palette */
+  --background: #E4DDD3;
+  /* Bone/Cream base */
+  --foreground: #0A0D0D;
+  /* Almost black */
 
   /* Brand Colors */
-  --brand-dark: #050505;
-  /* Deepest Black */
-  --brand-light: #ededed;
-  /* Off-White */
-  --brand-accent: #ccff00;
-  /* Acid Green */
-  --brand-secondary: #333333;
-  /* Dark Gray */
+  --brand-dark: #0A0D0D;
+  --brand-light: #E4DDD3;
+  --brand-accent: #00A19B;
+  /* Vibrant Teal */
+  --brand-secondary: #008782;
 
-  --text-dark-50: rgba(237, 237, 237, 0.5);
-  --text-dark-40: rgba(237, 237, 237, 0.4);
+  --text-dark-50: rgba(10, 13, 13, 0.5);
+  --text-dark-40: rgba(10, 13, 13, 0.4);
 
-  /* Font Variables (Assuming standard setup or Geist) */
+  /* Font Variables */
   --font-geist-sans: 'Figtree', sans-serif;
   --font-geist-mono: 'Fira Code', monospace;
+  --font-bangers: 'Bangers', cursive;
+  --font-climate: 'Climate Crisis', sans-serif;
 }
 
 @theme inline {
@@ -245,8 +246,65 @@ body {
   will-change: background-position;
 }
 
-@keyframes shimmer {
-  to {
-    background-position: -200% center;
+@keyframes blob {
+  0% {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
   }
+
+  33% {
+    border-radius: 60% 40% 40% 60% / 50% 60% 40% 50%;
+  }
+
+  66% {
+    border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+  }
+
+  100% {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  }
+}
+
+.blob-shape {
+  animation: blob 10s ease-in-out infinite;
+  overflow: hidden;
+}
+
+/* ── Infinite Marquee System ─────────────────── */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-33.333%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee-track-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 36s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track-left:hover,
+.marquee-track-right:hover {
+  animation-play-state: paused;
 }

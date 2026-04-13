@@ -1,307 +1,365 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUpRight } from 'lucide-react';
+import anime from 'animejs';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const PROJECTS = [
     {
-        id: "01",
+        id: "01", label: "College Website", year: "2024",
         title: "AVSEC",
-        category: "College Website",
-        year: "2024",
+        desc: "Official website of AVS Engineering College — high-performance, Tamil Nadu's flagship institution.",
+        stack: ["PHP", "MySQL", "HTML/CSS"],
         img: "/images/project-thumb-avsengg.png",
-        description: "Official website of AVS Engineering College featuring high-performance architecture and modern design in Tamil Nadu Zone",
-        stack: ["PHP", "MySQL", "Vanilla HTML and CSS"],
         link: "https://www.avsenggcollege.ac.in/",
-        githubUrl: "#",
-        color: "#0a0a0a"
     },
     {
-        id: "02",
+        id: "02", label: "College Website", year: "2024",
         title: "SSWC",
-        category: "College Website",
-        year: "2024",
+        desc: "Mobile-first site for Sakthi Kailash Women's College — admissions, departments, campus life.",
+        stack: ["PHP", "MySQL", "HTML/CSS"],
         img: "/images/project-thumb-sswc.png",
-        description: "Modern website for Sakthi Kailash Women's College showcasing courses, departments, admissions, and campus information with mobile-first design.",
-        stack: ["PHP", "MySQL", "Vanilla HTML and CSS"],
         link: "https://www.sakthikailashcollege.org/",
-        githubUrl: "#",
-        color: "#050505"
     },
     {
-        id: "03",
-        title: "AVS Omalur",
-        category: "College Website",
-        year: "2024",
+        id: "03", label: "College Portal", year: "2024",
+        title: "AVS OMALUR",
+        desc: "Production-ready academic portal — programmes, events, SEO-optimized for students & faculty.",
+        stack: ["PHP", "MySQL", "HTML/CSS"],
         img: "/images/project-thumb-avsomalur.png",
-        description: "Production-ready college website for AVS Arts and Science College, Omalur featuring academic programs, events, notices, and user-friendly navigation for students and faculty.",
-        stack: ["PHP", "MySQL", "Vanilla HTML and CSS"],
         link: "https://www.avscollegeomalur.edu.in/",
-        githubUrl: "#",
-        color: "#000000"
     },
     {
-        id: "04",
-        title: "CinemaHub",
-        category: "Movie Booking Platform",
-        year: "2024",
-        img: "images/project-thumb-1.png",
-        description: "Real-time movie ticket booking platform with interactive seat selection and automated email notifications.",
-        stack: ["Next.js", "React", "Node.js", "Express"],
+        id: "04", label: "Booking Platform", year: "2024",
+        title: "CINEMAHUB",
+        desc: "Live ticket booking with interactive seat selection and automated email confirmations.",
+        stack: ["Next.js", "Node.js", "Express"],
+        img: "/images/project-thumb-1.png",
         link: "http://cinemahub-arif.vercel.app/",
-        githubUrl: "https://github.com/mohammed-arif-23/cinemahub",
-        color: "#080808"
     },
     {
-        id: "05",
-        title: "Pixels to Plates",
-        category: "AI Food Analysis",
-        year: "2023",
+        id: "05", label: "AI Vision", year: "2023",
+        title: "PIX2PLATE",
+        desc: "Deep learning platform for food recognition and nutritional analysis via computer vision.",
+        stack: ["Python", "TensorFlow", "OpenCV"],
         img: "/images/project-thumb-pixels-to-plates.png",
-        description: "Machine learning platform for food recognition and nutritional analysis using computer vision.",
-        stack: ["Python", "TensorFlow", "OpenCV", "Keras"],
         link: "https://pixelstoplates.streamlit.app/",
-        githubUrl: "https://github.com/mohammed-arif-23/pixelstoplates",
-        color: "#0a0a0a"
     },
     {
-        id: "06",
-        title: "Movie AI",
-        category: "Recommender System",
-        year: "2023",
-        img: "/images/project-thumb-3.png",
-        description: "Content-based movie recommendation engine using cosine similarity algorithms.",
+        id: "06", label: "ML Recommender", year: "2023",
+        title: "MOVIE AI",
+        desc: "Cosine-similarity recommendation engine over a rich curated movie dataset.",
         stack: ["Python", "Streamlit", "Pandas"],
+        img: "/images/project-thumb-3.png",
         link: "https://arif-nm-movieapi.streamlit.app/",
-        githubUrl: "https://github.com/mohammed-arif-23/nm-movieapi",
-        color: "#050505"
-    }
+    },
 ];
 
+const N = PROJECTS.length;
+const ROTATIONS = [-4, 3, -2, 5, -3, 2]; // fixed — avoids hydration mismatch
+
 export default function Projects() {
-    const containerRef = useRef<HTMLElement>(null);
+    const wrapRef = useRef<HTMLDivElement>(null);
+    const svgRef = useRef<SVGPathElement>(null);
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [active, setActive] = useState(0);
 
     useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Mobile & Desktop Scroll Animations
-            const projects = document.querySelectorAll('.project-card');
+        const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+        if (!cards.length || !wrapRef.current) return;
 
-            projects.forEach((project) => {
-                const imageContainer = project.querySelector('.project-image-container');
-                const image = project.querySelector('.project-image-container img');
-                const id = project.querySelector('.project-id');
-                const title = project.querySelector('.project-title');
-                const desc = project.querySelector('.project-desc');
-                const tags = project.querySelector('.project-tags');
-                const links = project.querySelector('.project-links');
+        // ── Initial DOM state ──
+        // Card 0: fully visible, centered
+        // Cards 1-N: hidden below (yPercent 100)
+        cards.forEach((card, i) => {
+            gsap.set(card, {
+                yPercent: i === 0 ? 0 : 100,
+                x: 0, y: 0,
+                scale: 1,
+                rotation: 0,
+                borderRadius: 0,
+                zIndex: N - i,
+            });
+        });
 
-                // Image Reveal Animation (Mobile & Desktop Right Image)
-                const rightImage = project.querySelector('.project-right-image img');
-                const rightImageContainer = project.querySelector('.project-right-image');
+        // Corner slot for each dismissed card (top-left cluster)
+        const getCornerPos = (idx: number) => {
+            const col = idx % 4;
+            const row = Math.floor(idx / 4);
+            return {
+                x: -(window.innerWidth * 0.5) + 50 + col * 90,
+                y: -(window.innerHeight * 0.5) + 50 + row * 76,
+            };
+        };
 
-                /* Shared Reveal Logic */
-                if (imageContainer && image) {
-                    ScrollTrigger.create({
-                        trigger: project,
-                        start: 'top 80%',
-                        end: 'bottom 20%',
-                        onEnter: () => {
-                            gsap.to(imageContainer, { clipPath: 'inset(0 0 0 0)', duration: 1.5, ease: 'power4.inOut' });
-                            gsap.fromTo(image,
-                                { scale: 1.3, filter: 'blur(10px)' },
-                                { scale: 1.1, filter: 'blur(0px)', duration: 2.5, ease: 'power2.out' }
-                            );
-                        },
-                        onLeaveBack: () => {
-                            gsap.to(imageContainer, { clipPath: 'inset(0 100% 0 0)', duration: 1, ease: 'power4.inOut' });
-                        }
-                    });
-                }
+        // ── ScrollTrigger — NO pin, CSS sticky handles viewport lock ──
+        const st = ScrollTrigger.create({
+            trigger: wrapRef.current,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.65,
+            onUpdate: (self) => {
+                // rawStep: 0 → N-1 across the full scroll range
+                const rawStep = self.progress * (N - 1);
+                setActive(Math.min(Math.round(rawStep), N - 1));
 
-                if (rightImage && rightImageContainer) {
-                    ScrollTrigger.create({
-                        trigger: project,
-                        start: 'top 80%',
-                        end: 'bottom 20%',
-                        onEnter: () => {
-                            gsap.fromTo(rightImage,
-                                { scale: 1.2, filter: 'blur(15px)', opacity: 0 },
-                                { scale: 1, filter: 'blur(0px)', opacity: 1, duration: 1.5, ease: 'power2.out' }
-                            );
-                        }
-                    });
-                }
+                cards.forEach((card, i) => {
+                    // When does card i enter and exit?
+                    // Card i enters: rawStep goes from (i-1) to i
+                    // Card i exits : rawStep goes from i to (i+1)
+                    const enterProgress = i === 0 ? 1 : gsap.utils.clamp(0, 1, rawStep - (i - 1));
+                    const exitProgress = gsap.utils.clamp(0, 1, rawStep - i);
 
-                // MEGA Content Stagger Reveal
-                gsap.fromTo([id, title, desc, tags, links],
-                    {
-                        y: 120, // Pushed 49% further (was 80)
-                        opacity: 0,
-                        rotateX: 25, // Pushed further
-                        skewY: 5, // Pushed further
-                        transformOrigin: 'left center'
-                    },
-                    {
-                        y: 0,
-                        opacity: 1,
-                        rotateX: 0,
-                        skewY: 0,
-                        duration: 1.5, // Slower, more epic
-                        stagger: 0.2, // Pushed further
-                        ease: 'power4.out',
-                        scrollTrigger: {
-                            trigger: project,
-                            start: 'top 85%',
-                            toggleActions: 'play none none reverse'
-                        }
-                    }
-                );
-
-                // MEGA Parallax Effect for Image - Pushed to MAX
-                gsap.to(image, {
-                    yPercent: 40, // Doubled for Mega impact
-                    scale: 1.35,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: project,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: 2
+                    if (exitProgress > 0) {
+                        // Card is exiting toward top-left corner
+                        const pos = getCornerPos(i);
+                        gsap.set(card, {
+                            yPercent: 0,
+                            x: pos.x * exitProgress,
+                            y: pos.y * exitProgress,
+                            scale: 1 - (1 - 0.18) * exitProgress,
+                            rotation: ROTATIONS[i] * exitProgress,
+                            borderRadius: 14 * exitProgress,
+                        });
+                    } else if (enterProgress < 1) {
+                        // Card is entering from below
+                        gsap.set(card, {
+                            yPercent: (1 - enterProgress) * 100,
+                            x: 0, y: 0,
+                            scale: 1,
+                            rotation: 0,
+                            borderRadius: 0,
+                        });
+                    } else {
+                        // Card is fully active and centred
+                        gsap.set(card, {
+                            yPercent: 0,
+                            x: 0, y: 0,
+                            scale: 1,
+                            rotation: 0,
+                            borderRadius: 0,
+                        });
                     }
                 });
-            });
+            },
+        });
 
-        }, containerRef);
-        return () => ctx.revert();
+        // ── Anime.js: draw SVG thread on scroll entry ──
+        if (svgRef.current) {
+            const len = svgRef.current.getTotalLength?.() || 800;
+            svgRef.current.style.strokeDasharray = String(len);
+            svgRef.current.style.strokeDashoffset = String(len);
+            ScrollTrigger.create({
+                trigger: wrapRef.current,
+                start: 'top 65%',
+                once: true,
+                onEnter: () => {
+                    anime({ targets: svgRef.current, strokeDashoffset: [len, 0], duration: 3000, easing: 'easeInOutSine' });
+                },
+            });
+        }
+
+        // ── Title crash ──
+        gsap.fromTo('.proj-title-span', { yPercent: 115 }, {
+            yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.1,
+            scrollTrigger: { trigger: wrapRef.current, start: 'top 80%', once: true },
+        });
+
+        return () => { st.kill(); ScrollTrigger.getAll().forEach(t => t.kill()); };
     }, []);
 
+    // ── 3D parallax tilt on the active card only ──
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, i: number) => {
+        if (i !== active) return;
+        const el = cardRefs.current[i];
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        const imgEl = el.querySelector<HTMLElement>('.c-img');
+        const infoEl = el.querySelector<HTMLElement>('.c-info');
+        const numEl = el.querySelector<HTMLElement>('.c-num');
+        if (imgEl) gsap.to(imgEl, { x: x * 24, y: y * 24, duration: 0.5, ease: 'power2.out' });
+        if (infoEl) gsap.to(infoEl, { x: x * 10, y: y * 10, duration: 0.5, ease: 'power2.out' });
+        if (numEl) gsap.to(numEl, { x: x * -18, y: y * -18, duration: 0.5, ease: 'power2.out' });
+    };
+
+    const handleMouseLeave = (i: number) => {
+        if (i !== active) return;
+        const el = cardRefs.current[i];
+        if (!el) return;
+        ['.c-img', '.c-info', '.c-num'].forEach(cls => {
+            gsap.to(el.querySelector<HTMLElement>(cls), { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1,0.4)' });
+        });
+    };
+
     return (
-        <section ref={containerRef} className="relative w-full bg-black pt-2 pb-2 px-4 md:px-0 flex flex-col items-center">
+        /*
+         * Outer: N × 100vh creates the scroll space.
+         * Inner: CSS sticky locks it to the viewport — NO GSAP pin.
+         */
+        <div ref={wrapRef} style={{ height: `${N * 100}vh` }} className="relative bg-[#E4DDD3]">
 
-            <div className="w-full max-w-[90vw] md:max-w-7xl mx-auto mb-20 px-4 md:px-0">
-                <h2 className="text-sm font-mono text-brand-accent tracking-[0.5em] uppercase opacity-70 mb-4">
-                    Selected_Works
-                </h2>
-                <p className="text-white/40 text-sm max-w-md">
-                    Immersive digital experiences crafted with precision and passion.
-                </p>
-            </div>
+            {/* ── CSS-STICKY VIEWPORT ── */}
+            <div className="sticky top-0 h-screen w-full overflow-hidden">
 
-            <div className="w-full flex flex-col gap-0 md:gap-0">
-                {PROJECTS.map((project, index) => (
+                {/* Film grain */}
+                <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
+                    style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }}
+                />
+
+                {/* SVG decorative thread */}
+                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-20">
+                    <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                        <path
+                            ref={svgRef}
+                            d="M -100,600 C 300,-100 600,900 1000,200 C 1300,-200 1600,700 2000,300"
+                            fill="none" stroke="#00A19B" strokeWidth="2.5" strokeLinecap="round"
+                        />
+                    </svg>
+                </div>
+
+                {/* ── HEADER ── */}
+                <div className="absolute top-0 left-0 right-0 z-50 flex items-end justify-between px-6 md:px-12 xl:px-20 pt-8 pb-3 pointer-events-none">
+                    <div className="flex flex-wrap gap-x-[0.18em] overflow-hidden">
+                        {['SELECTED', 'WORKS'].map((w, i) => (
+                            <div key={i} className="overflow-hidden">
+                                <span
+                                    className="proj-title-span inline-block text-[#00A19B] leading-[0.85] tracking-tight uppercase will-change-transform"
+                                    style={{
+                                        fontFamily: '"Climate Crisis", sans-serif',
+                                        fontVariationSettings: '"YEAR" 2000',
+                                        fontSize: 'clamp(1.6rem, 5vw, 72px)',
+                                    }}
+                                >{w}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Dot progress + counter */}
+                    <div className="flex items-center gap-2 mb-1">
+                        {PROJECTS.map((_, i) => (
+                            <div
+                                key={i}
+                                className="rounded-full transition-all duration-500"
+                                style={{
+                                    width: i === active ? 28 : 6,
+                                    height: 6,
+                                    backgroundColor: i <= active ? '#00A19B' : 'rgba(0,161,155,0.2)',
+                                }}
+                            />
+                        ))}
+                        <span className="ml-2 text-[#00A19B]/40 text-xs font-mono tabular-nums">
+                            {String(active + 1).padStart(2, '0')}/{String(N).padStart(2, '0')}
+                        </span>
+                    </div>
+                </div>
+
+                {/* ── CARDS ── */}
+                {PROJECTS.map((p, i) => (
                     <div
-                        key={project.id}
-                        className="project-card group sticky top-0 w-full min-h-screen md:h-screen flex flex-col md:flex-row items-center justify-center overflow-hidden"
-                        style={{
-                            backgroundColor: project.color,
-                            zIndex: index + 1
-                        }}
-                        onMouseEnter={(e) => {
-                            const target = e.currentTarget;
-                            // Add a class to permanently hide the right image after first hover
-                            target.classList.add('has-interacted');
-                        }}
+                        key={p.id}
+                        ref={el => { cardRefs.current[i] = el; }}
+                        className="absolute inset-0 w-full h-full will-change-transform overflow-hidden"
+                        onMouseMove={e => handleMouseMove(e, i)}
+                        onMouseLeave={() => handleMouseLeave(i)}
+                        onClick={() => { if (i === active) window.open(p.link, '_blank'); }}
+                        style={{ cursor: i === active ? 'pointer' : 'default' }}
                     >
-                        {/* Background Image (Wipes in on Scroll/Hover) */}
-                        <div
-                            className="project-image-container absolute inset-0 z-0 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] pointer-events-none will-change-[clip-path]"
-                            style={{ clipPath: 'inset(0 100% 0 0)' }}
-                        >
-                            <div className="absolute inset-0 bg-black/60 md:bg-black/50 z-10"></div>
+                        {/* Full-bleed image */}
+                        <div className="c-img absolute inset-0 will-change-transform">
                             <img
-                                src={project.img}
-                                alt=""
-                                className="w-full h-full object-cover filter blur-2xl opacity-60 scale-110"
+                                src={p.img}
+                                alt={p.title}
+                                className="w-full h-full object-cover"
+                                draggable={false}
                             />
+                            {/* Gradient overlays so copy is always readable */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#E4DDD3] via-[#E4DDD3]/50 to-[#E4DDD3]/05" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#E4DDD3]/75 via-transparent to-transparent" />
                         </div>
 
-                        {/* Interactive Clear Image (Desktop Hover) with Blur Transition */}
-                        <div className="hidden md:block absolute inset-0 z-0 overflow-hidden pointer-events-none transition-[width] duration-700 ease-[cubic-bezier(0.87,0,0.13,1)] w-0 group-hover:w-full">
-                            <div className="absolute inset-0 bg-black/20 z-10 mix-blend-multiply"></div>
-                            <img
-                                src={project.img}
-                                alt=""
-                                className="w-screen h-screen object-cover max-w-none filter blur-xl group-hover:blur-0 transition-all duration-700 ease-out scale-110 group-hover:scale-100"
-                            />
-                        </div>
+                        {/* Giant number watermark */}
+                        <span
+                            className="c-num absolute right-0 bottom-0 text-[#00A19B]/[0.05] font-black leading-none pointer-events-none select-none will-change-transform"
+                            style={{
+                                fontFamily: '"Climate Crisis", sans-serif',
+                                fontVariationSettings: '"YEAR" 1979',
+                                fontSize: 'clamp(14rem, 40vw, 560px)',
+                            }}
+                        >{p.id}</span>
 
-                        <div className="relative z-10 w-full h-full max-w-[95vw] md:max-w-[90vw] grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center py-24 md:py-0 border-t border-white/5 md:border-none">
-
-                            {/* Left: Content */}
-                            <div className="project-content flex flex-col justify-center items-center md:items-start order-2 md:order-1 px-4 md:px-0 text-white transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:group-hover:translate-x-8 mix-blend-difference text-center md:text-left">
-                                <span className="project-id font-mono text-brand-accent text-xs md:text-base mb-6 bg-white/5 w-fit px-3 py-1 rounded-full border border-white/10 backdrop-blur-md group-hover:border-brand-accent/50 transition-colors duration-500">
-                                    {project.id} — {project.category}
-                                </span>
-                                <h3 className="project-title text-5xl md:text-9xl font-black mb-8 leading-[0.85] tracking-tighter group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/50 transition-all duration-500">
-                                    {project.title}
-                                </h3>
-                                <p className="project-desc text-white/80 md:text-white/60 text-base md:text-xl font-light mb-10 max-w-sm md:max-w-md leading-relaxed group-hover:text-white/90 transition-colors duration-500">
-                                    {project.description}
-                                </p>
-
-                                <div className="project-tags flex flex-wrap justify-center md:justify-start gap-2 md:gap-3 mb-12">
-                                    {project.stack.map((tech) => (
-                                        <span key={tech} className="px-3 py-1 md:px-4 md:py-1.5 border border-white/10 rounded-full text-[10px] md:text-xs text-white/60 md:text-white/40 font-mono uppercase hover:bg-white/10 hover:text-white transition-colors duration-300">
-                                            {tech}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div className="project-links flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center">
-                                    {project.link !== "#" && (
-                                        <a
-                                            href={project.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group/btn relative w-full sm:w-fit pl-6 pr-12 py-4 rounded-full bg-white md:bg-transparent border border-white/20 overflow-hidden flex items-center justify-center sm:justify-start gap-4 transition-all duration-500 hover:border-white hover:pl-8 hover:pr-14 active:scale-95 active:brightness-125"
-                                        >
-                                            <div className="absolute inset-0 bg-white translate-y-0 md:translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
-                                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] uppercase text-black md:text-white group-hover/btn:text-black transition-colors duration-500">
-                                                View Live
-                                            </span>
-                                            <ArrowUpRight size={16} className="relative z-10 text-black md:text-white group-hover/btn:text-black transition-colors duration-500 group-hover/btn:rotate-45 transform ease-out" />
-                                        </a>
-                                    )}
-                                    {project.githubUrl !== "#" && (
-                                        <a
-                                            href={project.githubUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group/btn relative w-full sm:w-fit px-8 py-4 rounded-full bg-transparent border border-white/20 overflow-hidden flex items-center justify-center gap-4 transition-all duration-500 hover:border-white hover:bg-white active:scale-95 active:brightness-125"
-                                        >
-                                            <div className="absolute inset-0 bg-white translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
-                                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] uppercase text-white group-hover/btn:text-black transition-colors duration-500">
-                                                GitHub
-                                            </span>
-                                        </a>
-                                    )}
-                                </div>
+                        {/* Content */}
+                        <div className="c-info absolute bottom-0 left-0 right-0 px-6 md:px-12 xl:px-20 pb-10 md:pb-14 will-change-transform">
+                            {/* Meta */}
+                            <div className="flex items-center gap-3 mb-3">
+                                <span className="text-[#00A19B]/50 text-xs font-mono tracking-[0.4em] uppercase">{p.label}</span>
+                                <span className="text-[#00A19B]/25 text-xs font-mono">·</span>
+                                <span className="text-[#00A19B]/40 text-xs font-mono tracking-widest">{p.year}</span>
                             </div>
 
-                            {/* Right: Image (Desktop only - Fades out on hover, Stays out after interaction) */}
-                            <div className="project-right-image hidden md:block relative w-full h-[30vh] md:h-[70vh] order-1 md:order-2 overflow-hidden rounded transform transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] origin-right group-[.has-interacted]:opacity-0">
-                                <img
-                                    src={project.img}
-                                    alt={project.title}
-                                    className="relative w-full h-full object-contain md:object-cover transition-all duration-1000"
-                                    loading="eager"
-                                />
-                            </div>
+                            {/* Title */}
+                            <h2
+                                className="text-[#00A19B] leading-[0.82] tracking-tight uppercase mb-5"
+                                style={{
+                                    fontFamily: '"Climate Crisis", sans-serif',
+                                    fontVariationSettings: '"YEAR" 2000',
+                                    fontSize: 'clamp(3rem, 11vw, 150px)',
+                                }}
+                            >{p.title}</h2>
 
+                            {/* Bottom row */}
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                                <div>
+                                    <p className="text-[#00A19B]/60 text-sm md:text-base leading-relaxed max-w-lg mb-4">
+                                        {p.desc}
+                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {p.stack.map(t => (
+                                            <span
+                                                key={t}
+                                                className="px-3 py-1.5 rounded-full border border-[#00A19B]/20 text-[#00A19B]/55 text-[10px] font-mono tracking-widest uppercase"
+                                            >{t}</span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {i === active && (
+                                    <a
+                                        href={p.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={e => e.stopPropagation()}
+                                        className="flex-none group flex items-center gap-3 px-6 py-3.5 rounded-full border-2 border-[#00A19B] text-[#00A19B] hover:bg-[#00A19B] hover:text-[#E4DDD3] transition-all duration-300 text-sm font-mono tracking-widest uppercase whitespace-nowrap"
+                                    >
+                                        View Project
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+                                        </svg>
+                                    </a>
+                                )}
+                            </div>
                         </div>
+
+                        {/* Active indicator */}
+                        {i === active && <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#00A19B]" />}
                     </div>
                 ))}
-            </div>
 
-            {/* End Spacer */}
-            <div className="w-full h-[8vh] flex items-center justify-center">
-                <p className="text-white/20 font-mono text-xs">MORE IN ARCHIVE</p>
-            </div>
+                {/* Scroll hint */}
+                {active === 0 && (
+                    <div className="absolute bottom-8 right-10 z-50 flex flex-col items-center gap-2 pointer-events-none animate-bounce">
+                        <span className="text-[#00A19B]/35 text-[9px] font-mono tracking-[0.35em] uppercase">Scroll</span>
+                        <svg className="text-[#00A19B]/35" width="14" height="18" viewBox="0 0 16 20" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                            <path d="M8 2v12M3 10l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </div>
+                )}
 
-        </section>
+            </div>
+        </div>
     );
 }
