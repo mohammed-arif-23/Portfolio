@@ -1,0 +1,276 @@
+{
+  "basics": {
+    "name": "T Mohammed Arif",
+    "firstName": "MOHAMMED",
+    "lastName": "ARIF",
+    "headline": "Part-Time Full Stack Developer | Next.js & Node.js | Real-World Web & Automation Systems",
+    "email": "mohammedarif2303@gmail.com",
+    "phone": "+91 7904645033",
+    "location": {
+      "city": "Salem",
+      "state": "Tamilnadu",
+      "country": "India"
+    },
+    "profileImage": "/images/profile.png",
+    "openToWork": {
+      "status": true,
+      "roles": ["Full Stack", "Frontend", "Backend"]
+    },
+    "socials": [
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/in/mohammedarif2303/",
+        "username": "mohammedarif2303",
+        "label": "linkedin.com/in/mohammedarif2303"
+      },
+      {
+        "name": "GitHub",
+        "url": "https://github.com/mohammed-arif-23",
+        "username": "mohammed-arif-23",
+        "label": "github.com/mohammed-arif-23"
+      },
+      {
+        "name": "Email",
+        "url": "mailto:mohammedarif2303@gmail.com",
+        "username": "mohammedarif2303@gmail.com",
+        "label": "mohammedarif2303@gmail.com"
+      }
+    ]
+  },
+  "metadata": {
+    "title": "T Mohammed Arif | Full Stack Developer",
+    "description": "Part-Time Full Stack Developer specializing in Next.js, Node.js, and Automation. Building real-world web systems and institutional platforms in Salem, Tamilnadu.",
+    "keywords": [
+      "T Mohammed Arif",
+      "Full Stack Developer",
+      "Next.js Developer",
+      "React Developer",
+      "Node.js Expert",
+      "Automation Specialist",
+      "Web Development Salem",
+      "Portfolio Mohammed Arif"
+    ],
+    "url": "https://arif.zone.id/"
+  },
+  "about": {
+    "bio": "I engineer digital experiences that blur the line between art and technology — crafting fast, beautiful, soul-first products for the real world.",
+    "stats": [
+      {
+        "value": 15,
+        "suffix": "+",
+        "label": "Projects Shipped"
+      },
+      {
+        "value": 3,
+        "suffix": "yrs",
+        "label": "Real-World Experience"
+      },
+      {
+        "value": 5,
+        "suffix": "k+",
+        "label": "Users Served"
+      },
+      {
+        "value": 8,
+        "suffix": "+",
+        "label": "Tech Domains"
+      }
+    ]
+  },
+  "technologies": [
+    { "name": "Next.js", "category": "Frontend", "icon": "/images/logos/Next.js.svg" },
+    { "name": "React", "category": "Frontend", "icon": "/images/logos/React.svg" },
+    { "name": "TypeScript", "category": "Language", "icon": "/images/logos/TypeScript.svg" },
+    { "name": "Tailwind", "category": "Frontend Styling", "icon": "/images/logos/Tailwind.svg" },
+    { "name": "JavaScript", "category": "Language", "icon": "/images/logos/JavaScript.svg" },
+    { "name": "HTML5", "category": "Frontend", "icon": "/images/logos/HTML5.svg" },
+    { "name": "GSAP", "category": "Animation", "icon": "/images/logos/gsap-black.svg" },
+    { "name": "Node.js", "category": "Backend", "icon": "/images/logos/Node.js.svg" },
+    { "name": "Python", "category": "Language / AI", "icon": "/images/logos/Python.svg" },
+    { "name": "PHP", "category": "Backend / Legacy", "icon": "/images/logos/PHP.svg" },
+    { "name": "Django", "category": "Backend", "icon": "/images/logos/Django.svg" },
+    { "name": "MongoDB", "category": "Database", "icon": "/images/logos/MongoDB.svg" },
+    { "name": "MySQL", "category": "Database", "icon": "/images/logos/MySQL.svg" },
+    { "name": "Supabase", "category": "Backend Services", "icon": "/images/logos/Supabase.svg" },
+    { "name": "Firebase", "category": "Backend Services", "icon": "/images/logos/Firebase.svg" },
+    { "name": "TensorFlow", "category": "Machine Learning", "icon": "/images/logos/TensorFlow.svg" },
+    { "name": "PyTorch", "category": "Machine Learning", "icon": "/images/logos/PyTorch.svg" },
+    { "name": "OpenCV", "category": "Computer Vision", "icon": "/images/logos/OpenCV.svg" },
+    { "name": "Redux", "category": "State Management", "icon": "/images/logos/Redux.svg" },
+    { "name": "C++", "category": "Language", "icon": "/images/logos/C++.svg" },
+    { "name": "Git", "category": "Version Control", "icon": "/images/logos/Git.svg" },
+    { "name": "Express", "category": "Backend Framework", "icon": "/images/logos/Express.svg" }
+  ],
+  "experience": [
+    {
+      "company": "Valli Super Specialty Hospital",
+      "location": "Salem, Tamilnadu",
+      "role": "Part-Time Full Stack Developer & Automation Support",
+      "period": "2024 - Present",
+      "summary": "Working as a part-time developer supporting hospital web systems, automation, and internal tools. Handled end-to-end development, API routes, database tuning, Zoho Creator configuration, and workflow automation to simplify operations.",
+      "impacts": [
+        {
+          "id": "01",
+          "headline": "Infrastructure at Scale",
+          "body": "Owned and maintained critical hospital software and hardware stacks — ensuring zero-downtime 24/7 across a live medical facility."
+        },
+        {
+          "id": "02",
+          "headline": "Zero Downtime Resolution",
+          "body": "First-response technical support for medical staff. Diagnosed and resolved high-priority system failures before they impacted patient care."
+        },
+        {
+          "id": "03",
+          "headline": "Query & DB Optimization",
+          "body": "Tuned SQL and MongoDB queries, restructured data pipelines and cut administrative retrieval times significantly."
+        },
+        {
+          "id": "04",
+          "headline": "Automation Engineering",
+          "body": "Built streamlined Zoho Creator and custom workflows eliminating manual data entry and reducing human error across departments."
+        },
+        {
+          "id": "05",
+          "headline": "Campaign Design",
+          "body": "Designed digital campaigns and medical information visuals — bridging clinical complexity with clear, impactful communication."
+        }
+      ],
+      "tags": ["Next.js", "Node.js", "MongoDB", "SQL", "Zoho Creator", "Automation", "Prompt Eng.", "AI Tools"]
+    }
+  ],
+  "projects": [
+    {
+      "id": "01",
+      "title": "AVSEC",
+      "label": "College Website",
+      "year": "2024",
+      "description": "Official website of AVS Engineering College — high-performance, Tamil Nadu's flagship institution.",
+      "longDescription": "Designed and developed the official website of AVS Engineering College, Salem. Managed frontend design, backend logic, and responsive UI optimizations to handle heavy loads of prospective students and administrative updates. Actively used by students, staff, and visitors.",
+      "stack": ["PHP", "MySQL", "HTML/CSS"],
+      "image": "/images/project-thumb-avsengg.png",
+      "link": "https://www.avsenggcollege.ac.in/"
+    },
+    {
+      "id": "02",
+      "title": "SSWC",
+      "label": "College Website",
+      "year": "2024",
+      "description": "Mobile-first site for Sakthi Kailash Women's College — admissions, departments, campus life.",
+      "longDescription": "Designed and built Sakthi Kailash Women's College portal. Focused heavily on mobile usability, SEO optimizations, and speed benchmarks to guarantee excellent accessibility for all target metrics.",
+      "stack": ["PHP", "MySQL", "HTML/CSS"],
+      "image": "/images/project-thumb-sswc.png",
+      "link": "https://www.sakthikailashcollege.org/"
+    },
+    {
+      "id": "03",
+      "title": "AVS OMALUR",
+      "label": "College Portal",
+      "year": "2024",
+      "description": "Production-ready academic portal — programmes, events, SEO-optimized for students & faculty.",
+      "longDescription": "Created the primary online presence for Sakthi Kailash Arts and Science College / AVS College Omalur. Streamlined academic navigation, department information layouts, and integrated simple forms for query submissions.",
+      "stack": ["PHP", "MySQL", "HTML/CSS"],
+      "image": "/images/project-thumb-avsomalur.png",
+      "link": "https://www.avscollegeomalur.edu.in/"
+    },
+    {
+      "id": "04",
+      "title": "CINEMAHUB",
+      "label": "Booking Platform",
+      "year": "2024",
+      "description": "Live ticket booking with interactive seat selection and automated email confirmations.",
+      "longDescription": "A complete, modern movie ticket booking application mimicking cinema architectures. Implements dynamic seat status grids, interactive cart states, authentication structures, and transactional confirmations.",
+      "stack": ["Next.js", "Node.js", "Express"],
+      "image": "/images/project-thumb-1.png",
+      "link": "http://cinemahub-arif.vercel.app/"
+    },
+    {
+      "id": "05",
+      "title": "PIX2PLATE",
+      "label": "AI Vision",
+      "year": "2023",
+      "description": "Deep learning platform for food recognition and nutritional analysis via computer vision.",
+      "longDescription": "An innovative AI-powered food tracking web tool. Combines computer vision models to identify dishes from uploaded food imagery, fetching detailed nutritional metadata and tracking historical logs for users.",
+      "stack": ["Python", "TensorFlow", "OpenCV"],
+      "image": "/images/project-thumb-pixels-to-plates.png",
+      "link": "https://pixelstoplates.streamlit.app/"
+    },
+    {
+      "id": "06",
+      "title": "MOVIE AI",
+      "label": "ML Recommender",
+      "year": "2023",
+      "description": "Cosine-similarity recommendation engine over a rich curated movie dataset.",
+      "longDescription": "An interactive machine learning movie recommendation system using content-based filtering algorithms. Recommends cinema titles based on title descriptions, cast, and keyword associations.",
+      "stack": ["Python", "Streamlit", "Pandas"],
+      "image": "/images/project-thumb-3.png",
+      "link": "https://arif-nm-movieapi.streamlit.app/"
+    }
+  ],
+  "awards": [
+    {
+      "id": "01",
+      "rank": "1st Place",
+      "event": "Web Development",
+      "category": "Spring Fest · Open Category",
+      "org": "KSR College of Technology",
+      "year": "2024",
+      "image": "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1964&auto=format&fit=crop"
+    },
+    {
+      "id": "02",
+      "rank": "1st Place",
+      "event": "Code Debugging",
+      "category": "National Level Symposium",
+      "org": "Mahendra Institutions of Technology",
+      "year": "2024",
+      "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1740&auto=format&fit=crop"
+    },
+    {
+      "id": "03",
+      "rank": "Completion",
+      "event": "React.js Course Completion",
+      "category": "Professional Certification",
+      "org": "Infosys Springboard",
+      "year": "2024",
+      "image": ""
+    },
+    {
+      "id": "04",
+      "rank": "Internship Completion",
+      "event": "CUDA Python & NVIDIA Boards",
+      "category": "25 Days Internship",
+      "org": "ADVI Group of Technologies",
+      "year": "2025",
+      "image": ""
+    }
+  ],
+  "education": [
+    {
+      "institution": "AVS Engineering College, Salem",
+      "degree": "B.Tech Information Technology",
+      "timeline": "2023 - 2027",
+      "grade": "8.55 CGPA",
+      "details": "Active participation in tech events, leading web projects, and competitive debugging."
+    },
+    {
+      "institution": "St. Paul's Higher Secondary School, Salem",
+      "degree": "12th Standard (HSC)",
+      "timeline": "2023",
+      "grade": "86.4%",
+      "details": "Focused on Computer Science, Mathematics, and Physics."
+    },
+    {
+      "institution": "The Gugai Higher Secondary School, Salem",
+      "degree": "10th Standard (SSLC)",
+      "timeline": "2020",
+      "grade": "100% (Covid Batch)",
+      "details": "General secondary education."
+    }
+  ],
+  "languages": [
+    { "name": "English", "proficiency": "Professional" },
+    { "name": "Urdu", "proficiency": "Native" },
+    { "name": "Tamil", "proficiency": "Fluent" },
+    { "name": "Hindi", "proficiency": "Conversational" }
+  ]
+}

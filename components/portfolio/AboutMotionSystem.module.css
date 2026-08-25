@@ -1,0 +1,230 @@
+.root {
+  --about-paper: var(--sotd-paper, #f3efe6);
+  --about-ink: var(--sotd-ink, #0d0d0c);
+  --about-accent: var(--sotd-accent, #e54832);
+  width: min(100%, 1600px);
+  margin-inline: auto;
+}
+
+.manifesto {
+  max-width: 15.5ch;
+  margin: clamp(5rem, 9vw, 10rem) 0 clamp(5rem, 8vw, 8rem);
+  color: var(--about-ink);
+  font-size: clamp(3.2rem, 7.35vw, 8.4rem);
+  font-weight: 650;
+  letter-spacing: -0.068em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.word {
+  display: inline-block;
+  transform-origin: center;
+}
+
+.accordion {
+  min-height: clamp(29rem, 55vh, 42rem);
+  display: flex;
+  border-block: 1px solid var(--about-ink);
+  border-left: 1px solid var(--about-ink);
+}
+
+.panel {
+  position: relative;
+  min-width: 0;
+  flex: 1 1 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border-right: 1px solid var(--about-ink);
+  background: var(--about-paper);
+  color: var(--about-ink);
+  isolation: isolate;
+}
+
+.panel[data-active='true'] {
+  flex-grow: 2.7;
+  background: var(--about-ink);
+  color: var(--about-paper);
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--about-accent);
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel:not([data-active='true']):hover::before,
+.panel:not([data-active='true']):focus-within::before {
+  transform: scaleY(1);
+}
+
+.panel > button {
+  min-height: 8.5rem;
+  padding: clamp(1rem, 2vw, 2rem);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.panel > button > span {
+  color: var(--about-accent);
+  font-size: 0.58rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.panel:not([data-active='true']):is(:hover, :focus-within) > button > span {
+  color: var(--about-ink);
+}
+
+.panel > button strong {
+  max-width: 10ch;
+  font-size: clamp(1.25rem, 2.3vw, 2.8rem);
+  font-weight: 620;
+  letter-spacing: -0.052em;
+  line-height: 0.96;
+}
+
+.panel > button i {
+  font-size: 1.35rem;
+  font-style: normal;
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel[data-active='true'] > button i {
+  color: var(--about-accent);
+  transform: translate(0.35rem, 0.35rem) rotate(-2deg);
+}
+
+.panelCopy {
+  min-width: min(31rem, 42vw);
+  padding: clamp(1.2rem, 2.6vw, 2.8rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition: opacity 280ms ease 80ms, transform 620ms cubic-bezier(0.16, 1, 0.3, 1) 40ms;
+}
+
+.panel[data-active='true'] .panelCopy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.panelCopy p {
+  max-width: 31rem;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(1.5rem, 2.6vw, 3.1rem);
+  font-style: italic;
+  line-height: 1.04;
+}
+
+.panelCopy > span {
+  width: fit-content;
+  margin-top: 2rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid currentColor;
+  color: var(--about-accent);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.panel > button:focus-visible {
+  outline: 3px solid var(--about-accent);
+  outline-offset: -3px;
+}
+
+@media (max-width: 900px) {
+  .manifesto {
+    max-width: 12ch;
+    font-size: clamp(3rem, 11vw, 6.5rem);
+  }
+
+  .accordion {
+    min-height: 0;
+    display: block;
+  }
+
+  .panel,
+  .panel[data-active='true'] {
+    display: block;
+    border-bottom: 1px solid var(--about-ink);
+    background: var(--about-paper);
+    color: var(--about-ink);
+  }
+
+  .panel[data-active='true'] {
+    background: var(--about-ink);
+    color: var(--about-paper);
+  }
+
+  .panel:last-child {
+    border-bottom: 0;
+  }
+
+  .panel > button {
+    width: 100%;
+    min-height: 6rem;
+    align-items: center;
+  }
+
+  .panel > button strong {
+    max-width: none;
+    font-size: clamp(1.35rem, 5vw, 2.2rem);
+  }
+
+  .panelCopy {
+    min-width: 0;
+    max-height: 0;
+    padding-block: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 720ms cubic-bezier(0.16, 1, 0.3, 1),
+      padding 720ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 280ms ease 80ms,
+      transform 620ms cubic-bezier(0.16, 1, 0.3, 1) 40ms;
+  }
+
+  .panel[data-active='true'] .panelCopy {
+    max-height: 19rem;
+    padding-block: 1.5rem 2.5rem;
+  }
+
+  .panel[data-active='true'] > button i,
+  .panel[data-active='true'] > button > span {
+    color: var(--about-accent);
+  }
+}
+
+@media (max-width: 560px) {
+  .manifesto {
+    max-width: 100%;
+    font-size: clamp(2.8rem, 13.6vw, 4.8rem);
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

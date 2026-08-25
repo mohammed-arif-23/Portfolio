@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local design and verification tooling
+/.agents/
+/scrollcraft/
+/tmp/
+/skills-lock.json
