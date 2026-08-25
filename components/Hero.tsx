@@ -3,193 +3,196 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import anime from 'animejs';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PROFILE_IMG = "images/profile.png";
+const NAV_LINKS = [
+  { href: '#work', label: 'Work' },
+  { href: '#about', label: 'About' },
+  { href: '#contact', label: 'Contact' },
+];
 
 export default function Hero() {
-  const scopeRef = useRef<HTMLDivElement>(null);
-  const stickyWrapperRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLElement>(null);
-  const firstNameRef = useRef<HTMLDivElement>(null);
-  const lastNameRef = useRef<HTMLDivElement>(null);
-  const imageWrapperRef = useRef<HTMLDivElement>(null);
-  const imageInsideRef = useRef<HTMLImageElement>(null);
-  const stringPathRef = useRef<SVGPathElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const blob1Ref = useRef<HTMLDivElement>(null);
+  const blob2Ref = useRef<HTMLDivElement>(null);
 
+  // Subtle blob parallax on mouse
   useEffect(() => {
-    let stringAnim: anime.AnimeInstance | null = null;
-
-    let ctx = gsap.context(() => {
-
-      // ----------- 0. ANIME.JS: Draw String -----------
-      if (stringPathRef.current) {
-        stringAnim = anime({
-          targets: stringPathRef.current,
-          strokeDashoffset: [anime.setDashoffset, 0],
-          easing: 'easeInOutSine',
-          duration: 4000,
-          delay: 200,
-        });
-      }
-
-      // ----------- 1. ENTRY ANIMATION (No Text Clipping) -----------
-      gsap.set('.name-char', { y: 100, opacity: 0 });
-      gsap.set(imageWrapperRef.current, { scale: 0.9, opacity: 0 });
-      gsap.set(imageInsideRef.current, { scale: 1.15 });
-
-      const loadTl = gsap.timeline({ delay: 0.1 });
-
-      loadTl.to(imageWrapperRef.current, {
-        scale: 1,
-        opacity: 1,
-        duration: 1.4,
-        ease: 'power3.out'
-      })
-        .to(imageInsideRef.current, {
-          scale: 1,
-          duration: 1.8,
-          ease: 'power3.out'
-        }, "<")
-        .to('.name-char', {
-          y: 0,
-          opacity: 1,
-          stagger: 0.04,
-          duration: 1.2,
-          ease: 'power4.out',
-        }, "-=1.2");
-
-      // ----------- 2. SMOOTH UNDISAPPEARING SCROLL -----------
-      // We rely on CSS 'sticky' for pinning so React NEVER crashes with removeChild. 
-      const scrollTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: scopeRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1,
-        }
-      });
-
-      // Variable Font thins out smoothly
-      scrollTl.to(containerRef.current, {
-        '--climate-year': 1979,
+    const onMove = (e: MouseEvent) => {
+      const { innerWidth: W, innerHeight: H } = window;
+      const nx = (e.clientX / W - 0.5) * 2;  // -1 to 1
+      const ny = (e.clientY / H - 0.5) * 2;
+      gsap.to(blob1Ref.current, {
+        x: nx * 40,
+        y: ny * 25,
         duration: 2.5,
-        ease: 'none'
-      }, 0);
-
-      // Typography glides upward cleanly
-      scrollTl.to([firstNameRef.current, lastNameRef.current], {
-        yPercent: -50,
-        scale: 0.9,
-        duration: 2,
-        ease: 'power2.inOut'
-      }, 0);
-
-      // Image glides upward slightly, NEVER losing opacity
-      scrollTl.to(imageWrapperRef.current, {
-        yPercent: -30,
-        scale: 0.95,
-        duration: 2,
-        ease: 'power2.inOut'
-      }, 0);
-
-      // String parallax
-      scrollTl.to('.hero-svg-overlay', {
-        yPercent: -20,
-        duration: 2,
-        ease: 'power1.inOut'
-      }, 0);
-
-    }, scopeRef);
-
-    return () => {
-      ctx.revert();
-      if (stringAnim) stringAnim.pause();
+        ease: 'power1.out',
+      });
+      gsap.to(blob2Ref.current, {
+        x: nx * -25,
+        y: ny * -18,
+        duration: 3,
+        ease: 'power1.out',
+      });
     };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => window.removeEventListener('mousemove', onMove);
   }, []);
 
+  // Intro reveal
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.15 });
+      tl.from('.h-line-inner', {
+        yPercent: 115,
+        stagger: 0.08,
+        duration: 1.1,
+        ease: 'power4.out',
+      })
+      .from('.h-sub', { opacity: 0, y: 14, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+      .from('.h-meta-item', { opacity: 0, stagger: 0.06, duration: 0.6, ease: 'power2.out' }, '-=0.4')
+      .from('.h-nav-item', { opacity: 0, stagger: 0.05, duration: 0.5, ease: 'power2.out' }, '-=0.6');
+    }, heroRef);
+    return () => ctx.revert();
+  }, []);
+
+  const scrollTo = (href: string) => {
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div ref={scopeRef} className="w-full relative h-[250vh]">
-
+    <section
+      ref={heroRef}
+      id="hero"
+      className="relative w-full min-h-screen flex flex-col overflow-hidden"
+      style={{ background: 'linear-gradient(160deg, #0C4137 0%, #071e19 100%)' }}
+    >
+      {/* Emerald atmospheric blobs */}
       <div
-        ref={stickyWrapperRef}
-        className="sticky top-0 w-full h-screen bg-[#E4DDD3] overflow-hidden"
-      >
+        ref={blob1Ref}
+        className="absolute top-[-15%] right-[-8%] w-[700px] h-[700px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at center, rgba(6,214,160,0.20) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+      />
+      <div
+        ref={blob2Ref}
+        className="absolute bottom-[-5%] left-[10%] w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at center, rgba(6,214,160,0.10) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+        }}
+      />
 
-        {/* SVG STRING IS FULLY VISIBLE INSIDE BACKGROUND */}
-        <div className="absolute inset-0 pointer-events-none hero-svg-overlay z-0 mix-blend-multiply flex justify-center items-center opacity-70">
-          <svg className="w-full h-full min-w-[100vw]" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-            <path
-              ref={stringPathRef}
-              d="M-50,800 Q 300,100 800,500 T 1800,200 T 2600,600"
-              fill="none"
-              stroke="#00A19B"
-              strokeWidth="5"
-              strokeLinecap="round"
-            />
-          </svg>
+      {/* ── HEADER ─────────────────────────────────── */}
+      <header className="relative z-10 flex items-center justify-between px-6 md:px-12 xl:px-20 py-7">
+        {/* Wordmark */}
+        <a
+          href="#hero"
+          onClick={(e) => { e.preventDefault(); scrollTo('#hero'); }}
+          className="h-nav-item text-[#E6FBF6] text-sm tracking-[0.25em] uppercase font-semibold"
+          style={{ fontFamily: 'Figtree, sans-serif' }}
+        >
+          Arif.
+        </a>
+
+        {/* Nav */}
+        <nav className="flex items-center gap-1">
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
+              className="h-nav-item px-4 py-2 text-xs tracking-[0.2em] uppercase text-[rgba(230,251,246,0.55)] hover:text-[#E6FBF6] transition-colors duration-200 font-mono"
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="mailto:mohammedarif1118@gmail.com"
+            className="h-nav-item ml-3 px-5 py-2.5 text-xs tracking-[0.18em] uppercase font-mono border border-[rgba(6,214,160,0.4)] text-[#06D6A0] hover:bg-[rgba(6,214,160,0.08)] rounded-full transition-all duration-200"
+          >
+            Hire me
+          </a>
+        </nav>
+      </header>
+
+      {/* ── HERO BODY ───────────────────────────────── */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-12 xl:px-20 py-10">
+        {/* Label */}
+        <div className="line-mask mb-8">
+          <span className="h-line-inner flex items-center gap-3 text-xs font-mono tracking-[0.35em] uppercase text-[#06D6A0]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#06D6A0] animate-pulse" />
+            Available for work · Salem, India
+          </span>
         </div>
 
-        <section
-          ref={containerRef}
-          className="w-full h-full flex flex-col xl:flex-row items-center justify-center relative overscroll-none max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 gap-8 xl:gap-0"
-          style={{ '--climate-year': 2000 } as React.CSSProperties}
-        >
-
-          {/* LEFT COLUMN: Typography */}
-          <div className="flex-none xl:flex-1 flex flex-col justify-end xl:justify-center relative z-20 w-full mt-20 xl:mt-0 items-start text-left">
-
-            <div className="flex flex-col select-none w-full">
-              {/* First Name */}
-              <div className="flex w-full justify-start" style={{ overflow: 'visible' }}>
-                <h1
-                  ref={firstNameRef}
-                  className="text-[#00A19B] text-[clamp(2.5rem,11.5vw,130px)] leading-[0.85] tracking-tight uppercase whitespace-nowrap"
-                  style={{ fontFamily: '"Climate Crisis", sans-serif', fontVariationSettings: '"YEAR" var(--climate-year)' }}
-                >
-                  {"MOHAMMED".split('').map((char, i) => (
-                    <span key={`f-${i}`} className="name-char inline-block">{char}</span>
-                  ))}
-                </h1>
-              </div>
-
-              {/* Last Name */}
-              <div className="flex w-full justify-start pl-[5vw] xl:pl-[8vw]" style={{ overflow: 'visible' }}>
-                <h1
-                  ref={lastNameRef}
-                  className="text-[#00A19B] text-[clamp(2.5rem,11.5vw,130px)] leading-[0.85] tracking-tight uppercase whitespace-nowrap"
-                  style={{ fontFamily: '"Climate Crisis", sans-serif', fontVariationSettings: '"YEAR" var(--climate-year)' }}
-                >
-                  {"ARIF".split('').map((char, i) => (
-                    <span key={`l-${i}`} className="name-char inline-block">{char}</span>
-                  ))}
-                </h1>
-              </div>
+        {/* HEADLINE — massive display type */}
+        <h1 className="display uppercase text-[#E6FBF6] mb-10" aria-label="Full Stack Engineer & Creative Developer">
+          {['Full', 'Stack'].map((word, i) => (
+            <div key={i} className="line-mask">
+              <span
+                className="h-line-inner block"
+                style={{ fontSize: 'clamp(4.5rem, 13.5vw, 190px)', lineHeight: 0.87 }}
+              >
+                {word}
+              </span>
             </div>
+          ))}
 
-          </div>
-
-          {/* RIGHT COLUMN: Minimal Blob Photo */}
-          <div className="flex-none xl:flex-[0.8] w-full flex items-center justify-center z-10 pointer-events-none mt-8 xl:mt-0 xl:ml-auto">
-            {/* CSS blob-shape ensures clean organic bounds without weird clipping issues */}
-            <div
-              ref={imageWrapperRef}
-              className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px] blob-shape bg-[#00A19B]/5"
+          {/* "Engineer" with emerald accent line underneath */}
+          <div className="line-mask">
+            <span
+              className="h-line-inner block text-[#06D6A0]"
+              style={{ fontSize: 'clamp(4.5rem, 13.5vw, 190px)', lineHeight: 0.87 }}
             >
-              <img
-                ref={imageInsideRef}
-                src={PROFILE_IMG}
-                alt="Mohammed Arif"
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
+              Engineer.
+            </span>
           </div>
+        </h1>
 
-        </section>
+        {/* Sub copy + CTA row */}
+        <div className="h-sub flex flex-col md:flex-row md:items-end md:justify-between gap-8 max-w-[1400px]">
+          <p
+            className="text-[rgba(230,251,246,0.65)] text-base md:text-xl font-light leading-relaxed max-w-lg"
+            style={{ fontFamily: 'Figtree, sans-serif' }}
+          >
+            I build web products that are fast, sharp, and actually ship — from patient management systems to immersive 3D interfaces. 3+ years in production.
+          </p>
+
+          <a
+            href="#work"
+            onClick={(e) => { e.preventDefault(); scrollTo('#work'); }}
+            className="group inline-flex items-center gap-4 text-[#E6FBF6] text-sm font-mono tracking-widest uppercase whitespace-nowrap"
+          >
+            <span className="w-12 h-px bg-[#06D6A0] group-hover:w-24 transition-all duration-500" />
+            View Work
+            <span className="translate-x-0 group-hover:translate-x-1.5 transition-transform duration-300">↓</span>
+          </a>
+        </div>
       </div>
 
-    </div>
+      {/* ── BOTTOM META BAR ─────────────────────────── */}
+      <footer
+        className="relative z-10 px-6 md:px-12 xl:px-20 py-6 border-t"
+        style={{ borderColor: 'rgba(230,251,246,0.08)' }}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-4 text-[11px] font-mono tracking-[0.25em] uppercase text-[rgba(230,251,246,0.4)]">
+          <div className="h-meta-item flex items-center gap-6">
+            <span>Next.js · Node.js · Python</span>
+            <span className="hidden md:block">Three.js · PostgreSQL · MongoDB</span>
+          </div>
+          <div className="h-meta-item flex items-center gap-6">
+            <span className="text-[rgba(6,214,160,0.7)]">15+ Projects</span>
+            <span>5k+ Users</span>
+            <span>2026</span>
+          </div>
+        </div>
+      </footer>
+    </section>
   );
 }

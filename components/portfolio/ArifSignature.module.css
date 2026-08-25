@@ -1,0 +1,27 @@
+.signature {
+  display: block;
+  width: min(100%, 18rem);
+  height: auto;
+  overflow: visible;
+  color: inherit;
+  transform: none;
+}
+
+.stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+}
+
+.finisher {
+  opacity: 1;
+  stroke-width: 4.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signature { transform: none; }
+}
